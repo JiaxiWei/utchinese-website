@@ -1,0 +1,26 @@
+{
+    "name": "final-2025s-backend",
+    "version": "1.0.0",
+    "description": "",
+    "main": "src/index.js",
+    "scripts": {
+        "start": "nodemon src/server.js",
+        "clean": "rm -rf node_modules .env package-lock.json *~ prisma/dev*"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "@prisma/client": "^6.6.0",
+        "cors": "^2.8.5",
+        "dotenv": "^16.4.7",
+        "express": "^4.21.2",
+        "jsonwebtoken": "^9.0.2",
+        "nodemon": "^3.1.9",
+        "prisma": "^6.6.0",
+        "sqlite": "^5.1.1"
+    },
+    "prisma": {
+        "seed": "node prisma/seed.js"
+    }
+}
