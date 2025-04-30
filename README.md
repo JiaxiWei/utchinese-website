@@ -4,8 +4,6 @@
 
 UTChinese Network is a comprehensive web platform for the University of Toronto's Chinese student organization, dedicated to connecting Chinese culture with the UofT community. The website serves as a central hub for cultural events, career services, and community engagement, showcasing the organization's mission and activities through a modern, interactive interface.
 
-多大中文网站是多伦多大学中文学生组织的综合网络平台，致力于连接中国文化与多大社区。该网站作为文化活动、职业服务和社区参与的中心枢纽，通过现代化的交互界面展示组织的使命和活动。
-
 ## Technology Stack
 
 - **Frontend**: React.js with Hooks, Context API
