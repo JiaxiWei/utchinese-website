@@ -86,6 +86,11 @@ const enTranslations = {
       req1: 'Love photography and be good at discovering interesting details in life',
       req2: 'Have the necessary photographic equipment',
       req3: 'Have the ability to shoot videos, process images, and edit videos',
+      req4: 'Love computer technology',
+      req5: 'Have a certain programming foundation, at least above CSC108 level',
+      req6: 'Love negotiation and have certain negotiation skills',
+      req7: 'Have strong understanding, communication, and coordination abilities, with team awareness',
+      req8: 'Are careful and thorough, agile in thinking, with a strong sense of responsibility',
       subgroup1: {
         title: 'Design and Art',
         description: 'We believe that art, images, and design can provide people with better interactive experiences, and we hope to bring positive and effective energy to society through these methods.'
@@ -104,6 +109,9 @@ const enTranslations = {
       req2: 'Willing to accept the constantly changing nature of new media influenced by technology, dare to innovate and persist, and focus on readers',
       req3: 'Interested in self-media platform operation and creative tweet writing is a priority',
       req4: 'Serious and responsible, actively participate in activities, have certain execution ability and strong sense of responsibility',
+      req5: 'Have strong communication skills and willingness to make new friends',
+      req6: 'Have execution ability and sense of responsibility',
+      req7: 'Love organizing club activities, and have strong team awareness and coordination ability',
       subgroup1: {
         title: 'Content Marketing',
         description: 'At UTChinese, there are no marketing experts; we are explorers, learners, and executors. We wrote the freshman manual, built a new media creation platform, held charity classical music concerts, and coordinated job fairs.'
@@ -245,6 +253,11 @@ const zhTranslations = {
       req1: '热爱摄影、善于发现生活中有趣的细节',
       req2: '拥有必要的摄影器材',
       req3: '有视频拍摄、图片处理、视频剪辑的能力',
+      req4: '热爱计算机技术',
+      req5: '有一定编程的基础，至少CSC108以上水平',
+      req6: '热爱谈判，拥有一定的谈判技巧',
+      req7: '有较强的理解、沟通、协调能力，具备团队意识',
+      req8: '认真细致，思维敏捷，具有较强的责任感',
       subgroup1: {
         title: 'Design and Art',
         description: '相信艺术、影像和设计能够给人更好的交互体验，希望通过这些方式来给这个社会带来积极且有效的能量。'
@@ -263,9 +276,12 @@ const zhTranslations = {
       req2: '乐于接受新媒体受科技影响不断变革的性质，敢于创新并坚持，专注于读者',
       req3: '对自媒体平台运营和创作推文感兴趣优先',
       req4: '认真负责，积极参与活动，有一定的执行能力和较强的责任感',
+      req5: '有较强的沟通能力，愿意结交新朋友',
+      req6: '具有执行力和责任感',
+      req7: '热爱组织社团活动，并有较强的团队意识和统筹能力',
       subgroup1: {
         title: 'Content Marketing',
-        description: '在多大中文，没有 marketing 的专家，我们是探索者、学习者和执行者。我们撰写了新生手册、搭建了新媒体创作平台，举办了慈善古典音乐会，统筹了招聘会。'
+        description: '在多大中文，没有 marketing 的专家，我们是探索者、学习者和执行者。我们撰写了新生手册、搭建了新媒体创作平台，举办了慈善古典音乐会，统筹了招聘会，甚至还会举办跟世界级品牌竞争的活动。虽然每一场宣传都是一次巨大的挑战，但这都是走出象牙塔，无比宝贵的机会。'
       },
       subgroup2: {
         title: 'Human Resources',
