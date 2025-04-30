@@ -416,7 +416,9 @@ const StyledHome = styled.div`
       
       &:hover {
         background: var(--accent);
-        color: var(--text);
+        color: var(--primary-dark);
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
       }
     }
   }

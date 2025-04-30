@@ -130,6 +130,8 @@ const StyledJoin = styled.div`
       &:hover {
         background: var(--accent);
         color: var(--primary-dark);
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
       }
     }
   }
@@ -381,6 +383,7 @@ const StyledJoin = styled.div`
           &:hover {
             transform: translateY(-3px);
             box-shadow: 0 10px 20px rgba(224, 43, 32, 0.2);
+            color: white;
           }
         }
         
