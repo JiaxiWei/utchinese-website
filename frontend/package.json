@@ -19,6 +19,9 @@
     "styled-components": "^6.1.17",
     "tailwindcss": "^4.1.4"
   },
+  "devDependencies": {
+    "typescript": "4.9.5"
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
