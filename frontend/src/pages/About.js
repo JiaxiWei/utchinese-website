@@ -342,6 +342,12 @@ const StyledAbout = styled.div`
         border-radius: 50%;
         color: var(--primary);
         font-size: 2rem;
+        
+        svg {
+          width: 40px;
+          height: 40px;
+          stroke: var(--primary);
+        }
       }
       
       h3 {
@@ -486,9 +492,9 @@ const AboutPage = () => {
       >
         <div className="container">
           <div className="quote animated-element">
-            "We're not a prestigious club - just a group of perfectionists who never compromise on the things we love."
+            "{t('about.quote')}"
           </div>
-          <div className="author animated-element">UTChinese Network</div>
+          <div className="author animated-element">{t('about.authorName')}</div>
         </div>
       </section>
       
@@ -499,12 +505,46 @@ const AboutPage = () => {
       >
         <div className="container">
           <div className="section-heading">
-            <h2 className="animated-element">Our Values</h2>
-            <p className="animated-element">The core principles that drive everything we do at UTChinese Network.</p>
+            <h2 className="animated-element">{t('about.values.title')}</h2>
+            <p className="animated-element">{t('about.values.description')}</p>
           </div>
           
           <div className="values-grid">
-            {values.map((value, index) => (
+            {[
+              {
+                title: t('about.values.cultural.title'),
+                description: t('about.values.cultural.description'),
+                icon: (
+                  <svg viewBox="0 0 24 24" width="48" height="48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M3.6 9H20.4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M3.6 15H20.4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M11.5 3C9.9116 5.55023 9 8.70362 9 12C9 15.2964 9.9116 18.4498 11.5 21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M12.5 3C14.0884 5.55023 15 8.70362 15 12C15 15.2964 14.0884 18.4498 12.5 21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                )
+              },
+              {
+                title: t('about.values.commitment.title'),
+                description: t('about.values.commitment.description'),
+                icon: (
+                  <svg viewBox="0 0 24 24" width="48" height="48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2C12 2 16 6 16 10C16 12.5 14.5 14 12 14C9.5 14 8 12.5 8 10C8 6 12 2 12 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M10 15L8 20L12 19L16 20L14 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                )
+              },
+              {
+                title: t('about.values.innovation.title'),
+                description: t('about.values.innovation.description'),
+                icon: (
+                  <svg viewBox="0 0 24 24" width="48" height="48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9.663 17h4.674M12 3v1M12 20v1M3 12h1M20 12h1M18.364 5.636l-.707.707M6.343 17.657l-.707.707M18.364 18.364l-.707-.707M6.343 6.343l-.707-.707" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M12 16a4 4 0 100-8 4 4 0 000 8z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                )
+              }
+            ].map((value, index) => (
               <div className="value-card animated-element" key={index}>
                 <div className="value-icon">{value.icon}</div>
                 <h3>{value.title}</h3>

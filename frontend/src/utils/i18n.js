@@ -30,7 +30,25 @@ const enTranslations = {
     story2: 'Initially, our members wanted to host entrepreneur forums. They quickly invited Yu Minhong, the founder of Roots, Microsoft Canada\'s CTO, and Coca-Cola\'s Global VP. I admired their resources, but after joining, I realized they had searched the entire internet, found contact information for entrepreneurs and executives, sent hundreds of invitation emails, and finally got lucky with that one percent chance. Later, I joined them.',
     story3: 'Following this approach, we organized the Ace Career Fair. No one expected Apple, Microsoft, and the Big Five banks to become our guests.',
     story4: 'Later, we discovered that as Chinese living in Canada, we sometimes wanted to introduce our homeland but didn\'t know where to start. For this reason, UTChinese\'s founders created the Mulan International Film Festival. We succeeded in "enabling Chinese people to better tell China\'s story, and non-Chinese people to see China comprehensively and objectively" through film.',
-    story5: 'We\'ve received praise along the way, even from renowned producer Nai An, who expressed appreciation and admiration for us. After receiving countless encouragement and support, we are more convinced that what we\'re doing is truly meaningful!'
+    story5: 'We\'ve received praise along the way, even from renowned producer Nai An, who expressed appreciation and admiration for us. After receiving countless encouragement and support, we are more convinced that what we\'re doing is truly meaningful!',
+    quote: "We're not a prestigious club - just a group of perfectionists who never compromise on the things we love.",
+    authorName: "UTChinese Network",
+    values: {
+      title: "Our Values",
+      description: "The core principles that drive everything we do at UTChinese Network.",
+      cultural: {
+        title: "Cultural Exchange",
+        description: "Fostering mutual understanding between Chinese and Western cultures."
+      },
+      commitment: {
+        title: "Commitment",
+        description: "Dedicated to excellence in everything we do."
+      },
+      innovation: {
+        title: "Innovation",
+        description: "Constantly exploring new ideas and approaches."
+      }
+    }
   },
   join: {
     title: 'Are You Ready to Join UTChinese?',
@@ -169,7 +187,25 @@ const zhTranslations = {
     story2: '起初，社团的大家想要办企业家论坛，结果很快就请到了俞敏洪、Roots的创始人、微软加拿大的CTO、可口可乐的全球副总裁。本羡慕他们手里已有大量资源，加入了才知道，他们是搜遍整个网络、找到各个企业家或者公司高管的联系方式，发出上百封邮件邀请，最终碰上那百分之一的运气。后来我也加入了他们。',
     story3: '循着这个路子，我们办起了Ace Career Fair。谁都没想到苹果、微软、五大行等都成为了我们的座上客。',
     story4: '之后，我们发现作为生活在加拿大的华人，有时想要介绍我们的祖国时, 却不知道该如何讲起。为了这个，多大中文的创始人们挖了史上最大的坑，木兰国际电影节。我们做到了通过电影的形式"让华人可以更好地讲述中国，让非华人全面客观地看到中国"。',
-    story5: '我们一路收获好评，就连著名制片人耐安老师也表达了对我们的欣赏和赞美。在收获了无数的鼓励与支持后，我们更加相信我们做的种种事情真的是太有意义了！'
+    story5: '我们一路收获好评，就连著名制片人耐安老师也表达了对我们的欣赏和赞美。在收获了无数的鼓励与支持后，我们更加相信我们做的种种事情真的是太有意义了！',
+    quote: "我们不是一个名门望族的社团 - 只是一群追求完美的人，从不在热爱的事情上妥协。",
+    authorName: "多大中文",
+    values: {
+      title: "我们的价值观",
+      description: "推动多大中文一切工作的核心原则。",
+      cultural: {
+        title: "文化交流",
+        description: "促进中西方文化之间的相互理解。"
+      },
+      commitment: {
+        title: "追求卓越",
+        description: "致力于把每一件事做到最好。"
+      },
+      innovation: {
+        title: "创新思维",
+        description: "不断探索新想法和新方法。"
+      }
+    }
   },
   join: {
     title: '你准备好加入多大中文了吗?',
