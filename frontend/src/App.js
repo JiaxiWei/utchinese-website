@@ -22,6 +22,7 @@ function App() {
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
   const appRef = useRef(null);
+  const [theme, setTheme] = useState('light');
 
   // Handle cursor movement
   useEffect(() => {
@@ -75,10 +76,29 @@ function App() {
     window.scrollTo({ top: 0, behavior: 'instant' });
   }, [location.pathname]);
 
+  useEffect(() => {
+    // Apply theme to document element
+    document.documentElement.setAttribute('data-theme', theme);
+  }, [theme]);
+
+  // Toggle theme between light and dark
+  const toggleTheme = () => {
+    const newTheme = theme === 'light' ? 'dark' : 'light';
+    setTheme(newTheme);
+    
+    // Animation for theme change
+    gsap.fromTo(
+      '.theme-change-flash',
+      { opacity: 0.5, scale: 1 },
+      { opacity: 0, scale: 1.5, duration: 0.6, ease: 'power2.out' }
+    );
+  };
+
   return (
     <div className="app" ref={appRef}>
-      <Header changeLanguage={changeLanguage} />
+      <Header changeLanguage={changeLanguage} theme={theme} toggleTheme={toggleTheme} />
       <div className="language-change-flash"></div>
+      <div className="theme-change-flash"></div>
       <CustomCursor position={cursorPosition} isHovering={isHovering} />
       <SocialSidebar />
       

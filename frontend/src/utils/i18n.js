@@ -10,7 +10,9 @@ const enTranslations = {
     contact: 'Contact',
     language: 'Language',
     home: 'Home',
-    viewMore: 'View More'
+    viewMore: 'View More',
+    darkMode: 'Dark Mode',
+    lightMode: 'Light Mode'
   },
   home: {
     hero: {
@@ -167,7 +169,9 @@ const zhTranslations = {
     contact: '联系方式',
     language: '语言',
     home: '首页',
-    viewMore: '查看更多'
+    viewMore: '查看更多',
+    darkMode: '夜间模式',
+    lightMode: '日间模式'
   },
   home: {
     hero: {
