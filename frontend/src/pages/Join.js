@@ -332,6 +332,34 @@ const StyledJoin = styled.div`
         color: var(--text-light);
         margin-bottom: 1.5rem;
       }
+      
+      h5 {
+        margin-top: 0;
+        margin-bottom: 1rem;
+        font-size: 1.1rem;
+        color: var(--primary);
+      }
+      
+      ul {
+        list-style-type: none;
+        padding: 0;
+        margin-bottom: 1.5rem;
+        
+        li {
+          margin-bottom: 0.7rem;
+          padding-left: 1.5rem;
+          position: relative;
+          
+          &:before {
+            content: '•';
+            color: var(--primary);
+            position: absolute;
+            left: 0;
+            font-size: 1.2rem;
+            line-height: 1;
+          }
+        }
+      }
     }
   }
   
@@ -527,11 +555,7 @@ const JoinPage = () => {
       title: t('groups.operation.title'),
       description: t('groups.operation.description'),
       image: 'https://images.unsplash.com/photo-1531538606174-0f90ff5dce83?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
-      requirements: [
-        t('join.operation.req1'),
-        t('join.operation.req2'),
-        t('join.operation.req3')
-      ],
+      requirements: [],
       subgroups: [
         {
           title: t('join.operation.subgroup1.title'),
@@ -552,12 +576,7 @@ const JoinPage = () => {
       title: t('groups.support.title'),
       description: t('groups.support.description'),
       image: 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
-      requirements: [
-        t('join.support.req1'),
-        t('join.support.req2'),
-        t('join.support.req3'),
-        t('join.support.req4')
-      ],
+      requirements: [],
       subgroups: [
         {
           title: t('join.support.subgroup1.title'),
@@ -657,12 +676,16 @@ const JoinPage = () => {
                   <h3>{group.title}</h3>
                   <p>{group.description}</p>
                   
-                  <h4>{t('join.welcomeMembers')}</h4>
-                  <ul>
-                    {group.requirements.map((req, index) => (
-                      <li key={index}>{req}</li>
-                    ))}
-                  </ul>
+                  {group.requirements.length > 0 && (
+                    <>
+                      <h4>{t('join.welcomeMembers')}</h4>
+                      <ul>
+                        {group.requirements.map((req, index) => (
+                          <li key={index}>{req}</li>
+                        ))}
+                      </ul>
+                    </>
+                  )}
                 </div>
               </div>
               
@@ -675,6 +698,56 @@ const JoinPage = () => {
                       </div>
                       <div className="subgroup-content">
                         <p>{subgroup.description}</p>
+                        {group.id === 'operation' && index === 0 && (
+                          <div>
+                            <h5>{t('join.welcomeMembers')}</h5>
+                            <ul>
+                              <li>{t('join.operation.req1')}</li>
+                              <li>{t('join.operation.req2')}</li>
+                              <li>{t('join.operation.req3')}</li>
+                            </ul>
+                          </div>
+                        )}
+                        {group.id === 'operation' && index === 1 && (
+                          <div>
+                            <h5>{t('join.welcomeMembers')}</h5>
+                            <ul>
+                              <li>{t('join.operation.req4')}</li>
+                              <li>{t('join.operation.req5')}</li>
+                            </ul>
+                          </div>
+                        )}
+                        {group.id === 'operation' && index === 2 && (
+                          <div>
+                            <h5>{t('join.welcomeMembers')}</h5>
+                            <ul>
+                              <li>{t('join.operation.req6')}</li>
+                              <li>{t('join.operation.req7')}</li>
+                              <li>{t('join.operation.req8')}</li>
+                            </ul>
+                          </div>
+                        )}
+                        {group.id === 'support' && index === 0 && (
+                          <div>
+                            <h5>{t('join.welcomeMembers')}</h5>
+                            <ul>
+                              <li>{t('join.support.req1')}</li>
+                              <li>{t('join.support.req2')}</li>
+                              <li>{t('join.support.req3')}</li>
+                              <li>{t('join.support.req4')}</li>
+                            </ul>
+                          </div>
+                        )}
+                        {group.id === 'support' && index === 1 && (
+                          <div>
+                            <h5>{t('join.welcomeMembers')}</h5>
+                            <ul>
+                              <li>{t('join.support.req5')}</li>
+                              <li>{t('join.support.req6')}</li>
+                              <li>{t('join.support.req7')}</li>
+                            </ul>
+                          </div>
+                        )}
                         <a 
                           href="https://docs.google.com/forms/d/e/1FAIpQLSd3q_33MfwIt0BLxrI4uUgeN1y397OuVtv80FSXjhus9wavfQ/viewform" 
                           target="_blank"

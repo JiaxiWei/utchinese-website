@@ -343,7 +343,7 @@ const ImageCarousel = () => {
             animate="center"
             exit="exit"
             transition={{
-              x: { type: "spring", stiffness: 300, damping: 30 },
+              x: { type: "tween", duration: 0.5, ease: "easeInOut" },
               opacity: { duration: 0.2 }
             }}
           >
