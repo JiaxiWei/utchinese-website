@@ -4,6 +4,19 @@ import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import styled from 'styled-components';
 
+const ThemeToggleIcon = ({ theme }) => {
+  return theme === 'light' ? (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  ) : (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 17C14.7614 17 17 14.7614 17 12C17 9.23858 14.7614 7 12 7C9.23858 7 7 9.23858 7 12C7 14.7614 9.23858 17 12 17Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M12 1V3M12 21V23M4.22 4.22L5.64 5.64M18.36 18.36L19.78 19.78M1 12H3M21 12H23M4.22 19.78L5.64 18.36M18.36 5.64L19.78 4.22" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  );
+};
+
 const StyledHeader = styled.header`
   position: fixed;
   top: 0;
@@ -175,9 +188,139 @@ const StyledHeader = styled.header`
       }
     }
   }
+
+  .language-switch {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.04);
+    border-radius: 24px;
+    padding: 3px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    
+    [data-theme="dark"] & {
+      background-color: rgba(255, 255, 255, 0.07);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    }
+    
+    &::before {
+      content: '';
+      position: absolute;
+      width: 50%;
+      height: calc(100% - 6px);
+      border-radius: 20px;
+      background: linear-gradient(45deg, rgba(255,255,255,0.9), rgba(255,255,255,0.7));
+      top: 3px;
+      z-index: 0;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+      
+      [data-theme="dark"] & {
+        background: linear-gradient(45deg, rgba(50,50,50,0.9), rgba(40,40,40,0.7));
+        box-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
+      }
+    }
+    
+    &.en::before {
+      transform: translateX(0);
+    }
+    
+    &.zh::before {
+      transform: translateX(100%);
+    }
+    
+    button {
+      background: none;
+      border: none;
+      padding: 6px 10px;
+      font-size: 0.85rem;
+      letter-spacing: 0.3px;
+      cursor: pointer;
+      border-radius: 20px;
+      color: var(--text-secondary);
+      transition: all 0.3s ease;
+      position: relative;
+      z-index: 1;
+      flex: 1;
+      text-align: center;
+      min-width: 35px;
+      white-space: nowrap;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      
+      &.active {
+        font-weight: 600;
+        color: var(--text);
+        transform: scale(1.05);
+      }
+      
+      &:hover:not(.active) {
+        color: var(--text);
+      }
+      
+      &:active {
+        transform: scale(0.95);
+      }
+    }
+    
+    .divider {
+      width: 1px;
+      height: 1rem;
+      background-color: rgba(0, 0, 0, 0.1);
+      margin: 0 1px;
+      z-index: 1;
+      
+      [data-theme="dark"] & {
+        background-color: rgba(255, 255, 255, 0.1);
+      }
+    }
+  }
+
+  .theme-toggle {
+    margin-left: 5px;
+    padding: 8px;
+    background: none;
+    border: none;
+    color: var(--text);
+    cursor: pointer;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+      transform: rotate(15deg);
+    }
+    
+    &:active {
+      transform: scale(0.9);
+    }
+    
+    [data-theme="dark"] &:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    svg {
+      transition: transform 0.5s ease;
+    }
+    
+    &:hover svg {
+      transform: rotate(30deg);
+    }
+  }
+  
+  .controls-group {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
 `;
 
-const Header = ({ changeLanguage }) => {
+const Header = ({ changeLanguage, theme, toggleTheme }) => {
   const { t, i18n } = useTranslation();
   const location = useLocation();
   const [scrolled, setScrolled] = useState(false);
@@ -255,19 +398,25 @@ const Header = ({ changeLanguage }) => {
             ))}
           </div>
           
-          <div className="language-switch">
-            <button 
-              className={i18n.language === 'en' ? 'active' : ''} 
-              onClick={() => changeLanguage('en')}
-            >
-              EN
-            </button>
-            <div className="divider"></div>
-            <button 
-              className={i18n.language === 'zh' ? 'active' : ''} 
-              onClick={() => changeLanguage('zh')}
-            >
-              中文
+          <div className="controls-group">
+            <div className={`language-switch ${i18n.language}`}>
+              <button 
+                className={i18n.language === 'en' ? 'active' : ''} 
+                onClick={() => changeLanguage('en')}
+              >
+                EN
+              </button>
+              <div className="divider"></div>
+              <button 
+                className={i18n.language === 'zh' ? 'active' : ''} 
+                onClick={() => changeLanguage('zh')}
+              >
+                中文
+              </button>
+            </div>
+            
+            <button className="theme-toggle" onClick={toggleTheme} aria-label={theme === 'light' ? t('header.darkMode') : t('header.lightMode')}>
+              <ThemeToggleIcon theme={theme} />
             </button>
           </div>
           
@@ -307,7 +456,7 @@ const Header = ({ changeLanguage }) => {
             ))}
             
             <motion.div 
-              className="language-switch"
+              className={`language-switch ${i18n.language}`}
               custom={navLinks.length}
               variants={linkVariants}
             >
@@ -325,6 +474,16 @@ const Header = ({ changeLanguage }) => {
                 中文
               </button>
             </motion.div>
+            
+            <motion.button 
+              className="theme-toggle"
+              custom={navLinks.length + 1}
+              variants={linkVariants}
+              onClick={toggleTheme}
+            >
+              {theme === 'light' ? t('header.darkMode') : t('header.lightMode')}
+              <ThemeToggleIcon theme={theme} />
+            </motion.button>
           </motion.div>
         )}
       </AnimatePresence>
