@@ -1,25 +1,29 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "UTChinese",
+  "name": "UTChinese Network | 多大中文",
   "icons": [
     {
-      "src": "favicon.ico",
+      "src": "logo.png",
       "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
+      "type": "image/png"
     },
     {
-      "src": "logo192.png",
+      "src": "logo.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "logo512.png",
+      "src": "logo.png",
       "type": "image/png",
       "sizes": "512x512"
     }
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "theme_color": "#C9352B",
+  "background_color": "#ffffff",
+  "description": "Connecting Chinese culture with the University of Toronto community through cultural events, career services, and more.",
+  "lang": "en",
+  "orientation": "portrait-primary",
+  "categories": ["education", "community", "culture"]
 }
