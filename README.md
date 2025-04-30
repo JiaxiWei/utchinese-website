@@ -1,10 +1,10 @@
 # UTChinese Network | 多大中文
 
-## Project Overview
+## 📌 Project Overview
 
 UTChinese Network is a comprehensive web platform for the University of Toronto's Chinese student organization, dedicated to connecting Chinese culture with the UofT community. The website serves as a central hub for cultural events, career services, and community engagement, showcasing the organization's mission and activities through a modern, interactive interface.
 
-## Technology Stack
+## 🔧 Technology Stack
 
 - **Frontend**: React.js with Hooks, Context API
 - **Styling**: Styled-components, GSAP for animations, Framer Motion
