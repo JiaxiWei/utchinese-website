@@ -34,11 +34,14 @@ function App() {
     document.documentElement.lang = lng;
     
     // Animation for language change
-    gsap.fromTo(
-      '.language-change-flash',
-      { opacity: 0.8, scale: 1 },
-      { opacity: 0, scale: 1.5, duration: 0.6, ease: 'power2.out' }
-    );
+    const flashElement = document.querySelector('.language-change-flash');
+    if (flashElement) {
+      gsap.fromTo(
+        flashElement,
+        { opacity: 0.8, scale: 1 },
+        { opacity: 0, scale: 1.5, duration: 0.6, ease: 'power2.out' }
+      );
+    }
   };
 
   // Scroll to top on route change
@@ -57,11 +60,14 @@ function App() {
     setTheme(newTheme);
     
     // Animation for theme change
-    gsap.fromTo(
-      '.theme-change-flash',
-      { opacity: 0.5, scale: 1 },
-      { opacity: 0, scale: 1.5, duration: 0.6, ease: 'power2.out' }
-    );
+    const flashElement = document.querySelector('.theme-change-flash');
+    if (flashElement) {
+      gsap.fromTo(
+        flashElement,
+        { opacity: 0.5, scale: 1 },
+        { opacity: 0, scale: 1.5, duration: 0.6, ease: 'power2.out' }
+      );
+    }
   };
 
   return (

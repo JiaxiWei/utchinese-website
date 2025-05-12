@@ -372,48 +372,55 @@ const AboutPage = () => {
     sectionRefs.current.forEach((section) => {
       if (!section) return;
       
-      gsap.fromTo(
-        section.querySelectorAll('.animated-element'),
-        { y: 50, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.8,
-          stagger: 0.2,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: section,
-            start: 'top 80%',
-            end: 'top 50%',
-            toggleActions: 'play none none none'
+      const animatedElements = section.querySelectorAll('.animated-element');
+      if (animatedElements.length > 0) {
+        gsap.fromTo(
+          animatedElements,
+          { y: 50, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.8,
+            stagger: 0.2,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: section,
+              start: 'top 80%',
+              end: 'top 50%',
+              toggleActions: 'play none none none'
+            }
           }
-        }
-      );
+        );
+      }
     });
     
     // Timeline animation
     const timelineItems = document.querySelectorAll('.timeline-item');
-    timelineItems.forEach((item, index) => {
-      gsap.fromTo(
-        item,
-        { 
-          opacity: 0,
-          x: index % 2 === 0 ? -50 : 50
-        },
-        {
-          opacity: 1,
-          x: 0,
-          duration: 1,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: item,
-            start: 'top 80%',
-            end: 'top 60%',
-            toggleActions: 'play none none none'
+    if (timelineItems && timelineItems.length > 0) {
+      timelineItems.forEach((item, index) => {
+        if (!item) return;
+        
+        gsap.fromTo(
+          item,
+          { 
+            opacity: 0,
+            x: index % 2 === 0 ? -50 : 50
+          },
+          {
+            opacity: 1,
+            x: 0,
+            duration: 1,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: item,
+              start: 'top 80%',
+              end: 'top 60%',
+              toggleActions: 'play none none none'
+            }
           }
-        }
-      );
-    });
+        );
+      });
+    }
   }, []);
   
   const stories = [

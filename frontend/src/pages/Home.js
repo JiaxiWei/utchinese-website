@@ -368,12 +368,14 @@ const StyledHome = styled.div`
     text-align: center;
     position: relative;
     overflow: hidden;
+    will-change: transform;
     
     &:before, &:after {
       content: '';
       position: absolute;
       background: rgba(255, 255, 255, 0.1);
       border-radius: 50%;
+      will-change: transform, opacity;
     }
     
     &:before {
@@ -395,16 +397,23 @@ const StyledHome = styled.div`
       z-index: 1;
     }
     
-    h2 {
+    .cta-title {
       font-size: clamp(2rem, 4vw, 3.5rem);
       margin-bottom: 1.5rem;
+      transform: translateZ(0);
     }
     
-    p {
+    .cta-description {
       max-width: 600px;
       margin: 0 auto 2.5rem;
       font-size: 1.2rem;
       opacity: 0.9;
+      line-height: 1.6;
+      transform: translateZ(0);
+    }
+    
+    .cta-button-wrapper {
+      display: inline-block;
     }
     
     .button {
@@ -413,11 +422,12 @@ const StyledHome = styled.div`
       font-weight: 600;
       padding: 1rem 2.5rem;
       font-size: 1.1rem;
+      transform: translateZ(0);
       
       &:hover {
         background: var(--accent);
         color: var(--primary-dark);
-        transform: translateY(-2px);
+        transform: translateY(-2px) translateZ(0);
         box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
       }
     }
@@ -432,26 +442,93 @@ const Home = () => {
   
   useEffect(() => {
     // Scroll animations
-    sectionRefs.current.forEach((section) => {
+    sectionRefs.current.forEach((section, index) => {
       if (!section) return;
       
-      gsap.fromTo(
-        section.querySelectorAll('.animated-element'),
-        { y: 50, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 1,
-          stagger: 0.2,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: section,
-            start: 'top 80%',
-            end: 'top 50%',
-            toggleActions: 'play none none none'
+      const animatedElements = section.querySelectorAll('.animated-element');
+      if (animatedElements && animatedElements.length > 0) {
+        if (index === 2) {
+          const ctaTitle = section.querySelector('.cta-title');
+          if (ctaTitle) {
+            gsap.fromTo(
+              ctaTitle,
+              { y: 30, opacity: 0 },
+              {
+                y: 0,
+                opacity: 1,
+                duration: 0.6,
+                ease: 'power2.out',
+                scrollTrigger: {
+                  trigger: section,
+                  start: 'top 75%',
+                  toggleActions: 'play none none none',
+                  once: true
+                }
+              }
+            );
           }
+          
+          const ctaDescription = section.querySelector('.cta-description');
+          if (ctaDescription) {
+            gsap.fromTo(
+              ctaDescription,
+              { y: 30, opacity: 0 },
+              {
+                y: 0,
+                opacity: 1,
+                duration: 0.6,
+                delay: 0.2,
+                ease: 'power2.out',
+                scrollTrigger: {
+                  trigger: section,
+                  start: 'top 75%',
+                  toggleActions: 'play none none none',
+                  once: true
+                }
+              }
+            );
+          }
+          
+          const ctaButton = section.querySelector('.cta-button-wrapper');
+          if (ctaButton) {
+            gsap.fromTo(
+              ctaButton,
+              { y: 30, opacity: 0 },
+              {
+                y: 0,
+                opacity: 1,
+                duration: 0.6,
+                delay: 0.4,
+                ease: 'power2.out',
+                scrollTrigger: {
+                  trigger: section,
+                  start: 'top 75%',
+                  toggleActions: 'play none none none',
+                  once: true
+                }
+              }
+            );
+          }
+        } else {
+          gsap.fromTo(
+            animatedElements,
+            { y: 50, opacity: 0 },
+            {
+              y: 0,
+              opacity: 1,
+              duration: 1,
+              stagger: 0.2,
+              ease: 'power3.out',
+              scrollTrigger: {
+                trigger: section,
+                start: 'top 80%',
+                end: 'top 50%',
+                toggleActions: 'play none none none'
+              }
+            }
+          );
         }
-      );
+      }
     });
   }, []);
   
@@ -604,13 +681,17 @@ const Home = () => {
         ref={el => sectionRefs.current[2] = el}
       >
         <div className="container">
-          <h2 className="animated-element">{t('join.title')}</h2>
-          <p className="animated-element">
+          <h2 className="animated-element cta-title">
+            {t('join.title')}
+          </h2>
+          <p className="animated-element cta-description">
             {t('join.intro')}
           </p>
-          <Link to="/join" className="button animated-element">
-            {t('home.hero.cta')}
-          </Link>
+          <div className="animated-element cta-button-wrapper">
+            <Link to="/join" className="button">
+              {t('home.hero.cta')}
+            </Link>
+          </div>
         </div>
       </section>
     </StyledHome>
