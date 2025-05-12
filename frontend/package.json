@@ -3,9 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@react-spring/web": "^9.7.5",
     "autoprefixer": "^10.4.21",
-    "dotenv": "^16.5.0",
     "framer-motion": "^12.9.2",
     "gsap": "^3.12.7",
     "i18next": "^23.7.11",

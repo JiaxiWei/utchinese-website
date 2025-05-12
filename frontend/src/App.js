@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
@@ -7,56 +7,26 @@ import gsap from 'gsap';
 // Components
 import Header from './components/Header';
 import Footer from './components/Footer';
-import CustomCursor from './components/CustomCursor';
 import SocialSidebar from './components/SocialSidebar';
 
-// Pages
-import Home from './pages/Home';
-import About from './pages/About';
-import Join from './pages/Join';
-import NotFound from './pages/NotFound';
+// Lazy load pages
+const Home = lazy(() => import('./pages/Home'));
+const About = lazy(() => import('./pages/About'));
+const Join = lazy(() => import('./pages/Join'));
+const NotFound = lazy(() => import('./pages/NotFound'));
+
+// Loading component
+const LoadingSpinner = () => (
+  <div className="loading-spinner">
+    <div className="spinner"></div>
+  </div>
+);
 
 function App() {
   const { i18n } = useTranslation();
   const location = useLocation();
-  const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
-  const [isHovering, setIsHovering] = useState(false);
   const appRef = useRef(null);
   const [theme, setTheme] = useState('light');
-
-  // Handle cursor movement
-  useEffect(() => {
-    const handleMouseMove = (e) => {
-      setCursorPosition({ x: e.clientX, y: e.clientY });
-    };
-
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-    };
-  }, []);
-
-  // Set up global hover detection for interactive elements
-  useEffect(() => {
-    if (!appRef.current) return;
-
-    const interactiveElements = appRef.current.querySelectorAll('a, button, .interactive');
-    
-    const handleMouseEnter = () => setIsHovering(true);
-    const handleMouseLeave = () => setIsHovering(false);
-
-    interactiveElements.forEach(element => {
-      element.addEventListener('mouseenter', handleMouseEnter);
-      element.addEventListener('mouseleave', handleMouseLeave);
-    });
-
-    return () => {
-      interactiveElements.forEach(element => {
-        element.removeEventListener('mouseenter', handleMouseEnter);
-        element.removeEventListener('mouseleave', handleMouseLeave);
-      });
-    };
-  }, [location]);
 
   // Handle language change
   const changeLanguage = (lng) => {
@@ -99,17 +69,18 @@ function App() {
       <Header changeLanguage={changeLanguage} theme={theme} toggleTheme={toggleTheme} />
       <div className="language-change-flash"></div>
       <div className="theme-change-flash"></div>
-      <CustomCursor position={cursorPosition} isHovering={isHovering} />
       <SocialSidebar />
       
       <main>
         <AnimatePresence mode="wait">
-          <Routes location={location} key={location.pathname}>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/join" element={<Join />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+          <Suspense fallback={<LoadingSpinner />}>
+            <Routes location={location} key={location.pathname}>
+              <Route path="/" element={<Home />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/join" element={<Join />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </Suspense>
         </AnimatePresence>
       </main>
       
