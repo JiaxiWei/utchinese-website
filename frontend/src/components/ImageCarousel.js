@@ -169,10 +169,10 @@ const Indicators = styled.div`
 `;
 
 const Indicator = styled.button`
-  width: ${props => props.active ? '20px' : '6px'};
+  width: ${props => props.$active ? '20px' : '6px'};
   height: 6px;
-  border-radius: ${props => props.active ? '8px' : '50%'};
-  background: ${props => props.active ? 'var(--primary)' : 'rgba(255, 255, 255, 0.6)'};
+  border-radius: ${props => props.$active ? '8px' : '50%'};
+  background: ${props => props.$active ? 'var(--primary)' : 'rgba(255, 255, 255, 0.6)'};
   border: none;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -183,8 +183,8 @@ const Indicator = styled.button`
   margin: 0;
   
   &:hover {
-    transform: ${props => props.active ? 'none' : 'scale(1.2)'};
-    background: ${props => props.active ? 'var(--primary)' : 'rgba(255, 255, 255, 0.8)'};
+    transform: ${props => props.$active ? 'none' : 'scale(1.2)'};
+    background: ${props => props.$active ? 'var(--primary)' : 'rgba(255, 255, 255, 0.8)'};
   }
   
   &:focus {
@@ -192,12 +192,12 @@ const Indicator = styled.button`
   }
   
   @media (max-width: 768px) {
-    width: ${props => props.active ? '16px' : '5px'};
+    width: ${props => props.$active ? '16px' : '5px'};
     height: 5px;
   }
   
   @media (max-width: 480px) {
-    width: ${props => props.active ? '12px' : '4px'};
+    width: ${props => props.$active ? '12px' : '4px'};
     height: 4px;
   }
   
@@ -214,7 +214,7 @@ const Indicator = styled.button`
     pointer-events: none;
   }
   
-  ${props => props.active && `
+  ${props => props.$active && `
     &:after {
       transform: translateX(100%);
     }
@@ -373,7 +373,7 @@ const ImageCarousel = () => {
         {images.map((_, index) => (
           <Indicator 
             key={index} 
-            active={index === currentIndex} 
+            $active={index === currentIndex} 
             onClick={() => goToSlide(index)}
             aria-label={`Go to slide ${index + 1}`}
           />

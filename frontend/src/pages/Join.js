@@ -461,7 +461,7 @@ const JoinPage = () => {
   // 仅在组件加载时设置一次性的ScrollTrigger动画（标题和按钮）
   useEffect(() => {
     const headingElements = document.querySelectorAll('.groups-section .section-heading .animated-element, .groups-section .tab-navigation.animated-element');
-    if (headingElements.length > 0) {
+    if (headingElements && headingElements.length > 0 && groupsSectionRef.current) {
       gsap.fromTo(
         headingElements,
         { y: 50, opacity: 0 },
@@ -486,7 +486,7 @@ const JoinPage = () => {
     const playActiveGroupAnimations = () => {
       const activeElements = document.querySelectorAll(`#${activeGroup} .group-card.animated-element, #${activeGroup} .subgroup-card.animated-element`);
       
-      if (activeElements.length === 0) return;
+      if (!activeElements || activeElements.length === 0) return;
 
       // 先重置
       gsap.set(activeElements, { y: 50, opacity: 0 });
