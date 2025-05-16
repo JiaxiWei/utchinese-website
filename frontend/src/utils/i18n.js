@@ -165,6 +165,30 @@ const enTranslations = {
     instagram: 'Instagram',
     linkedin: 'LinkedIn',
     email: 'Email'
+  },
+  events: {
+    title: 'Exciting Events',
+    subtitle: 'Explore the various activities organized by UTChinese, from academic lectures to cultural exchanges, from career development to social gatherings. Join us to experience the charm of Chinese culture, expand your horizons, and meet like-minded friends.',
+    filters: {
+      all: 'All Events',
+      upcoming: 'Upcoming',
+      ongoing: 'Ongoing',
+      past: 'Past'
+    },
+    status: {
+      past: 'Past',
+      ongoing: 'Ongoing',
+      upcoming: 'Upcoming'
+    },
+    featured: 'Featured Event',
+    learnMore: 'Learn More',
+    noEvents: 'No events match your criteria',
+    loading: 'Loading events...',
+    admin: {
+      manage: 'Manage Events',
+      edit: 'Edit Event',
+      add: 'Add New Event'
+    }
   }
 };
 
@@ -332,6 +356,30 @@ const zhTranslations = {
     instagram: 'Instagram',
     linkedin: 'LinkedIn',
     email: '邮箱'
+  },
+  events: {
+    title: '精彩活动',
+    subtitle: '探索多大中文举办的各类活动，从学术讲座到文化交流，从职业发展到社交聚会。加入我们，体验中国文化的魅力，拓展您的视野，结交志同道合的朋友。',
+    filters: {
+      all: '全部活动',
+      upcoming: '即将到来',
+      ongoing: '进行中',
+      past: '已结束'
+    },
+    status: {
+      past: '已结束',
+      ongoing: '进行中',
+      upcoming: '即将开始'
+    },
+    featured: '精选活动',
+    learnMore: '了解更多',
+    noEvents: '当前没有符合条件的活动',
+    loading: '加载中...',
+    admin: {
+      manage: '管理活动',
+      edit: '编辑活动',
+      add: '添加新活动'
+    }
   }
 };
 

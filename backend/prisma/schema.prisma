@@ -7,3 +7,28 @@ datasource db {
   provider = "sqlite"
   url      = "file:./dev.db"
 }
+
+model Event {
+  id              Int      @id @default(autoincrement())
+  title_en        String   // English title
+  title_zh        String   // Chinese title
+  description_en  String   // English description
+  description_zh  String   // Chinese description
+  imageUrl        String?
+  startDate       DateTime
+  endDate         DateTime?
+  location_en     String?  // English location
+  location_zh     String?  // Chinese location
+  status          String   // 'past', 'ongoing', 'upcoming'
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  link            String?
+  featured        Boolean  @default(false)
+}
+
+// Admin configuration model
+model AdminConfig {
+  id       Int    @id @default(autoincrement())
+  key      String @unique
+  value    String
+}
