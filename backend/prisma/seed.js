@@ -48,7 +48,6 @@ async function main() {
         location_zh: '多信仰中心（科夫勒楼）',
         status: 'past',
         featured: true,
-        link: 'https://utchinesenetwork.ca/ace'
       },
       {
         title_en: 'EXCITE Panel Talk',
@@ -61,7 +60,6 @@ async function main() {
         location_en: 'Online',
         location_zh: '线上',
         status: 'past',
-        link: 'https://utchinesenetwork.ca/excite'
       },
       {
         title_en: 'New Year Concert',
@@ -75,6 +73,7 @@ async function main() {
         location_zh: '伊莎贝尔·巴德剧院',
         status: 'past',
         featured: true,
+        link: 'https://www.youtube.com/watch?v=RX_vrxenzBM'
       },
       {
         title_en: 'Ace Firm Visit',
@@ -88,7 +87,6 @@ async function main() {
         location_zh: '各公司地点',
         status: 'past',
         featured: false,
-        link: 'https://utchinesenetwork.ca/ace-firm-visit'
       },
       {
         title_en: 'UTChinese Network Qin Society Open Ceremony',
@@ -102,6 +100,7 @@ async function main() {
         location_zh: '哈特之家',
         status: 'past',
         featured: true,
+        link: 'https://www.youtube.com/watch?v=8HbfgZVLNHM&t=3s'
       }
     ];
 
