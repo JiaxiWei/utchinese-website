@@ -13,8 +13,8 @@ const app = express();
 const prisma = new PrismaClient();
 const PORT = process.env.PORT || 8000;
 
-// Frontend URL for CORS
-const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
+// Frontend URL for CORS - 确保没有尾部斜杠
+const FRONTEND_URL = (process.env.FRONTEND_URL || 'http://localhost:3000').replace(/\/+$/, '');
 
 // Secret key for JWT token
 const JWT_SECRET = process.env.JWT_SECRET || 'ut-chinese-network-secret-key';

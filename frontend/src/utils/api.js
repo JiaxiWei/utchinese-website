@@ -1,8 +1,8 @@
 import axios from 'axios';
 import i18n from 'i18next';
 
-// 使用环境变量或默认值
-export const BASE_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000';
+// 使用环境变量或默认值，并确保URL末尾没有斜杠
+export const BASE_URL = (process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000').replace(/\/+$/, '');
 export const API_BASE_URL = `${BASE_URL}/api`;
 
 // 创建axios实例
