@@ -6,7 +6,7 @@ UTChinese Network is a comprehensive web platform for the University of Toronto'
 
 ## 🔧 Technology Stack
 
-- **Frontend**: React.js, JavaScript
+- **Frontend**: React, JavaScript
 - **Backend**: Node.js, Express, JavaScript, PostgreSQL, SQLite
 - **Deployment**: Vercel, Railway
 - Styling: Styled-components, GSAP for animations, Framer Motion
