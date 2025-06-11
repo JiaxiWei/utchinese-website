@@ -343,7 +343,9 @@ const Header = ({ changeLanguage, theme, toggleTheme }) => {
   const navLinks = [
     { path: '/', label: 'home' },
     { path: '/about', label: 'about' },
-    { path: '/join', label: 'join' }
+    { path: '/join', label: 'join' },
+    { path: '/qin-society', label: 'QinSociety' },
+    { path: '/ny-concert', label: 'NYConcert' }
   ];
   
   const menuVariants = {

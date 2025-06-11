@@ -4,6 +4,8 @@ import { AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import gsap from 'gsap';
 
+
+
 // Components
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -13,7 +15,10 @@ import SocialSidebar from './components/SocialSidebar';
 const Home = lazy(() => import('./pages/Home'));
 const About = lazy(() => import('./pages/About'));
 const Join = lazy(() => import('./pages/Join'));
+const QinSociety = lazy(() => import('./pages/QinSociety'));
+const NYConcert = lazy(() => import('./pages/NYConcert'));
 const NotFound = lazy(() => import('./pages/NotFound'));
+
 
 // Loading component
 const LoadingSpinner = () => (
@@ -84,6 +89,8 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/about" element={<About />} />
               <Route path="/join" element={<Join />} />
+              <Route path="/qin-society" element={<QinSociety />} />
+              <Route path="/ny-concert" element={<NYConcert />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>
