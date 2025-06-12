@@ -5,6 +5,7 @@ import { FiPlus, FiEdit2, FiTrash2, FiStar, FiUpload } from 'react-icons/fi';
 import { getEvents, createEvent, updateEvent, deleteEvent, BASE_URL, API_BASE_URL } from '../utils/api';
 import axios from 'axios';
 
+
 const AdminContainer = styled.div`
   max-width: 1200px;
   margin: 0 auto;

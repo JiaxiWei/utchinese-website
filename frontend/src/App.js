@@ -95,6 +95,8 @@ function App() {
                 <Route path="/join" element={<Join />} />
                 <Route path="/events" element={<Events />} />
                 <Route path="/admin/events" element={<EventsAdmin />} />
+                <Route path="/qin-society" element={<QinSociety />} />
+                <Route path="/ny-concert" element={<NYConcert />} />  
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </Suspense>

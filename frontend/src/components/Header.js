@@ -462,9 +462,12 @@ const Header = ({ changeLanguage, theme, toggleTheme }) => {
                     to="/events"
                     active={location.pathname.startsWith('/events') || location.pathname.startsWith('/qin') || location.pathname.startsWith('/ny')}
                   >
-                    {/* <DropdownLink to="/events">{t('header.events')}</DropdownLink> */}
+                    {/* 可以继续在这里添加其他的events导航页面, 记得修改i18n文件 */}
                     <DropdownLink to="/qin-society">{t('header.QinSociety')}</DropdownLink>
                     <DropdownLink to="/ny-concert">{t('header.NYConcert')}</DropdownLink>
+                    {/* <DropdownLink to="/your-new-page">{t('header.YourNewPage')}</DropdownLink> */}
+                    {/* <DropdownLink to="/your-new-page">{t('header.YourNewPage')}</DropdownLink> */}
+                    {/* <DropdownLink to="/your-new-page">{t('header.YourNewPage')}</DropdownLink> */}
                 </NavDropdown>
               );
             }
