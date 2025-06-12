@@ -2,19 +2,22 @@
 # Makefile for Express.js + Prisma Backend
 #
 
-.PHONY: clean setup run
+.PHONY: clean setup seed run
 
 run: setup
 	node src/server.js
 
-setup: clean
+setup:
 	npm install
+
+seed:
 	npx prisma generate
 	npx prisma db push
 	npx prisma db seed
+	node prisma/seed.js
 
 clean:
-	rm -rf *~ prisma/dev* .env
+	rm -rf *~ prisma/dev*
 
 realclean: clean
-	rm -rf node_modules package-lock.json 
+	rm -rf node_modules package-lock.json

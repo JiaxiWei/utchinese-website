@@ -3,6 +3,7 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import gsap from 'gsap';
+import { AuthProvider } from './contexts/AuthContext';
 
 
 
@@ -17,6 +18,8 @@ const About = lazy(() => import('./pages/About'));
 const Join = lazy(() => import('./pages/Join'));
 const QinSociety = lazy(() => import('./pages/QinSociety'));
 const NYConcert = lazy(() => import('./pages/NYConcert'));
+const Events = lazy(() => import('./pages/Events'));
+const EventsAdmin = lazy(() => import('./pages/EventsAdmin'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 
 
@@ -76,29 +79,31 @@ function App() {
   };
 
   return (
-    <div className="app" ref={appRef}>
-      <Header changeLanguage={changeLanguage} theme={theme} toggleTheme={toggleTheme} />
-      <div className="language-change-flash"></div>
-      <div className="theme-change-flash"></div>
-      <SocialSidebar />
-      
-      <main>
-        <AnimatePresence mode="wait">
-          <Suspense fallback={<LoadingSpinner />}>
-            <Routes location={location} key={location.pathname}>
-              <Route path="/" element={<Home />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/join" element={<Join />} />
-              <Route path="/qin-society" element={<QinSociety />} />
-              <Route path="/ny-concert" element={<NYConcert />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </Suspense>
-        </AnimatePresence>
-      </main>
-      
-      <Footer />
-    </div>
+    <AuthProvider>
+      <div className="app" ref={appRef}>
+        <Header changeLanguage={changeLanguage} theme={theme} toggleTheme={toggleTheme} />
+        <div className="language-change-flash"></div>
+        <div className="theme-change-flash"></div>
+        <SocialSidebar />
+        
+        <main>
+          <AnimatePresence mode="wait">
+            <Suspense fallback={<LoadingSpinner />}>
+              <Routes location={location} key={location.pathname}>
+                <Route path="/" element={<Home />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/join" element={<Join />} />
+                <Route path="/events" element={<Events />} />
+                <Route path="/admin/events" element={<EventsAdmin />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </Suspense>
+          </AnimatePresence>
+        </main>
+        
+        <Footer />
+      </div>
+    </AuthProvider>
   );
 }
 

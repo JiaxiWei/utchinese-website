@@ -22,6 +22,14 @@
 
   --font-primary: 'Poppins', 'Noto Sans SC', sans-serif;
   --font-display: 'Playfair Display', 'Noto Serif SC', serif;
+  
+  /* RGB values for opacity calculations */
+  --primary-rgb: 224, 43, 32;
+  --primary-light-rgb: 255, 75, 65;
+  --primary-dark-rgb: 176, 30, 23;
+  --accent-rgb: 252, 185, 0;
+  --text-rgb: 51, 51, 51;
+  --text-light-rgb: 102, 102, 102;
 }
 
 [data-theme="dark"] {
@@ -33,6 +41,10 @@
   --secondary-light: #a0a0a0;
   --primary-dark: #ff4b41;
   --primary-light: #b01e17;
+  
+  /* Updated RGB values for dark mode */
+  --text-rgb: 248, 248, 248;
+  --text-light-rgb: 160, 160, 160;
 }
 
 *, *::before, *::after {

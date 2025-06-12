@@ -7,13 +7,75 @@ import styled from 'styled-components';
 const ThemeToggleIcon = ({ theme }) => {
   return theme === 'light' ? (
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   ) : (
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M12 17C14.7614 17 17 14.7614 17 12C17 9.23858 14.7614 7 12 7C9.23858 7 7 9.23858 7 12C7 14.7614 9.23858 17 12 17Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-      <path d="M12 1V3M12 21V23M4.22 4.22L5.64 5.64M18.36 18.36L19.78 19.78M1 12H3M21 12H23M4.22 19.78L5.64 18.36M18.36 5.64L19.78 4.22" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M12 17C14.7614 17 17 14.7614 17 12C17 9.23858 14.7614 7 12 7C9.23858 7 7 9.23858 7 12C7 14.7614 9.23858 17 12 17Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M12 1V3M12 21V23M4.22 4.22L5.64 5.64M18.36 18.36L19.78 19.78M1 12H3M21 12H23M4.22 19.78L5.64 18.36M18.36 5.64L19.78 4.22" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
+  );
+};
+
+// 下拉菜单样式
+const NavDropdownWrapper = styled.div`
+  position: relative;
+  display: inline-block; 
+
+  &:hover > div {
+    display: block;
+  }
+`;
+
+const DropdownMenu = styled.div`
+  display: none;
+  position: absolute;
+  top: 100%; /* 稍微下移，避免遮挡主菜单 */
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 180px;
+  background: #fff8ef;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+  border-radius: 8px;
+  z-index: 200;
+  padding: 0.5rem 0;
+`;
+
+const DropdownLink = styled(Link)`
+  display: block;
+  width: 100%;
+  padding: 0.7rem 1.5rem;
+  color: #b85a1c;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background 0.18s, color 0.18s;
+  border-radius: 0;
+
+  &:hover:not(.dropdown-toggle) {
+    background: #ffe7c2;
+    color: #e74c3c;
+  }
+`;
+
+// 鼠标悬停时显示下拉菜单
+const NavDropdown = ({ label, to, children, active }) => {
+  const [open, setOpen] = useState(false);
+  return (
+    <NavDropdownWrapper
+      onMouseEnter={() => setOpen(true)}
+      onMouseLeave={() => setOpen(false)}
+    >
+      <DropdownLink
+        to={to}
+        className={`nav-link dropdown-toggle${active ? ' active' : ''}`}
+        style={{ cursor: 'pointer' }}
+      >
+        {label}
+      </DropdownLink>
+      <DropdownMenu>
+        {children}
+      </DropdownMenu>
+    </NavDropdownWrapper>
   );
 };
 
@@ -71,6 +133,7 @@ const StyledHeader = styled.header`
   .nav-links {
     display: flex;
     gap: 1.2rem;
+    align-items: center;
     
     @media (max-width: 768px) {
       display: none;
@@ -325,29 +388,30 @@ const Header = ({ changeLanguage, theme, toggleTheme }) => {
   const location = useLocation();
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  
+
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
     };
-    
+
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-  
+
   // Close mobile menu when changing routes
   useEffect(() => {
     setMobileMenuOpen(false);
   }, [location]);
-  
+
   const navLinks = [
     { path: '/', label: 'home' },
     { path: '/about', label: 'about' },
     { path: '/join', label: 'join' },
-    { path: '/qin-society', label: 'QinSociety' },
-    { path: '/ny-concert', label: 'NYConcert' }
+    // { path: '/qin-society', label: 'QinSociety' },
+    // { path: '/ny-concert', label: 'NYConcert' },
+    { path: '/events', label: 'events' },
   ];
-  
+
   const menuVariants = {
     closed: {
       opacity: 0,
@@ -364,7 +428,7 @@ const Header = ({ changeLanguage, theme, toggleTheme }) => {
       }
     }
   };
-  
+
   const linkVariants = {
     closed: { y: 50, opacity: 0 },
     open: i => ({
@@ -376,7 +440,7 @@ const Header = ({ changeLanguage, theme, toggleTheme }) => {
       }
     })
   };
-  
+
   return (
     <StyledHeader className={scrolled ? 'scrolled' : ''}>
       <div className="container">
@@ -386,43 +450,59 @@ const Header = ({ changeLanguage, theme, toggleTheme }) => {
             {i18n.language === 'en' ? 'UTChinese Network' : '多大中文'}
           </h1>
         </Link>
-        
+
         <nav>
           <div className="nav-links">
-            {navLinks.map(({ path, label }) => (
-              <Link 
-                key={path} 
-                to={path} 
-                className={`nav-link ${location.pathname === path ? 'active' : ''}`}
-              >
-                {t(`header.${label}`)}
-              </Link>
-            ))}
+            {navLinks.map(({ path, to, active, label }) => {
+              if (label === 'events') {
+                return (
+                  <NavDropdown
+                    key={path}
+                    label={t(`header.${label}`)}
+                    to="/events"
+                    active={location.pathname.startsWith('/events') || location.pathname.startsWith('/qin') || location.pathname.startsWith('/ny')}
+                  >
+                    {/* <DropdownLink to="/events">{t('header.events')}</DropdownLink> */}
+                    <DropdownLink to="/qin-society">{t('header.QinSociety')}</DropdownLink>
+                    <DropdownLink to="/ny-concert">{t('header.NYConcert')}</DropdownLink>
+                </NavDropdown>
+              );
+            }
+            return (
+            <Link
+              key={path}
+              to={path}
+              className={`nav-link ${location.pathname === path ? 'active' : ''}`}
+            >
+              {t(`header.${label}`)}
+            </Link>
+            );
+          })}
           </div>
-          
+
           <div className="controls-group">
             <div className={`language-switch ${i18n.language}`}>
-              <button 
-                className={i18n.language === 'en' ? 'active' : ''} 
+              <button
+                className={i18n.language === 'en' ? 'active' : ''}
                 onClick={() => changeLanguage('en')}
               >
                 EN
               </button>
               <div className="divider"></div>
-              <button 
-                className={i18n.language === 'zh' ? 'active' : ''} 
+              <button
+                className={i18n.language === 'zh' ? 'active' : ''}
                 onClick={() => changeLanguage('zh')}
               >
                 中文
               </button>
             </div>
-            
+
             <button className="theme-toggle" onClick={toggleTheme} aria-label={theme === 'light' ? t('header.darkMode') : t('header.lightMode')}>
               <ThemeToggleIcon theme={theme} />
             </button>
           </div>
-          
-          <div 
+
+          <div
             className={`mobile-menu-btn ${mobileMenuOpen ? 'open' : ''}`}
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
@@ -432,10 +512,10 @@ const Header = ({ changeLanguage, theme, toggleTheme }) => {
           </div>
         </nav>
       </div>
-      
+
       <AnimatePresence>
         {mobileMenuOpen && (
-          <motion.div 
+          <motion.div
             className="mobile-menu"
             initial="closed"
             animate="open"
@@ -456,28 +536,28 @@ const Header = ({ changeLanguage, theme, toggleTheme }) => {
                 </Link>
               </motion.div>
             ))}
-            
-            <motion.div 
+
+            <motion.div
               className={`language-switch ${i18n.language}`}
               custom={navLinks.length}
               variants={linkVariants}
             >
-              <button 
-                className={i18n.language === 'en' ? 'active' : ''} 
+              <button
+                className={i18n.language === 'en' ? 'active' : ''}
                 onClick={() => changeLanguage('en')}
               >
                 EN
               </button>
               <div className="divider"></div>
-              <button 
-                className={i18n.language === 'zh' ? 'active' : ''} 
+              <button
+                className={i18n.language === 'zh' ? 'active' : ''}
                 onClick={() => changeLanguage('zh')}
               >
                 中文
               </button>
             </motion.div>
-            
-            <motion.button 
+
+            <motion.button
               className="theme-toggle"
               custom={navLinks.length + 1}
               variants={linkVariants}
@@ -493,4 +573,4 @@ const Header = ({ changeLanguage, theme, toggleTheme }) => {
   );
 };
 
-export default Header; 
+export default Header;
