@@ -8,7 +8,7 @@ UTChinese Network is a comprehensive web platform for the University of Toronto'
 
 - **Frontend**: React, JavaScript
 - **Backend**: Node.js, Express, JavaScript, PostgreSQL, SQLite
-- **Deployment**: Vercel, Railway
+- **Deployment**: Vercel(frontend), Railway(backend)
 - Styling: Styled-components, GSAP for animations, Framer Motion
 - Internationalization: React-i18next for bilingual support (English/Chinese)
 - Responsive Design: Mobile-first approach with dynamic layouts
