@@ -4,8 +4,8 @@ import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import axios from 'axios';
 import { FiMail, FiLinkedin, FiUsers, FiFilter } from 'react-icons/fi';
+import { getTeamMembers, getTeamDepartments } from '../utils/api';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -276,25 +276,9 @@ const StyledTeam = styled.div`
       background: linear-gradient(135deg, var(--primary), var(--accent));
     }
     
-    &:after {
-      content: '';
-      position: absolute;
-      top: -100%;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(135deg, rgba(224, 43, 32, 0.05), rgba(252, 185, 0, 0.05));
-      transition: top 0.4s ease;
-      z-index: 0;
-    }
-    
     &:hover {
       transform: translateY(-10px);
       box-shadow: 0 20px 40px rgba(224, 43, 32, 0.15);
-      
-      &:after {
-        top: 0;
-      }
       
       .member-avatar {
         transform: scale(1.1);
@@ -449,13 +433,13 @@ const Team = () => {
   const fetchTeamData = async () => {
     try {
       setLoading(true);
-      const [membersResponse, departmentsResponse] = await Promise.all([
-        axios.get(`${process.env.REACT_APP_API_URL || 'http://localhost:8000'}/api/team`),
-        axios.get(`${process.env.REACT_APP_API_URL || 'http://localhost:8000'}/api/team/departments`)
+      const [members, departments] = await Promise.all([
+        getTeamMembers(),
+        getTeamDepartments()
       ]);
       
-      setTeamMembers(membersResponse.data);
-      setDepartments(departmentsResponse.data);
+      setTeamMembers(members);
+      setDepartments(departments);
     } catch (err) {
       console.error('Error fetching team data:', err);
       setError('Failed to load team data');

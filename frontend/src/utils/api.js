@@ -107,4 +107,36 @@ export const changeAdminPassword = async (currentPassword, newPassword) => {
     console.error('Error changing admin password:', error);
     throw error;
   }
+};
+
+// Team API calls
+export const getTeamMembers = async (department = '') => {
+  try {
+    const params = department ? { department } : {};
+    const response = await api.get('/team', { params });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching team members:', error);
+    throw error;
+  }
+};
+
+export const getTeamDepartments = async () => {
+  try {
+    const response = await api.get('/team/departments');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching team departments:', error);
+    throw error;
+  }
+};
+
+export const getTeamMemberById = async (id) => {
+  try {
+    const response = await api.get(`/team/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching team member:', error);
+    throw error;
+  }
 }; 
