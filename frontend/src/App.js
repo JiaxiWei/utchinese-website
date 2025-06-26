@@ -14,6 +14,7 @@ import SocialSidebar from './components/SocialSidebar';
 const Home = lazy(() => import('./pages/Home'));
 const About = lazy(() => import('./pages/About'));
 const Join = lazy(() => import('./pages/Join'));
+const Team = lazy(() => import('./pages/Team'));
 const Events = lazy(() => import('./pages/Events'));
 const EventsAdmin = lazy(() => import('./pages/EventsAdmin'));
 const NotFound = lazy(() => import('./pages/NotFound'));
@@ -88,6 +89,7 @@ function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/join" element={<Join />} />
+                <Route path="/team" element={<Team />} />
                 <Route path="/events" element={<Events />} />
                 <Route path="/admin/events" element={<EventsAdmin />} />
                 <Route path="*" element={<NotFound />} />

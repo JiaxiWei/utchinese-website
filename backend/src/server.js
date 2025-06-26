@@ -497,6 +497,79 @@ app.post('/api/upload/image', authenticateAdmin, upload.single('image'), async (
   }
 });
 
+// ===============================
+// TEAM MEMBERS API ROUTES
+// ===============================
+
+// Get all active team members
+app.get('/api/team', async (req, res) => {
+  try {
+    const { department } = req.query;
+    
+    const whereCondition = {
+      isActive: true
+    };
+    
+    if (department) {
+      whereCondition.department = department;
+    }
+    
+    const teamMembers = await prisma.teamMember.findMany({
+      where: whereCondition,
+      orderBy: { order: 'asc' }
+    });
+    
+    res.json(teamMembers);
+  } catch (error) {
+    console.error('Error fetching team members:', error);
+    res.status(500).json({ error: 'Failed to fetch team members' });
+  }
+});
+
+// Get unique departments
+app.get('/api/team/departments', async (req, res) => {
+  try {
+    const departments = await prisma.teamMember.groupBy({
+      by: ['department'],
+      where: { isActive: true },
+      _count: {
+        department: true
+      },
+      orderBy: {
+        department: 'asc'
+      }
+    });
+    
+    res.json(departments.map(dept => ({
+      name: dept.department,
+      count: dept._count.department
+    })));
+  } catch (error) {
+    console.error('Error fetching departments:', error);
+    res.status(500).json({ error: 'Failed to fetch departments' });
+  }
+});
+
+// Get team member by ID
+app.get('/api/team/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    const member = await prisma.teamMember.findUnique({
+      where: { id: parseInt(id) }
+    });
+    
+    if (!member) {
+      return res.status(404).json({ error: 'Team member not found' });
+    }
+    
+    res.json(member);
+  } catch (error) {
+    console.error('Error fetching team member:', error);
+    res.status(500).json({ error: 'Failed to fetch team member' });
+  }
+});
+
 // Start server
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

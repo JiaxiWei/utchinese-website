@@ -343,6 +343,7 @@ const Header = ({ changeLanguage, theme, toggleTheme }) => {
   const navLinks = [
     { path: '/', label: 'home' },
     { path: '/about', label: 'about' },
+    { path: '/team', label: 'team' },
     { path: '/events', label: 'events' },
     { path: '/join', label: 'join' }
   ];

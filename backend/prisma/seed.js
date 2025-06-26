@@ -6,6 +6,7 @@ async function main() {
   try {
     // Clear existing data
     await prisma.event.deleteMany({});
+    await prisma.teamMember.deleteMany({});
     await prisma.adminConfig.deleteMany({});
 
     // Create default admin password
@@ -107,6 +108,180 @@ async function main() {
     for (const event of events) {
       await prisma.event.create({
         data: event,
+      });
+    }
+
+    // Add team members
+    const teamMembers = [
+      // ARTS & CULTURE GROUP
+      {
+        name_en: 'Emily Chen',
+        name_zh: '陈雨薇',
+        department: 'ARTS & CULTURE GROUP',
+        position_en: 'Director',
+        position_zh: '总监',
+        bio_en: 'Leading cultural events and artistic initiatives to bridge Eastern and Western cultures.',
+        bio_zh: '负责领导文化活动和艺术倡议，架起东西方文化的桥梁。',
+        avatarUrl: 'https://images.unsplash.com/photo-1494790108755-2616b612b002?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+        email: 'emily.chen@example.com',
+        order: 1,
+      },
+      {
+        name_en: 'David Liu',
+        name_zh: '刘思辰',
+        department: 'ARTS & CULTURE GROUP',
+        position_en: 'Event Coordinator',
+        position_zh: '活动协调员',
+        bio_en: 'Passionate about organizing cultural performances and community engagement.',
+        bio_zh: '热衷于组织文化表演和社区参与活动。',
+        avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+        email: 'david.liu@example.com',
+        order: 2,
+      },
+      {
+        name_en: 'Sophie Wang',
+        name_zh: '王雪菲',
+        department: 'ARTS & CULTURE GROUP',
+        position_en: 'Music Coordinator',
+        position_zh: '音乐协调员',
+        bio_en: 'Coordinating our annual charity concert and musical events.',
+        bio_zh: '协调我们的年度慈善音乐会和音乐活动。',
+        avatarUrl: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+        email: 'sophie.wang@example.com',
+        order: 3,
+      },
+
+      // CAREER & ACADEMIC GROUP
+      {
+        name_en: 'Michael Zhang',
+        name_zh: '张浩然',
+        department: 'CAREER & ACADEMIC GROUP',
+        position_en: 'Director',
+        position_zh: '总监',
+        bio_en: 'Connecting students with industry professionals and career opportunities.',
+        bio_zh: '连接学生与行业专业人士和职业机会。',
+        avatarUrl: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+        email: 'michael.zhang@example.com',
+        order: 4,
+      },
+      {
+        name_en: 'Jessica Li',
+        name_zh: '李佳怡',
+        department: 'CAREER & ACADEMIC GROUP',
+        position_en: 'Ace Committee Lead',
+        position_zh: 'Ace委员会负责人',
+        bio_en: 'Leading the Ace Career Fair and connecting students with dream companies.',
+        bio_zh: '领导Ace招聘会，连接学生与梦想公司。',
+        avatarUrl: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+        email: 'jessica.li@example.com',
+        order: 5,
+      },
+      {
+        name_en: 'Alex Chen',
+        name_zh: '陈志远',
+        department: 'CAREER & ACADEMIC GROUP',
+        position_en: 'EXCITE Committee Lead',
+        position_zh: 'EXCITE委员会负责人',
+        bio_en: 'Organizing panel talks and peer-to-peer learning opportunities.',
+        bio_zh: '组织小组讨论和同伴学习机会。',
+        avatarUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+        email: 'alex.chen@example.com',
+        order: 6,
+      },
+
+      // OPERATION GROUP
+      {
+        name_en: 'Sarah Zhou',
+        name_zh: '周思雨',
+        department: 'OPERATION GROUP',
+        position_en: 'Operations Director',
+        position_zh: '运营总监',
+        bio_en: 'Overseeing design, technology, and sponsorship operations.',
+        bio_zh: '监督设计、技术和赞助运营。',
+        avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+        email: 'sarah.zhou@example.com',
+        order: 7,
+      },
+      {
+        name_en: 'Kevin Wu',
+        name_zh: '吴凯文',
+        department: 'OPERATION GROUP',
+        position_en: 'Lead Developer',
+        position_zh: '首席开发工程师',
+        bio_en: 'Building innovative technical solutions for the community.',
+        bio_zh: '为社区构建创新的技术解决方案。',
+        avatarUrl: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+        email: 'kevin.wu@example.com',
+        linkedin: 'https://linkedin.com/in/kevinwu',
+        order: 8,
+      },
+      {
+        name_en: 'Grace Liu',
+        name_zh: '刘雨欣',
+        department: 'OPERATION GROUP',
+        position_en: 'Design Lead',
+        position_zh: '设计负责人',
+        bio_en: 'Creating visual identity and designing promotional materials.',
+        bio_zh: '创建视觉形象和设计宣传材料。',
+        avatarUrl: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+        email: 'grace.liu@example.com',
+        order: 9,
+      },
+      {
+        name_en: 'Ryan Kim',
+        name_zh: '金润雨',
+        department: 'OPERATION GROUP',
+        position_en: 'Sponsorship Manager',
+        position_zh: '赞助经理',
+        bio_en: 'Building partnerships and managing sponsorship relationships.',
+        bio_zh: '建立合作伙伴关系和管理赞助关系。',
+        avatarUrl: 'https://images.unsplash.com/photo-1566492031773-4f4e44671d66?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+        email: 'ryan.kim@example.com',
+        order: 10,
+      },
+
+      // SUPPORT GROUP
+      {
+        name_en: 'Amanda Zhang',
+        name_zh: '张晓雯',
+        department: 'SUPPORT GROUP',
+        position_en: 'Support Director',
+        position_zh: '支持总监',
+        bio_en: 'Leading content marketing and human resources initiatives.',
+        bio_zh: '领导内容营销和人力资源倡议。',
+        avatarUrl: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+        email: 'amanda.zhang@example.com',
+        order: 11,
+      },
+      {
+        name_en: 'Tony Huang',
+        name_zh: '黄志强',
+        department: 'SUPPORT GROUP',
+        position_en: 'Content Marketing Lead',
+        position_zh: '内容营销负责人',
+        bio_en: 'Managing social media presence and content creation strategies.',
+        bio_zh: '管理社交媒体存在和内容创建策略。',
+        avatarUrl: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+        email: 'tony.huang@example.com',
+        order: 12,
+      },
+      {
+        name_en: 'Lisa Chen',
+        name_zh: '陈丽莎',
+        department: 'SUPPORT GROUP',
+        position_en: 'HR Manager',
+        position_zh: '人力资源经理',
+        bio_en: 'Organizing team building activities and member engagement.',
+        bio_zh: '组织团队建设活动和成员参与。',
+        avatarUrl: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+        email: 'lisa.chen@example.com',
+        order: 13,
+      },
+    ];
+
+    for (const member of teamMembers) {
+      await prisma.teamMember.create({
+        data: member,
       });
     }
 

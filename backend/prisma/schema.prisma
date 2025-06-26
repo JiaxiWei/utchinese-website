@@ -4,31 +4,50 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
 model Event {
-  id             Int       @id @default(autoincrement())
-  title_en       String // English title
-  title_zh       String // Chinese title
-  description_en String // English description
-  description_zh String // Chinese description
-  imageUrl       String?
-  startDate      DateTime
-  endDate        DateTime?
-  location_en    String? // English location
-  location_zh    String? // Chinese location
-  status         String // 'past', 'ongoing', 'upcoming'
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
-  link           String?
-  featured       Boolean   @default(false)
+  id              Int      @id @default(autoincrement())
+  title_en        String   // English title
+  title_zh        String   // Chinese title
+  description_en  String   // English description
+  description_zh  String   // Chinese description
+  imageUrl        String?
+  startDate       DateTime
+  endDate         DateTime?
+  location_en     String?  // English location
+  location_zh     String?  // Chinese location
+  status          String   // 'past', 'ongoing', 'upcoming'
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  link            String?
+  featured        Boolean  @default(false)
 }
 
 // Admin configuration model
 model AdminConfig {
-  id    Int    @id @default(autoincrement())
-  key   String @unique
-  value String
+  id       Int    @id @default(autoincrement())
+  key      String @unique
+  value    String
+}
+
+// Team member model
+model TeamMember {
+  id           Int      @id @default(autoincrement())
+  name_en      String   // English name
+  name_zh      String   // Chinese name
+  department   String   // Department/Division
+  position_en  String   // English position title
+  position_zh  String   // Chinese position title
+  bio_en       String?  // English biography
+  bio_zh       String?  // Chinese biography
+  avatarUrl    String?  // Profile image URL
+  email        String?  // Contact email
+  linkedin     String?  // LinkedIn profile
+  order        Int      @default(0) // Display order
+  isActive     Boolean  @default(true) // Whether to show on website
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }

@@ -6,6 +6,7 @@ const enTranslations = {
   header: {
     about: 'About Us',
     join: 'Join Us',
+    team: 'Our Team',
     events: 'Events',
     contact: 'Contact',
     language: 'Language',
@@ -197,6 +198,7 @@ const zhTranslations = {
   header: {
     about: '关于我们',
     join: '加入我们',
+    team: '我们的团队',
     events: '活动',
     contact: '联系方式',
     language: '语言',
