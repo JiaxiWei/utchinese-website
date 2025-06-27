@@ -116,7 +116,7 @@ async function main() {
         title_en: 'Qin Society Summer Outdoor Gathering',
         title_zh: '古琴会夏日户外雅集',
         description_en: 'Join us for our first outdoor gathering of the new academic year! This event will be more vibrant and authentic, truly restoring the atmosphere of ancient gatherings. The activity will focus on social music appreciation, and we are honored to invite qin players from our homeland to join us for exchange. UofT alumni will perform pieces such as "Guangling San" and "Ai Nai". Please come and quietly listen to the beautiful qin music.',
-        description_zh: '6月28日下午一点，多大中文古琴会诚邀诸位参加新学年的第一次活动 -- 本社的首次室外雅集🎋 此次的雅集跟以往的活动相比会更为生动，更加还原古时雅集的样子 -- 本次活动将会以social欣赏音乐为主，我们更是有幸请到了来自祖国的琴人一起交流。届时，多大校友们将演出《广陵散》，《欸乃》等等雅乐，请诸位静听琴音一曲。',
+        description_zh: '下午一点，多大中文古琴会诚邀诸位参加新学年的第一次活动 -- 本社的首次室外雅集🎋 此次的雅集跟以往的活动相比会更为生动，更加还原古时雅集的样子 -- 本次活动将会以social欣赏音乐为主，我们更是有幸请到了来自祖国的琴人一起交流。届时，多大校友们将演出《广陵散》，《欸乃》等等雅乐，请诸位静听琴音一曲。',
         imageUrl: '/uploads/events/QinSocietySummerOutdoorGathering.jpg',
         startDate: new Date('2025-06-27T17:00:00'),
         endDate: new Date('2025-06-27T19:00:00'),
