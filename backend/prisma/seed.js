@@ -22,6 +22,21 @@ async function main() {
     
     console.log('Admin password initialized successfully');
 
+    // Helper function to calculate event status
+    const calculateEventStatus = (startDate, endDate) => {
+      const now = new Date();
+      const start = new Date(startDate);
+      const end = endDate ? new Date(endDate) : null;
+      
+      if (end && now > end) {
+        return 'past';
+      } else if (start > now) {
+        return 'upcoming';
+      } else {
+        return 'ongoing';
+      }
+    };
+
     // Add seed events with bilingual content
     const events = [
       {
@@ -34,7 +49,6 @@ async function main() {
         endDate: new Date('2023-11-20'),
         location_en: 'Room 534, 21 Sussex Ave, Toronto',
         location_zh: '多伦多萨塞克斯大道21号534室',
-        status: 'past',
         featured: true,
       },
       {
@@ -47,7 +61,6 @@ async function main() {
         endDate: new Date('2024-02-10'),
         location_en: 'Multi-Faith Centre (Koffler House)',
         location_zh: '多信仰中心（科夫勒楼）',
-        status: 'past',
         featured: true,
       },
       {
@@ -60,7 +73,6 @@ async function main() {
         endDate: new Date('2024-03-05'),
         location_en: 'Online',
         location_zh: '线上',
-        status: 'past',
       },
       {
         title_en: 'New Year Concert',
@@ -72,7 +84,6 @@ async function main() {
         endDate: new Date('2024-01-20'),
         location_en: 'Isabel Bader Theatre',
         location_zh: '伊莎贝尔·巴德剧院',
-        status: 'past',
         featured: true,
         link: 'https://www.youtube.com/watch?v=RX_vrxenzBM'
       },
@@ -86,7 +97,6 @@ async function main() {
         endDate: new Date('2024-04-15'),
         location_en: 'Various Company Locations',
         location_zh: '各公司地点',
-        status: 'past',
         featured: false,
       },
       {
@@ -99,15 +109,33 @@ async function main() {
         endDate: new Date('2024-11-27'),
         location_en: 'Hart House',
         location_zh: '哈特之家',
-        status: 'past',
         featured: true,
         link: 'https://www.youtube.com/watch?v=8HbfgZVLNHM&t=3s'
+      },
+      {
+        title_en: 'Qin Society Summer Outdoor Gathering',
+        title_zh: '古琴会夏日户外雅集',
+        description_en: 'Join us for our first outdoor gathering of the new academic year! This event will be more vibrant and authentic, truly restoring the atmosphere of ancient gatherings. The activity will focus on social music appreciation, and we are honored to invite qin players from our homeland to join us for exchange. UofT alumni will perform pieces such as "Guangling San" and "Ai Nai". Please come and quietly listen to the beautiful qin music.',
+        description_zh: '明日下午一点，多大中文古琴会诚邀诸位参加新学年的第一次活动 -- 本社的首次室外雅集🎋 此次的雅集跟以往的活动相比会更为生动，更加还原古时雅集的样子 -- 本次活动将会以social欣赏音乐为主，我们更是有幸请到了来自祖国的琴人一起交流。届时，多大校友们将演出《广陵散》，《欸乃》等等雅乐，请诸位静听琴音一曲。',
+        imageUrl: '/uploads/events/QinSocietySummerOutdoorGathering.jpg',
+        startDate: new Date('2025-06-27T17:00:00'),
+        endDate: new Date('2025-06-27T19:00:00'),
+        location_en: 'Philosopher\'s Walk, University of Toronto',
+        location_zh: '多伦多大学哲学家小径',
+        featured: true,
+        link: 'https://docs.google.com/forms/d/e/1FAIpQLSdCAaPfNFDTFaFwIEp4cYsugSvLQPhBPo_j2hMVa0UlCZ3Fpw/viewform'
       }
     ];
 
     for (const event of events) {
+      // Calculate status dynamically based on dates
+      const status = calculateEventStatus(event.startDate, event.endDate);
+      
       await prisma.event.create({
-        data: event,
+        data: {
+          ...event,
+          status: status,
+        },
       });
     }
 
