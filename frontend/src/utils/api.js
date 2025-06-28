@@ -33,6 +33,23 @@ api.interceptors.request.use(config => {
   return Promise.reject(error);
 });
 
+// Add a response interceptor to handle 401 (unauthorized) errors globally
+api.interceptors.response.use(
+  response => response,
+  error => {
+    if (error.response && error.response.status === 401) {
+      // Token is invalid or expired – clear stored credentials
+      localStorage.removeItem('adminToken');
+      localStorage.removeItem('adminAuthenticated');
+
+      // Notify the rest of the app (e.g., AuthContext) that the user has been logged out
+      // We dispatch a custom event so interested components can react.
+      window.dispatchEvent(new Event('admin-logout'));
+    }
+    return Promise.reject(error);
+  }
+);
+
 // Event API calls
 export const getEvents = async (status = '') => {
   try {

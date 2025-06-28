@@ -26,6 +26,16 @@ export const AuthProvider = ({ children }) => {
     checkAuth();
   }, []);
 
+  useEffect(() => {
+    // Listen for global logout events (e.g., token expiration)
+    const handleGlobalLogout = () => {
+      setIsAuthenticated(false);
+    };
+
+    window.addEventListener('admin-logout', handleGlobalLogout);
+    return () => window.removeEventListener('admin-logout', handleGlobalLogout);
+  }, []);
+
   // Log in the admin user
   const login = () => {
     setIsAuthenticated(true);
