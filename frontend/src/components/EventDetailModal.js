@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { FiX, FiCalendar, FiMapPin, FiExternalLink, FiEdit } from 'react-icons/fi';
-import { formatDate } from '../utils/dateUtils';
+import { formatEventDateTime } from '../utils/dateUtils';
 import { BASE_URL } from '../utils/api';
 
 const Overlay = styled(motion.div)`
@@ -236,9 +236,7 @@ const EventDetailModal = ({ event: initialEvent, onClose, isAdmin = false }) => 
     link
   } = event;
 
-  const formattedStartDate = formatDate(new Date(startDate));
-  const formattedEndDate = endDate ? formatDate(new Date(endDate)) : null;
-  const dateDisplay = formattedEndDate ? `${formattedStartDate} - ${formattedEndDate}` : formattedStartDate;
+  const dateDisplay = formatEventDateTime(startDate, endDate);
 
   // Default placeholder image from an external source
   const defaultImage = "https://images.unsplash.com/photo-1531058020387-3be344556be6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80";

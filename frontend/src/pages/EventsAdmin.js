@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiPlus, FiEdit2, FiTrash2, FiStar, FiUpload } from 'react-icons/fi';
 import { getEvents, createEvent, updateEvent, deleteEvent, BASE_URL, API_BASE_URL } from '../utils/api';
+import { formatEventDateTime } from '../utils/dateUtils';
 import axios from 'axios';
 
 const AdminContainer = styled.div`
@@ -439,7 +440,9 @@ const EventsAdmin = () => {
     description_zh: '',
     imageUrl: '',
     startDate: '',
+    startTime: '',
     endDate: '',
+    endTime: '',
     location_en: '',
     location_zh: '',
     link: '',
@@ -474,7 +477,9 @@ const EventsAdmin = () => {
         description_zh: event.description_zh || '',
         imageUrl: event.imageUrl || '',
         startDate: new Date(event.startDate).toISOString().split('T')[0],
+        startTime: new Date(event.startDate).toTimeString().split(' ')[0].substring(0, 5),
         endDate: event.endDate ? new Date(event.endDate).toISOString().split('T')[0] : '',
+        endTime: event.endDate ? new Date(event.endDate).toTimeString().split(' ')[0].substring(0, 5) : '',
         location_en: event.location_en || '',
         location_zh: event.location_zh || '',
         link: event.link || '',
@@ -497,7 +502,9 @@ const EventsAdmin = () => {
         description_zh: '',
         imageUrl: '',
         startDate: '',
+        startTime: '',
         endDate: '',
+        endTime: '',
         location_en: '',
         location_zh: '',
         link: '',
@@ -564,6 +571,26 @@ const EventsAdmin = () => {
     try {
       let eventData = { ...formData };
       
+      // Combine date and time for startDate
+      if (eventData.startDate) {
+        const startDateTime = eventData.startTime 
+          ? `${eventData.startDate}T${eventData.startTime}:00`
+          : `${eventData.startDate}T00:00:00`;
+        eventData.startDate = startDateTime;
+      }
+      
+      // Combine date and time for endDate
+      if (eventData.endDate) {
+        const endDateTime = eventData.endTime 
+          ? `${eventData.endDate}T${eventData.endTime}:00`
+          : `${eventData.endDate}T23:59:59`;
+        eventData.endDate = endDateTime;
+      }
+      
+      // Remove separate time fields before sending to API
+      delete eventData.startTime;
+      delete eventData.endTime;
+      
       // If there's a new image file, upload it first
       if (imageFile) {
         const imageUrl = await uploadImage(imageFile);
@@ -606,8 +633,8 @@ const EventsAdmin = () => {
         description_en: event.description_en,
         description_zh: event.description_zh,
         imageUrl: event.imageUrl,
-        startDate: new Date(event.startDate).toISOString().split('T')[0],
-        endDate: event.endDate ? new Date(event.endDate).toISOString().split('T')[0] : '',
+        startDate: event.startDate, // 保持完整的日期时间
+        endDate: event.endDate || '', // 保持完整的日期时间
         location_en: event.location_en,
         location_zh: event.location_zh,
         link: event.link,
@@ -685,8 +712,7 @@ const EventsAdmin = () => {
               <EventId>{event.id}</EventId>
               <EventTitle>{event.title}</EventTitle>
               <EventDate>
-                {new Date(event.startDate).toLocaleDateString('zh-CN')}
-                {event.endDate && ` ~ ${new Date(event.endDate).toLocaleDateString('zh-CN')}`}
+                {formatEventDateTime(event.startDate, event.endDate)}
               </EventDate>
               <EventStatus status={event.status}>
                 {statusText[event.status]}
@@ -843,6 +869,20 @@ const EventsAdmin = () => {
                 </FormGroup>
                 
                 <FormGroup>
+                  <Label htmlFor="startTime">开始时间 (可选)</Label>
+                  <Input 
+                    type="time" 
+                    id="startTime" 
+                    name="startTime" 
+                    value={formData.startTime} 
+                    onChange={handleInputChange}
+                    placeholder="HH:mm"
+                  />
+                </FormGroup>
+              </FormRow>
+              
+              <FormRow>
+                <FormGroup>
                   <Label htmlFor="endDate">结束日期 (可选)</Label>
                   <Input 
                     type="date" 
@@ -850,6 +890,18 @@ const EventsAdmin = () => {
                     name="endDate" 
                     value={formData.endDate} 
                     onChange={handleInputChange}
+                  />
+                </FormGroup>
+                
+                <FormGroup>
+                  <Label htmlFor="endTime">结束时间 (可选)</Label>
+                  <Input 
+                    type="time" 
+                    id="endTime" 
+                    name="endTime" 
+                    value={formData.endTime} 
+                    onChange={handleInputChange}
+                    placeholder="HH:mm"
                   />
                 </FormGroup>
               </FormRow>
