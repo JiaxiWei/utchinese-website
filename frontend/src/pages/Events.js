@@ -298,6 +298,16 @@ const Events = () => {
     fetchEvents();
   }, [i18n.language]);
 
+  // Update selected event when events data changes (for language switching)
+  useEffect(() => {
+    if (selectedEvent && events.length > 0) {
+      const updatedEvent = events.find(e => e.id === selectedEvent.id);
+      if (updatedEvent) {
+        setSelectedEvent(updatedEvent);
+      }
+    }
+  }, [events, selectedEvent?.id]);
+
   const fetchEvents = async () => {
     try {
       setLoading(true);
@@ -352,13 +362,13 @@ const Events = () => {
     }
   };
 
-  const handleEventClick = async (id) => {
-    try {
-      // Fetch the event by ID to get the most recent data with current language
-      const event = await getEventById(id);
+  const handleEventClick = (id) => {
+    // Find the event from existing events data instead of making API call
+    const event = events.find(e => e.id === id);
+    if (event) {
       setSelectedEvent(event);
-    } catch (error) {
-      console.error('Error fetching event details:', error);
+    } else {
+      console.error('Event not found:', id);
     }
   };
 

@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, memo } from 'react';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { FiX, FiCalendar, FiMapPin, FiExternalLink, FiEdit } from 'react-icons/fi';
 import { formatDate } from '../utils/dateUtils';
-import { getEventById, BASE_URL } from '../utils/api';
+import { BASE_URL } from '../utils/api';
 
 const Overlay = styled(motion.div)`
   position: fixed;
@@ -219,19 +219,10 @@ const EventDetailModal = ({ event: initialEvent, onClose, isAdmin = false }) => 
   const { t, i18n } = useTranslation();
   const [event, setEvent] = useState(initialEvent);
   
-  // Reload event data when language changes
+  // Update event data when initialEvent changes (language switching handled by parent)
   useEffect(() => {
-    const reloadEvent = async () => {
-      try {
-        const updatedEvent = await getEventById(event.id);
-        setEvent(updatedEvent);
-      } catch (error) {
-        console.error('Error reloading event details:', error);
-      }
-    };
-    
-    reloadEvent();
-  }, [i18n.language, event.id]);
+    setEvent(initialEvent);
+  }, [initialEvent]);
   
   const { 
     id,
@@ -320,4 +311,4 @@ const EventDetailModal = ({ event: initialEvent, onClose, isAdmin = false }) => 
   );
 };
 
-export default EventDetailModal; 
+export default memo(EventDetailModal); 

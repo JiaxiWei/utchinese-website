@@ -107,7 +107,7 @@ export const changeAdminPassword = async (currentPassword, newPassword) => {
     console.error('Error changing admin password:', error);
     throw error;
   }
-};
+}; 
 
 // Team API calls
 export const getTeamMembers = async (department = '') => {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
@@ -268,6 +268,7 @@ const EventCard = ({ event, index, onClick }) => {
         duration: 0.5
       }}
       whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
     >
       {featured && <FeaturedBadge>{t('events.featured')}</FeaturedBadge>}
       <StatusBadge status={status}>{t(`events.status.${status}`)}</StatusBadge>
@@ -296,4 +297,4 @@ const EventCard = ({ event, index, onClick }) => {
   );
 };
 
-export default EventCard; 
+export default memo(EventCard); 
