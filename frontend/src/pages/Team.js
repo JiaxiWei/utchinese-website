@@ -10,6 +10,9 @@ import { getTeamMembers, getTeamDepartments } from '../utils/api';
 gsap.registerPlugin(ScrollTrigger);
 
 const StyledTeam = styled.div`
+  overflow-x: hidden;
+  width: 100%;
+  
   .page-header {
     height: 80vh;
     background: linear-gradient(135deg, rgba(224, 43, 32, 0.05) 0%, rgba(252, 185, 0, 0.1) 100%);
@@ -20,6 +23,17 @@ const StyledTeam = styled.div`
     position: relative;
     overflow: hidden;
     padding-top: 5rem;
+    width: 100%;
+    
+    @media (max-width: 768px) {
+      height: 70vh;
+      padding-top: 4rem;
+    }
+    
+    @media (max-width: 480px) {
+      height: 60vh;
+      padding-top: 3rem;
+    }
     
     .header-bg {
       position: absolute;
@@ -63,6 +77,15 @@ const StyledTeam = styled.div`
       z-index: 1;
       max-width: 1000px;
       padding: 0 2rem;
+      width: 100%;
+      
+      @media (max-width: 768px) {
+        padding: 0 1rem;
+      }
+      
+      @media (max-width: 480px) {
+        padding: 0 0.5rem;
+      }
     }
     
     h1 {
@@ -101,6 +124,19 @@ const StyledTeam = styled.div`
       gap: 2rem;
       max-width: 600px;
       margin: 0 auto;
+      width: 100%;
+      
+      @media (max-width: 768px) {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+        max-width: 400px;
+      }
+      
+      @media (max-width: 480px) {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+        max-width: 200px;
+      }
       
       .stat-item {
         padding: 1.5rem;
@@ -138,6 +174,17 @@ const StyledTeam = styled.div`
       gap: 1rem;
       justify-content: center;
       align-items: center;
+      padding: 0 1rem;
+      
+      @media (max-width: 768px) {
+        gap: 0.75rem;
+        padding: 0 0.5rem;
+      }
+      
+      @media (max-width: 480px) {
+        gap: 0.5rem;
+        padding: 0 0.25rem;
+      }
       
       .filter-label {
         display: flex;
@@ -163,6 +210,18 @@ const StyledTeam = styled.div`
         font-weight: 500;
         position: relative;
         overflow: hidden;
+        white-space: nowrap;
+        
+        @media (max-width: 768px) {
+          padding: 0.6rem 1rem;
+          font-size: 0.9rem;
+        }
+        
+        @media (max-width: 480px) {
+          padding: 0.5rem 0.75rem;
+          font-size: 0.8rem;
+          border-radius: 20px;
+        }
         
         &:before {
           content: '';
@@ -206,6 +265,15 @@ const StyledTeam = styled.div`
     
     .container {
       max-width: 1400px;
+      padding: 0 2rem;
+      
+      @media (max-width: 768px) {
+        padding: 0 1rem;
+      }
+      
+      @media (max-width: 480px) {
+        padding: 0 0.5rem;
+      }
     }
     
     .department-section {
@@ -220,6 +288,8 @@ const StyledTeam = styled.div`
           margin-bottom: 1rem;
           position: relative;
           display: inline-block;
+          word-break: break-word;
+          white-space: normal;
           
           &:after {
             content: '';
@@ -244,12 +314,54 @@ const StyledTeam = styled.div`
       
       .members-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
         gap: 2rem;
+        justify-content: center;
+        max-width: 1200px;
+        margin: 0 auto;
+        
+        /* 默认布局 */
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        
+        /* 少量成员时的特殊布局 */
+        &.single-member {
+          grid-template-columns: minmax(300px, 400px);
+          justify-content: center;
+        }
+        
+        &.two-members {
+          grid-template-columns: repeat(2, minmax(300px, 400px));
+          justify-content: center;
+        }
+        
+        &.three-members {
+          grid-template-columns: repeat(3, minmax(300px, 350px));
+          justify-content: center;
+        }
         
         @media (max-width: 768px) {
           grid-template-columns: 1fr;
           gap: 1.5rem;
+          max-width: 100%;
+          padding: 0 1rem;
+
+          /* Override special layouts to enforce single column */
+          &.single-member,
+          &.two-members,
+          &.three-members {
+            grid-template-columns: 1fr;
+          }
+        }
+        
+        @media (max-width: 480px) {
+          gap: 1rem;
+          padding: 0 0.5rem;
+
+          /* Override special layouts on extra-small screens */
+          &.single-member,
+          &.two-members,
+          &.three-members {
+            grid-template-columns: 1fr;
+          }
         }
       }
     }
@@ -265,6 +377,18 @@ const StyledTeam = styled.div`
     overflow: hidden;
     transition: all 0.4s ease;
     cursor: pointer;
+    width: 100%;
+    max-width: 100%;
+    
+    @media (max-width: 768px) {
+      padding: 1.5rem;
+      border-radius: 15px;
+    }
+    
+    @media (max-width: 480px) {
+      padding: 1rem;
+      border-radius: 12px;
+    }
     
     &:before {
       content: '';
@@ -501,6 +625,19 @@ const Team = () => {
   const totalMembers = teamMembers.length;
   const totalDepartments = departments.length;
 
+  // 根据成员数量获取合适的网格类名
+  const getGridClassName = (memberCount) => {
+    let className = 'members-grid';
+    if (memberCount === 1) {
+      className += ' single-member';
+    } else if (memberCount === 2) {
+      className += ' two-members';
+    } else if (memberCount === 3) {
+      className += ' three-members';
+    }
+    return className;
+  };
+
   if (loading) {
     return (
       <StyledTeam>
@@ -630,7 +767,7 @@ const Team = () => {
                         {members.length} {i18n.language === 'zh' ? '位成员' : 'members'}
                       </p>
                     </div>
-                    <div className="members-grid">
+                    <div className={getGridClassName(members.length)}>
                       {members.map((member, index) => (
                         <motion.div
                           key={member.id}
@@ -716,7 +853,7 @@ const Team = () => {
                       {filteredMembers.length} {i18n.language === 'zh' ? '位成员' : 'members'}
                     </p>
                   </div>
-                  <div className="members-grid">
+                  <div className={getGridClassName(filteredMembers.length)}>
                     {filteredMembers.map((member, index) => (
                       <motion.div
                         key={member.id}

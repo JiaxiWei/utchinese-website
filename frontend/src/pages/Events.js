@@ -2,28 +2,27 @@ import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+
 import { getEvents, getEventById, BASE_URL } from '../utils/api';
 import EventCard from '../components/EventCard';
 import EventDetailModal from '../components/EventDetailModal';
 import EventFilters from '../components/EventFilters';
-import AdminLoginModal from '../components/AdminLoginModal';
-import { FiEdit, FiPlus, FiLock } from 'react-icons/fi';
+import { FiPlus } from 'react-icons/fi';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { useAuth } from '../contexts/AuthContext';
+
 
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
 
 const PageContainer = styled.div`
   min-height: 100vh;
-  padding: 120px 20px 100px;
+  padding: 0 20px 100px;
   background: var(--background-alt);
   transition: background-color 0.3s ease;
   
   @media (max-width: 768px) {
-    padding: 100px 16px 80px;
+    padding: 0 16px 80px;
   }
 `;
 
@@ -37,13 +36,6 @@ const Header = styled.div`
   margin-bottom: 60px;
   overflow: hidden;
   padding-top: 0;
-`;
-
-const HeaderControls = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 30px;
 `;
 
 const DecorativeLine = styled(motion.div)`
@@ -124,59 +116,6 @@ const NoEventsMessage = styled.div`
   color: var(--text-light);
 `;
 
-const AdminButton = styled(motion.button)`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 20px;
-  background: linear-gradient(135deg, var(--primary), var(--primary-light));
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(var(--primary-rgb), 0.2);
-  
-  &:hover {
-    box-shadow: 0 6px 20px rgba(var(--primary-rgb), 0.3);
-    transform: translateY(-2px);
-  }
-  
-  svg {
-    font-size: 18px;
-  }
-`;
-
-const AdminLink = styled(Link)`
-  text-decoration: none;
-`;
-
-const AdminLoginButton = styled(motion.button)`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 20px;
-  background: var(--background);
-  color: var(--text-light);
-  border: none;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  
-  &:hover {
-    background: var(--background-alt);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-    transform: translateY(-2px);
-  }
-  
-  svg {
-    font-size: 18px;
-  }
-`;
-
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
@@ -210,9 +149,7 @@ const Events = () => {
   const [activeFilter, setActiveFilter] = useState('');
   const [loading, setLoading] = useState(true);
   const [counts, setCounts] = useState({ all: 0, upcoming: 0, ongoing: 0, past: 0 });
-  const [loginModalOpen, setLoginModalOpen] = useState(false);
   
-  const { isAuthenticated, login, logout } = useAuth();
   
   const headerRef = useRef(null);
   const bubblesRef = useRef([]);
@@ -376,16 +313,7 @@ const Events = () => {
     setSelectedEvent(null);
   };
 
-  const handleLoginSuccess = () => {
-    login();
-    setLoginModalOpen(false);
-  };
 
-  const handleAdminClick = () => {
-    if (!isAuthenticated) {
-      setLoginModalOpen(true);
-    }
-  };
 
   return (
     <PageContainer>
@@ -396,7 +324,6 @@ const Events = () => {
             initial="hidden"
             animate="visible"
           >
-            <HeaderControls>
               <div>
                 <DecorativeLine
                   initial={{ width: 0 }}
@@ -405,26 +332,6 @@ const Events = () => {
                 />
                 <PageTitle variants={textVariants}>{t('events.title')}</PageTitle>
               </div>
-              
-              {isAuthenticated ? (
-                <AdminLink to="/admin/events">
-                  <AdminButton
-                    whileHover={{ scale: 1.03 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    <FiEdit /> {t('events.admin.manage')}
-                  </AdminButton>
-                </AdminLink>
-              ) : (
-                <AdminLoginButton
-                  whileHover={{ scale: 1.03 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={handleAdminClick}
-                >
-                  <FiLock /> {t('admin.login', 'Admin Login')}
-                </AdminLoginButton>
-              )}
-            </HeaderControls>
             
             <SubTitle variants={textVariants}>
               {t('events.subtitle')}
@@ -462,17 +369,11 @@ const Events = () => {
         )}
       </ContentWrapper>
 
-      <AdminLoginModal 
-        isOpen={loginModalOpen}
-        onClose={() => setLoginModalOpen(false)}
-        onLogin={handleLoginSuccess}
-      />
-
       {selectedEvent && (
         <EventDetailModal
           event={selectedEvent}
           onClose={handleCloseModal}
-          isAdmin={isAuthenticated}
+          isAdmin={false}
         />
       )}
     </PageContainer>

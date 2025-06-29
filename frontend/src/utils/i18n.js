@@ -13,7 +13,12 @@ const enTranslations = {
     home: 'Home',
     viewMore: 'View More',
     darkMode: 'Dark Mode',
-    lightMode: 'Light Mode'
+    lightMode: 'Light Mode',
+    login: 'Login',
+    logout: 'Logout',
+    eventManagement: 'Events',
+    staffManagement: 'Staff',
+    myProfile: 'Profile'
   },
   home: {
     hero: {
@@ -133,7 +138,7 @@ const enTranslations = {
       submit: 'Submit Application',
       title: 'UTChinese Network Application Form',
       description: 'Please fill out our official application form to join UTChinese Network. The form will open in a new tab or you can complete it directly below.',
-      openForm: 'Open Form in New Tab'
+              openForm: 'Open Form in New Tab'
     }
   },
   groups: {
@@ -190,6 +195,209 @@ const enTranslations = {
       edit: 'Edit Event',
       add: 'Add New Event'
     }
+  },
+  staff: {
+    login: {
+      title: 'Staff Login',
+      subtitle: 'Access your staff account to manage your profile',
+      username: 'Username or Email',
+      usernamePlaceholder: 'Enter your username or email',
+      password: 'Password',
+      passwordPlaceholder: 'Enter your password',
+      loginButton: 'Login',
+      loggingIn: 'Logging in...',
+      error: {
+        required: 'Please enter both username and password',
+        failed: 'Login failed. Please check your credentials.'
+      }
+    },
+    profile: {
+      title: 'Staff Profile',
+      subtitle: 'Manage your personal information and profile settings',
+      viewPermission: 'View Permission',
+      logout: 'Logout',
+      status: {
+        approved: {
+          title: 'Profile Approved',
+          message: 'Your profile has been approved and is now visible on the team page.'
+        },
+        pending: {
+          title: 'Profile Pending Review',
+          message: 'Your profile is currently under review by administrators.'
+        },
+        rejected: {
+          title: 'Profile Rejected',
+          message: 'Your profile was rejected. Please make necessary changes and resubmit.'
+        },
+        new: {
+          title: 'New Profile',
+          message: 'Please complete your profile information.'
+        }
+      },
+      changeAvatar: 'Change Avatar',
+      uploading: 'Uploading...',
+      nameEn: 'English Name',
+      nameEnPlaceholder: 'Enter your English name',
+      nameZh: 'Chinese Name',
+      nameZhPlaceholder: 'Enter your Chinese name',
+      positionEn: 'Position (English)',
+      positionEnPlaceholder: 'Enter your position in English',
+      positionZh: 'Position (Chinese)',
+      positionZhPlaceholder: 'Enter your position in Chinese',
+      department: 'Department',
+      selectDepartment: 'Select a department',
+      departments: {
+        arts: 'ARTS & CULTURE GROUP',
+        career: 'CAREER & ACADEMIC GROUP',
+        operation: 'OPERATION GROUP',
+        support: 'SUPPORT GROUP'
+      },
+      bioEn: 'Bio (English)',
+      bioEnPlaceholder: 'Tell us about yourself in English...',
+      bioZh: 'Bio (Chinese)',
+      bioZhPlaceholder: 'Tell us about yourself in Chinese...',
+      email: 'Email',
+      emailPlaceholder: 'Enter your email address',
+      phone: 'Phone',
+      phonePlaceholder: 'Enter your phone number',
+      linkedin: 'LinkedIn',
+      linkedinPlaceholder: 'Enter your LinkedIn profile URL',
+      save: 'Save Changes',
+      saving: 'Saving...',
+      saved: 'Profile saved successfully!',
+      avatarUploaded: 'Avatar uploaded successfully!',
+      error: {
+        required: 'Please fill in all required fields',
+        invalidFile: 'Please select a valid image file',
+        fileTooLarge: 'File size is too large (max 5MB)',
+        uploadFailed: 'Failed to upload avatar',
+        saveFailed: 'Failed to save profile'
+      },
+      permissions: {
+        title: 'My Permissions',
+        manageEvents: 'Event',
+        manageEventsDesc: 'Can create, edit, and delete events',
+        reviewProfiles: 'Review',
+        reviewProfilesDesc: 'Can review and approve staff profiles',
+        manageStaff: 'Account',
+        manageStaffDesc: 'Can create and manage staff accounts',
+        adminNote: 'As an admin, you have all permissions automatically',
+        defaultPosition: 'Staff Member',
+        noBio: 'No bio available'
+      },
+      verified: 'Profile Verified',
+      unverified: 'Profile Pending Verification'
+    }
+  },
+  common: {
+    loading: 'Loading...',
+    save: 'Save',
+    cancel: 'Cancel',
+    edit: 'Edit',
+    delete: 'Delete',
+    confirm: 'Confirm',
+    yes: 'Yes',
+    no: 'No',
+    manageStaffDesc: '可以创建和管理员工账户',
+    adminNote: '作为管理员，您自动拥有所有权限',
+    defaultPosition: '社团成员',
+    noBio: '暂无个人简介'
+  },
+  login: {
+    title: 'Login',
+    subtitle: 'Access your account to manage your profile and content',
+    identifier: 'Username / Email',
+    identifierPlaceholder: 'Username or email',
+    password: 'Password',
+    passwordPlaceholder: 'Enter your password',
+    signIn: 'Sign In',
+    signingIn: 'Signing In...',
+    error: {
+      required: 'Please enter username and password',
+      failed: 'Login failed. Please check your credentials.'
+    }
+  },
+  admin: {
+    login: {
+      title: 'Admin Authentication',
+      passwordPlaceholder: 'Enter admin password',
+      loginButton: 'Login',
+      authenticating: 'Authenticating...',
+      error: {
+        failed: 'Authentication failed',
+        serverError: 'Server not responding. Please try again.'
+      },
+    },
+    staff: {
+      managementTitle: 'Staff Management',
+      managementSubtitle: 'Manage staff accounts and review profile submissions',
+      tabs: {
+        accounts: 'Staff Accounts',
+        profiles: 'Profile Reviews'
+      },
+      searchPlaceholder: 'Search staff...',
+      filters: {
+        all: 'All',
+        active: 'Active',
+        inactive: 'Inactive',
+        pending: 'Pending',
+        approved: 'Approved',
+        rejected: 'Rejected'
+      },
+      createAccount: 'Create Account',
+      modal: {
+        create: 'Create Staff Account',
+        edit: 'Edit Staff Account',
+        review: 'Review Profile'
+      },
+      form: {
+        username: 'Username',
+        email: 'Email',
+        password: 'Password',
+        role: 'Role',
+        active: 'Active',
+        status: 'Status',
+        displayOrder: 'Display Order',
+        reviewNote: 'Review Note',
+        reviewNotePlaceholder: 'Add a note about this review...',
+        roles: {
+          staff: 'Staff',
+          admin: 'Admin'
+        },
+        statuses: {
+          pending: 'Pending',
+          approved: 'Approved',
+          rejected: 'Rejected'
+        },
+        buttons: {
+          cancel: 'Cancel',
+          create: 'Create',
+          update: 'Update',
+          save: 'Save'
+        }
+      },
+      noPermissions: 'No special permissions',
+      emptyStates: {
+        noAccounts: 'No staff accounts found',
+        noAccountsDesc: 'There are no staff accounts matching your criteria.',
+        noProfiles: 'No profiles to review',
+        noProfilesDesc: 'There are no pending or rejected profiles at this time.',
+        noResults: 'No results found',
+        noResultsDesc: 'Try adjusting your search or filter criteria.'
+      },
+      batchDelete: {
+        button: 'Batch Delete',
+        noSelection: 'Please select at least one item to delete.',
+        confirm: 'Are you sure you want to delete {{count}} staff account(s)? This action cannot be undone.',
+        success: 'Successfully deleted {{count}} staff account(s).',
+        error: 'Failed to delete selected accounts. Please try again.'
+      },
+      selectAll: {
+        selectAll: 'Select All',
+        deselectAll: 'Deselect All',
+        selected: '{{count}} selected'
+      }
+    }
   }
 };
 
@@ -205,7 +413,12 @@ const zhTranslations = {
     home: '首页',
     viewMore: '查看更多',
     darkMode: '夜间模式',
-    lightMode: '日间模式'
+    lightMode: '日间模式',
+    login: '登录',
+    logout: '退出登录',
+    eventManagement: '活动管理',
+    staffManagement: '员工管理',
+    myProfile: '我的资料'
   },
   home: {
     hero: {
@@ -325,7 +538,7 @@ const zhTranslations = {
       submit: '提交申请',
       title: '多大中文招新报名表',
       description: '请填写我们的官方申请表以加入多大中文。表单将在新标签页中打开，或者您可以直接在下方完成。',
-      openForm: '在新标签页中打开表单'
+              openForm: '在新标签页中打开表单'
     }
   },
   groups: {
@@ -381,6 +594,209 @@ const zhTranslations = {
       manage: '管理活动',
       edit: '编辑活动',
       add: '添加新活动'
+    }
+  },
+  staff: {
+    login: {
+      title: '员工登录',
+      subtitle: '登录您的员工账户以管理个人资料',
+      username: '用户名或邮箱',
+      usernamePlaceholder: '请输入用户名或邮箱',
+      password: '密码',
+      passwordPlaceholder: '请输入密码',
+      loginButton: '登录',
+      loggingIn: '登录中...',
+      error: {
+        required: '请输入用户名和密码',
+        failed: '登录失败，请检查您的凭据。'
+      }
+    },
+    profile: {
+      title: '员工资料',
+      subtitle: '管理您的个人信息和资料设置',
+      viewPermission: '查看权限',
+      logout: '退出登录',
+      status: {
+        approved: {
+          title: '资料已通过审核',
+          message: '您的资料已通过审核，现在已在团队页面显示。'
+        },
+        pending: {
+          title: '资料审核中',
+          message: '您的资料正在等待管理员审核。'
+        },
+        rejected: {
+          title: '资料被拒绝',
+          message: '您的资料被拒绝，请进行必要的修改后重新提交。'
+        },
+        new: {
+          title: '新建资料',
+          message: '请完善您的个人资料信息。'
+        }
+      },
+      changeAvatar: '更换头像',
+      uploading: '上传中...',
+      nameEn: '英文姓名',
+      nameEnPlaceholder: '请输入您的英文姓名',
+      nameZh: '中文姓名',
+      nameZhPlaceholder: '请输入您的中文姓名',
+      positionEn: '职位（英文）',
+      positionEnPlaceholder: '请输入您的英文职位',
+      positionZh: '职位（中文）',
+      positionZhPlaceholder: '请输入您的中文职位',
+      department: '部门',
+      selectDepartment: '请选择部门',
+      departments: {
+        arts: '文化艺术部门',
+        career: '职业学术部门',
+        operation: '运营部门',
+        support: '支持部门'
+      },
+      bioEn: '个人简介（英文）',
+      bioEnPlaceholder: '请用英文介绍一下您自己...',
+      bioZh: '个人简介（中文）',
+      bioZhPlaceholder: '请用中文介绍一下您自己...',
+      email: '邮箱',
+      emailPlaceholder: '请输入您的邮箱地址',
+      phone: '电话',
+      phonePlaceholder: '请输入您的电话号码',
+      linkedin: 'LinkedIn',
+      linkedinPlaceholder: '请输入您的 LinkedIn 个人资料链接',
+      save: '保存更改',
+      saving: '保存中...',
+      saved: '资料保存成功！',
+      avatarUploaded: '头像上传成功！',
+      error: {
+        required: '请填写所有必填字段',
+        invalidFile: '请选择有效的图片文件',
+        fileTooLarge: '文件大小过大（最大5MB）',
+        uploadFailed: '头像上传失败',
+        saveFailed: '资料保存失败'
+      },
+      permissions: {
+        title: '我的权限',
+        manageEvents: '活动管理',
+        manageEventsDesc: '可以增删改查活动',
+        reviewProfiles: '资料审核',
+        reviewProfilesDesc: '可以审核和批准员工资料',
+        manageStaff: '账户管理',
+        manageStaffDesc: '可以创建和管理员工账户',
+        adminNote: '作为管理员，您自动拥有所有权限',
+        defaultPosition: '社团成员',
+        noBio: '暂无个人简介'
+      },
+      verified: '资料已认证',
+      unverified: '资料待认证'
+    }
+  },
+  common: {
+    loading: '加载中...',
+    save: '保存',
+    cancel: '取消',
+    edit: '编辑',
+    delete: '删除',
+    confirm: '确认',
+    yes: '是',
+    no: '否',
+    manageStaffDesc: '可以创建和管理员工账户',
+    adminNote: '作为管理员，您自动拥有所有权限',
+    defaultPosition: '社团成员',
+    noBio: '暂无个人简介'
+  },
+  login: {
+    title: '登录',
+    subtitle: '登录您的账户以管理个人资料和内容',
+    identifier: '用户名/邮箱',
+    identifierPlaceholder: '用户名或邮箱',
+    password: '密码',
+    passwordPlaceholder: '请输入密码',
+    signIn: '登录',
+    signingIn: '登录中...',
+    error: {
+      required: '请输入用户名和密码',
+      failed: '登录失败，请检查您的凭据。'
+    }
+  },
+  admin: {
+    login: {
+      title: '管理员认证',
+      passwordPlaceholder: '请输入管理员密码',
+      loginButton: '登录',
+      authenticating: '认证中...',
+      error: {
+        failed: '认证失败',
+        serverError: '服务器无响应，请重试。'
+      }
+    },
+    staff: {
+      managementTitle: '员工管理',
+      managementSubtitle: '管理员工账户并审核个人资料提交',
+      tabs: {
+        accounts: '员工账户',
+        profiles: '资料审核'
+      },
+      searchPlaceholder: '搜索员工...',
+      filters: {
+        all: '全部',
+                 active: '激活状态',
+        inactive: '不活跃',
+        pending: '待审核',
+        approved: '已通过',
+        rejected: '已拒绝'
+      },
+      createAccount: '创建账户',
+      modal: {
+        create: '创建员工账户',
+        edit: '编辑员工账户',
+        review: '审核资料'
+      },
+      form: {
+        username: '用户名',
+        email: '邮箱',
+        password: '密码',
+        role: '角色',
+        active: '激活状态',
+        status: '状态',
+        displayOrder: '显示顺序',
+        reviewNote: '审核备注',
+        reviewNotePlaceholder: '添加关于此次审核的备注...',
+        roles: {
+          staff: '员工',
+          admin: '管理员'
+        },
+        statuses: {
+          pending: '待审核',
+          approved: '已通过',
+          rejected: '已拒绝'
+        },
+        buttons: {
+          cancel: '取消',
+          create: '创建',
+          update: '更新',
+          save: '保存'
+        }
+      },
+      noPermissions: '无特殊权限',
+      emptyStates: {
+        noAccounts: '未找到员工账户',
+        noAccountsDesc: '没有符合您条件的员工账户。',
+        noProfiles: '暂无资料需要审核',
+        noProfilesDesc: '目前没有待审核或被拒绝的资料。',
+        noResults: '未找到结果',
+        noResultsDesc: '请尝试调整您的搜索或筛选条件。'
+      },
+      batchDelete: {
+        button: '批量删除',
+        noSelection: '请至少选择一个项目进行删除。',
+        confirm: '您确定要删除 {{count}} 个员工账户吗？此操作无法撤销。',
+        success: '成功删除了 {{count}} 个员工账户。',
+        error: '删除选中账户失败，请重试。'
+      },
+      selectAll: {
+        selectAll: '全选',
+        deselectAll: '取消全选',
+        selected: '已选择 {{count}} 个'
+      }
     }
   }
 };

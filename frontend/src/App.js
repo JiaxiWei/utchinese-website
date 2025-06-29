@@ -17,6 +17,8 @@ const Join = lazy(() => import('./pages/Join'));
 const Team = lazy(() => import('./pages/Team'));
 const Events = lazy(() => import('./pages/Events'));
 const EventsAdmin = lazy(() => import('./pages/EventsAdmin'));
+const StaffProfile = lazy(() => import('./pages/StaffProfile'));
+const StaffAdmin = lazy(() => import('./pages/StaffAdmin'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 
 // Loading component
@@ -92,6 +94,8 @@ function App() {
                 <Route path="/team" element={<Team />} />
                 <Route path="/events" element={<Events />} />
                 <Route path="/admin/events" element={<EventsAdmin />} />
+                <Route path="/admin/staff" element={<StaffAdmin />} />
+                <Route path="/staff/profile" element={<StaffProfile />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </Suspense>

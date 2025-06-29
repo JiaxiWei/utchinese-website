@@ -1,0 +1,531 @@
+const bcrypt = require('bcryptjs');
+const fs = require('fs').promises;
+const path = require('path');
+const prisma = require('../config/database');
+const { transformTeamMemberByLanguage } = require('../utils/fileUtils');
+
+class StaffService {
+  // Get staff profile (own profile)
+  static async getStaffProfile(staffId) {
+    const profile = await prisma.staffProfile.findUnique({
+      where: { staffId: staffId },
+      include: {
+        staff: {
+          select: {
+            username: true,
+            email: true,
+            role: true
+          }
+        }
+      }
+    });
+    
+    return profile;
+  }
+
+  // Create or update staff profile
+  static async saveStaffProfile(staffId, profileData, username) {
+    const {
+      name_en,
+      name_zh,
+      position_en,
+      position_zh,
+      department,
+      bio_en,
+      bio_zh,
+      avatarUrl,
+      email,
+      linkedin,
+      phone
+    } = profileData;
+    
+    // Validation
+    if (!name_en || !name_zh || !position_en || !position_zh || !department) {
+      throw new Error('Required fields missing');
+    }
+    
+    // Check if profile exists
+    const existingProfile = await prisma.staffProfile.findUnique({
+      where: { staffId: staffId }
+    });
+    
+    const profileSaveData = {
+      name_en,
+      name_zh,
+      position_en,
+      position_zh,
+      department,
+      bio_en,
+      bio_zh,
+      avatarUrl,
+      email,
+      linkedin,
+      phone,
+      status: 'pending', // Reset to pending when updated
+      isVisible: false // Hide until approved
+    };
+    
+    let profile;
+    if (existingProfile) {
+      // Update existing profile
+      profile = await prisma.staffProfile.update({
+        where: { staffId: staffId },
+        data: profileSaveData
+      });
+      
+      // Log history
+      await prisma.staffProfileHistory.create({
+        data: {
+          staffId: staffId,
+          profileData: JSON.stringify(profileSaveData),
+          action: 'updated',
+          actionBy: username
+        }
+      });
+    } else {
+      // Create new profile
+      profile = await prisma.staffProfile.create({
+        data: {
+          ...profileSaveData,
+          staffId: staffId
+        }
+      });
+      
+      // Log history
+      await prisma.staffProfileHistory.create({
+        data: {
+          staffId: staffId,
+          profileData: JSON.stringify(profileSaveData),
+          action: 'created',
+          actionBy: username
+        }
+      });
+    }
+    
+    return { 
+      profile, 
+      message: 'Profile submitted for review' 
+    };
+  }
+
+  // Upload staff avatar
+  static async uploadStaffAvatar(req) {
+    if (!req.file) {
+      throw new Error('No avatar file provided');
+    }
+    
+    const staffId = req.userId;
+    
+    // Get staff information for username
+    const staff = await prisma.staff.findUnique({
+      where: { id: staffId },
+      select: { username: true }
+    });
+    
+    if (!staff) {
+      throw new Error('Staff not found');
+    }
+    
+    // Check if staff profile exists first
+    const existingProfile = await prisma.staffProfile.findUnique({
+      where: { staffId }
+    });
+
+    if (!existingProfile) {
+      // Delete the uploaded file since we won't use it
+      try {
+        await fs.unlink(req.file.path);
+      } catch (error) {
+        console.warn('Warning: Could not delete uploaded file:', error.message);
+      }
+      throw new Error('请先完善个人资料后再上传头像');
+    }
+    
+    // Delete old avatar file if it exists
+    if (existingProfile.avatarUrl) {
+      await StaffService.deleteOldAvatar(existingProfile.avatarUrl);
+    }
+    
+    // Generate new filename with username and timestamp
+    const fileExtension = path.extname(req.file.originalname);
+    const timestamp = Date.now();
+    const newFilename = `${staff.username}-${timestamp}${fileExtension}`;
+    
+    // Move uploaded file to new location with new name
+    const oldPath = req.file.path;
+    const newPath = path.join(path.dirname(oldPath), newFilename);
+    
+    try {
+      await fs.rename(oldPath, newPath);
+    } catch (error) {
+      console.error('Error renaming avatar file:', error);
+      throw new Error('Failed to process avatar file');
+    }
+    
+    // Get the server URL
+    const protocol = req.protocol;
+    const host = req.get('host');
+    
+    // Generate the avatar URL with new filename
+    const avatarUrl = `${protocol}://${host}/uploads/staff/${newFilename}`;
+
+    // Update existing staff profile with the new avatar URL
+    await prisma.staffProfile.update({
+      where: { staffId },
+      data: { 
+        avatarUrl,
+        updatedAt: new Date()
+      }
+    });
+    
+    return { 
+      avatarUrl, 
+      message: 'Avatar uploaded and saved successfully' 
+    };
+  }
+
+  // Helper method to delete old avatar file
+  static async deleteOldAvatar(avatarUrl) {
+    try {
+      // Extract filename from URL
+      // avatarUrl format: http://localhost:5000/uploads/staff/filename.jpg
+      const urlParts = avatarUrl.split('/');
+      const filename = urlParts[urlParts.length - 1];
+      
+      // Construct file path
+      const filePath = path.join(__dirname, '../../uploads/staff', filename);
+      
+      // Check if file exists and delete it
+      try {
+        await fs.access(filePath);
+        await fs.unlink(filePath);
+        console.log(`Deleted old avatar: ${filename}`);
+      } catch (error) {
+        // File doesn't exist or can't be accessed, ignore
+        if (error.code !== 'ENOENT') {
+          console.warn(`Warning: Could not delete old avatar ${filename}:`, error.message);
+        }
+      }
+    } catch (error) {
+      console.warn('Warning: Error processing old avatar deletion:', error.message);
+    }
+  }
+
+
+
+  // Admin: Get all staff accounts
+  static async getAllStaff() {
+    const staff = await prisma.staff.findMany({
+      include: {
+        profile: true
+      },
+      orderBy: { createdAt: 'desc' }
+    });
+    
+    return staff;
+  }
+
+  // Admin: Create staff account
+  static async createStaffAccount(staffData) {
+    const { 
+      username, 
+      email, 
+      password, 
+      role = 'staff',
+      permissions = {}
+    } = staffData;
+    
+    if (!username || !email || !password) {
+      throw new Error('用户名、邮箱和密码不能为空');
+    }
+    
+    // 验证邮箱格式
+    if (!email.endsWith('@mail.utoronto.ca')) {
+      throw new Error('邮箱必须是多伦多大学邮箱格式 (xx.xx@mail.utoronto.ca)');
+    }
+    
+    // Check if username or email already exists
+    const existingStaff = await prisma.staff.findFirst({
+      where: {
+        OR: [
+          { username },
+          { email }
+        ]
+      }
+    });
+    
+    if (existingStaff) {
+      throw new Error('用户名或邮箱已存在');
+    }
+    
+    // Hash password
+    const passwordHash = await bcrypt.hash(password, 10);
+    
+    const newStaff = await prisma.staff.create({
+      data: {
+        username,
+        email,
+        passwordHash,
+        role,
+        canManageEvents: permissions.canManageEvents || false,
+        canManageStaff: permissions.canManageStaff || false,
+        canReviewProfiles: permissions.canReviewProfiles || false,
+        isActive: true
+      }
+    });
+    
+    // Remove password hash from response
+    const { passwordHash: _, ...staffResponse } = newStaff;
+    
+    return { 
+      staff: staffResponse, 
+      message: '员工账户创建成功' 
+    };
+  }
+
+  // Admin: Update staff account
+  static async updateStaffAccount(id, updateData) {
+    const { 
+      username, 
+      email, 
+      isActive, 
+      role,
+      permissions = {}
+    } = updateData;
+    
+    const updateFields = {};
+    if (username !== undefined) updateFields.username = username;
+    if (email !== undefined) updateFields.email = email;
+    if (isActive !== undefined) updateFields.isActive = isActive;
+    if (role !== undefined) updateFields.role = role;
+    
+    // 更新权限字段
+    if (permissions.canManageEvents !== undefined) updateFields.canManageEvents = permissions.canManageEvents;
+    if (permissions.canManageStaff !== undefined) updateFields.canManageStaff = permissions.canManageStaff;
+    if (permissions.canReviewProfiles !== undefined) updateFields.canReviewProfiles = permissions.canReviewProfiles;
+    
+    const updatedStaff = await prisma.staff.update({
+      where: { id: parseInt(id) },
+      data: updateFields,
+      include: {
+        profile: true
+      }
+    });
+    
+    return { 
+      staff: updatedStaff, 
+      message: 'Staff account updated successfully' 
+    };
+  }
+
+  // Admin: Delete staff account
+  static async deleteStaffAccount(id) {
+    // Get staff profile to check for avatar before deletion
+    const staffProfile = await prisma.staffProfile.findUnique({
+      where: { staffId: parseInt(id) }
+    });
+    
+    // Delete avatar file if it exists
+    if (staffProfile?.avatarUrl) {
+      await StaffService.deleteOldAvatar(staffProfile.avatarUrl);
+    }
+    
+    // Delete staff and related data (cascade)
+    await prisma.staff.delete({
+      where: { id: parseInt(id) }
+    });
+    
+    return { message: 'Staff account deleted successfully' };
+  }
+
+  // Admin: Batch delete staff accounts
+  static async batchDeleteStaffAccounts(ids) {
+    if (!ids || !Array.isArray(ids) || ids.length === 0) {
+      throw new Error('Invalid or empty IDs array');
+    }
+
+    const intIds = ids.map(id => parseInt(id));
+    
+    // Get all staff profiles to check for avatars before deletion
+    const staffProfiles = await prisma.staffProfile.findMany({
+      where: { staffId: { in: intIds } }
+    });
+    
+    // Delete avatar files if they exist
+    for (const profile of staffProfiles) {
+      if (profile.avatarUrl) {
+        await StaffService.deleteOldAvatar(profile.avatarUrl);
+      }
+    }
+    
+    // Delete staff accounts and related data (cascade)
+    const deleteResult = await prisma.staff.deleteMany({
+      where: { id: { in: intIds } }
+    });
+    
+    return { 
+      message: `Successfully deleted ${deleteResult.count} staff account(s)`,
+      deletedCount: deleteResult.count
+    };
+  }
+
+  // Admin: Get all staff profiles for review
+  static async getAllProfilesForReview(status) {
+    let whereCondition = {};
+    
+    if (status) {
+      whereCondition.status = status;
+    } else {
+      // 默认只显示 pending 和 rejected 状态的资料
+      whereCondition.status = {
+        in: ['pending', 'rejected']
+      };
+    }
+    
+    const profiles = await prisma.staffProfile.findMany({
+      where: whereCondition,
+      include: {
+        staff: {
+          select: {
+            username: true,
+            email: true,
+            role: true
+          }
+        }
+      },
+      orderBy: { createdAt: 'desc' }
+    });
+    
+    return profiles;
+  }
+
+  // Admin: Review staff profile
+  static async reviewStaffProfile(id, reviewData) {
+    const { status, reviewNote, displayOrder } = reviewData;
+    
+    if (!['pending', 'approved', 'rejected'].includes(status)) {
+      throw new Error('Invalid review status');
+    }
+    
+    const updateData = {
+      status,
+      reviewNote,
+      isVisible: status === 'approved'
+    };
+    
+    // Only update reviewedAt and reviewedBy if status is not pending
+    if (status !== 'pending') {
+      updateData.reviewedAt = new Date();
+      updateData.reviewedBy = 'admin';
+    }
+    
+    if (status === 'approved' && displayOrder !== undefined) {
+      updateData.displayOrder = displayOrder;
+    }
+    
+    const updatedProfile = await prisma.staffProfile.update({
+      where: { id: parseInt(id) },
+      data: updateData,
+      include: {
+        staff: {
+          select: {
+            username: true,
+            email: true
+          }
+        }
+      }
+    });
+    
+    // Log history
+    await prisma.staffProfileHistory.create({
+      data: {
+        staffId: updatedProfile.staffId,
+        profileData: JSON.stringify(updatedProfile),
+        action: status,
+        actionBy: 'admin',
+        actionNote: reviewNote
+      }
+    });
+    
+    return { 
+      profile: updatedProfile, 
+      message: `Profile ${status} successfully` 
+    };
+  }
+
+  // Public: Get all approved team members
+  static async getTeamMembers(department, language = 'en') {
+    const whereCondition = {
+      status: 'approved',
+      isVisible: true
+    };
+    
+    if (department) {
+      whereCondition.department = department;
+    }
+    
+    const teamMembers = await prisma.staffProfile.findMany({
+      where: whereCondition,
+      include: {
+        staff: {
+          select: {
+            username: true,
+            email: true
+          }
+        }
+      },
+      orderBy: { displayOrder: 'asc' }
+    });
+    
+    return teamMembers.map(member => transformTeamMemberByLanguage(member, language));
+  }
+
+  // Public: Get team member by ID
+  static async getTeamMemberById(id, language = 'en') {
+    const member = await prisma.staffProfile.findUnique({
+      where: { 
+        id: parseInt(id),
+        status: 'approved',
+        isVisible: true
+      },
+      include: {
+        staff: {
+          select: {
+            username: true,
+            email: true
+          }
+        }
+      }
+    });
+    
+    if (!member) {
+      throw new Error('Team member not found');
+    }
+    
+    return transformTeamMemberByLanguage(member, language);
+  }
+
+  // Public: Get unique departments
+  static async getDepartments() {
+    const departments = await prisma.staffProfile.groupBy({
+      by: ['department'],
+      where: { 
+        status: 'approved',
+        isVisible: true 
+      },
+      _count: {
+        department: true
+      },
+      orderBy: {
+        department: 'asc'
+      }
+    });
+    
+    return departments.map(dept => ({
+      name: dept.department,
+      count: dept._count.department
+    }));
+  }
+}
+
+module.exports = StaffService; 

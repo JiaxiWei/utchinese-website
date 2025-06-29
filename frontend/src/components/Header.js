@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import styled from 'styled-components';
+import { FiUser, FiLogIn, FiLogOut, FiSettings, FiUsers } from 'react-icons/fi';
+import { useAuth } from '../contexts/AuthContext';
+import UnifiedLoginModal from './UnifiedLoginModal';
 
 const ThemeToggleIcon = ({ theme }) => {
   return theme === 'light' ? (
@@ -41,6 +44,12 @@ const StyledHeader = styled.header`
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    
+    @media (max-width: 1024px) {
+      gap: 0.5rem;
+    }
   }
 
   .logo {
@@ -65,12 +74,22 @@ const StyledHeader = styled.header`
   nav {
     display: flex;
     align-items: center;
-    gap: 2rem;
+    gap: 1.5rem;
+    flex: 1;
+    justify-content: flex-end;
+    
+    @media (max-width: 1024px) {
+      gap: 0.8rem;
+    }
   }
 
   .nav-links {
     display: flex;
     gap: 1.2rem;
+    
+    @media (max-width: 1024px) {
+      gap: 0.8rem;
+    }
     
     @media (max-width: 768px) {
       display: none;
@@ -185,6 +204,28 @@ const StyledHeader = styled.header`
           left: 0;
           right: auto;
         }
+      }
+    }
+    
+    .mobile-login-button {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: 12px;
+      font-size: 1.2rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      min-width: 200px;
+      justify-content: center;
+      
+      &:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(224, 43, 32, 0.3);
       }
     }
   }
@@ -316,15 +357,137 @@ const StyledHeader = styled.header`
   .controls-group {
     display: flex;
     align-items: center;
-    gap: 5px;
+    gap: 0.5rem;
+  }
+
+  .auth-section {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-left: 0.5rem;
+    
+    @media (max-width: 1024px) {
+      gap: 0.5rem;
+      margin-left: 0.25rem;
+    }
+    
+    @media (max-width: 768px) {
+      display: none;
+    }
+  }
+
+  .login-button {
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+    font-size: 0.85rem;
+    white-space: nowrap;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    color: white;
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(224, 43, 32, 0.3);
+    }
+    
+    span {
+      font-size: inherit;
+      font-weight: inherit;
+    }
+  }
+
+  .user-menu {
+    position: relative;
+    
+    .user-button {
+      background: rgba(224, 43, 32, 0.1);
+      color: var(--primary);
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 500;
+      font-size: 0.9rem;
+      
+      &:hover {
+        background: rgba(224, 43, 32, 0.2);
+      }
+    }
+    
+    .dropdown {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      margin-top: 0.5rem;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      border: 1px solid rgba(224, 43, 32, 0.1);
+      min-width: 200px;
+      overflow: hidden;
+      z-index: 1000;
+      
+      [data-theme="dark"] & {
+        background: var(--background-secondary);
+        border-color: rgba(255, 255, 255, 0.1);
+      }
+      
+      .dropdown-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem 1rem;
+        color: var(--text);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: none;
+        background: none;
+        width: 100%;
+        text-align: left;
+        font-size: 0.9rem;
+        
+        &:hover {
+          background: rgba(224, 43, 32, 0.05);
+          color: var(--primary);
+        }
+        
+        &.danger {
+          color: #ef4444;
+          
+          &:hover {
+            background: rgba(239, 68, 68, 0.05);
+          }
+        }
+      }
+    }
   }
 `;
 
 const Header = ({ changeLanguage, theme, toggleTheme }) => {
   const { t, i18n } = useTranslation();
   const location = useLocation();
+  const navigate = useNavigate();
+  const { 
+    isAuthenticated,
+    user,
+    hasPermission,
+    logout
+  } = useAuth();
+  
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showUserMenu, setShowUserMenu] = useState(false);
   
   useEffect(() => {
     const handleScroll = () => {
@@ -339,13 +502,25 @@ const Header = ({ changeLanguage, theme, toggleTheme }) => {
   useEffect(() => {
     setMobileMenuOpen(false);
   }, [location]);
+
+  // Close user menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (showUserMenu && !event.target.closest('.user-menu')) {
+        setShowUserMenu(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [showUserMenu]);
   
   const navLinks = [
-    { path: '/', label: 'home' },
-    { path: '/about', label: 'about' },
-    // { path: '/team', label: 'team' }, // 暂时注释掉，开发中
-    { path: '/events', label: 'events' },
-    { path: '/join', label: 'join' }
+    { path: '/', label: t('header.home') },
+    { path: '/about', label: t('header.about') },
+    { path: '/team', label: t('header.team') },
+    { path: '/events', label: t('header.events') },
+    { path: '/join', label: t('header.join') }
   ];
   
   const menuVariants = {
@@ -376,6 +551,23 @@ const Header = ({ changeLanguage, theme, toggleTheme }) => {
       }
     })
   };
+
+  const handleLoginSuccess = (response) => {
+    setShowLoginModal(false);
+    
+    // 根据用户权限进行适当的跳转
+    if (response.user.hasProfile) {
+      navigate('/staff/profile');
+    } else if (hasPermission('accessAdmin')) {
+      navigate('/admin/events');
+    }
+  };
+
+  const handleLogout = () => {
+    logout();
+    setShowUserMenu(false);
+    navigate('/');
+  };
   
   return (
     <StyledHeader className={scrolled ? 'scrolled' : ''}>
@@ -383,7 +575,7 @@ const Header = ({ changeLanguage, theme, toggleTheme }) => {
         <Link to="/" className="logo">
           <img src="/logo.png" alt="UTChinese Network Logo" />
           <h1>
-            {i18n.language === 'en' ? 'UTChinese Network' : '多大中文'}
+            UTChinese Network
           </h1>
         </Link>
         
@@ -395,7 +587,7 @@ const Header = ({ changeLanguage, theme, toggleTheme }) => {
                 to={path} 
                 className={`nav-link ${location.pathname === path ? 'active' : ''}`}
               >
-                {t(`header.${label}`)}
+                {label}
               </Link>
             ))}
           </div>
@@ -417,9 +609,88 @@ const Header = ({ changeLanguage, theme, toggleTheme }) => {
               </button>
             </div>
             
-            <button className="theme-toggle" onClick={toggleTheme} aria-label={theme === 'light' ? t('header.darkMode') : t('header.lightMode')}>
+            <button className="theme-toggle" onClick={toggleTheme} aria-label={theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}>
               <ThemeToggleIcon theme={theme} />
             </button>
+          </div>
+
+          <div className="auth-section">
+            {isAuthenticated ? (
+              <div className="user-menu">
+                <button 
+                  className="user-button"
+                  onClick={() => setShowUserMenu(!showUserMenu)}
+                >
+                  <FiUser />
+                  {user?.username || 'User'}
+                </button>
+                
+                <AnimatePresence>
+                  {showUserMenu && (
+                    <motion.div
+                      className="dropdown"
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      {hasPermission('manageEvents') && (
+                        <button 
+                          className="dropdown-item"
+                          onClick={() => {
+                            navigate('/admin/events');
+                            setShowUserMenu(false);
+                          }}
+                        >
+                          <FiSettings />
+                          {t('header.eventManagement')}
+                        </button>
+                      )}
+                      
+                      {(hasPermission('manageStaff') || hasPermission('reviewProfiles')) && (
+                        <button 
+                          className="dropdown-item"
+                          onClick={() => {
+                            navigate('/admin/staff');
+                            setShowUserMenu(false);
+                          }}
+                        >
+                          <FiUsers />
+                          {t('header.staffManagement')}
+                        </button>
+                      )}
+                      
+                      <button 
+                        className="dropdown-item"
+                        onClick={() => {
+                          navigate('/staff/profile');
+                          setShowUserMenu(false);
+                        }}
+                      >
+                        <FiUser />
+                        {t('header.myProfile')}
+                      </button>
+                      
+                      <button 
+                        className="dropdown-item danger"
+                        onClick={handleLogout}
+                      >
+                        <FiLogOut />
+                        {t('header.logout')}
+                      </button>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            ) : (
+              <button 
+                className="login-button unified-login"
+                onClick={() => setShowLoginModal(true)}
+              >
+                <FiLogIn />
+                <span>{t('header.login')}</span>
+              </button>
+            )}
           </div>
           
           <div 
@@ -452,7 +723,7 @@ const Header = ({ changeLanguage, theme, toggleTheme }) => {
                 exit="closed"
               >
                 <Link to={path}>
-                  {t(`header.${label}`)}
+                  {label}
                 </Link>
               </motion.div>
             ))}
@@ -486,9 +757,133 @@ const Header = ({ changeLanguage, theme, toggleTheme }) => {
               {theme === 'light' ? t('header.darkMode') : t('header.lightMode')}
               <ThemeToggleIcon theme={theme} />
             </motion.button>
+            
+            {/* Mobile Login/User Menu */}
+            {isAuthenticated ? (
+              <motion.div
+                className="mobile-user-section"
+                custom={navLinks.length + 2}
+                variants={linkVariants}
+                                 style={{
+                   display: 'flex',
+                   flexDirection: 'column',
+                   gap: '1rem',
+                   padding: '1rem',
+                   background: 'var(--card-bg, rgba(224, 43, 32, 0.05))',
+                   borderRadius: '15px',
+                   border: '1px solid rgba(224, 43, 32, 0.1)',
+                   boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
+                 }}
+              >
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.75rem',
+                  fontSize: '1.1rem',
+                  fontWeight: '600',
+                  color: 'var(--primary)'
+                }}>
+                  <FiUser />
+                  {user?.username || 'User'}
+                </div>
+                
+                {hasPermission('manageEvents') && (
+                  <Link 
+                    to="/admin/events"
+                    onClick={() => setMobileMenuOpen(false)}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.5rem',
+                      fontSize: '1rem',
+                      color: 'var(--text)',
+                      textDecoration: 'none'
+                    }}
+                  >
+                    <FiSettings />
+                    {t('header.eventManagement')}
+                  </Link>
+                )}
+                
+                {(hasPermission('manageStaff') || hasPermission('reviewProfiles')) && (
+                  <Link 
+                    to="/admin/staff"
+                    onClick={() => setMobileMenuOpen(false)}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.5rem',
+                      fontSize: '1rem',
+                      color: 'var(--text)',
+                      textDecoration: 'none'
+                    }}
+                  >
+                    <FiUsers />
+                    {t('header.staffManagement')}
+                  </Link>
+                )}
+                
+                <Link 
+                  to="/staff/profile"
+                  onClick={() => setMobileMenuOpen(false)}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                    fontSize: '1rem',
+                    color: 'var(--text)',
+                    textDecoration: 'none'
+                  }}
+                >
+                  <FiUser />
+                  {t('header.myProfile')}
+                </Link>
+                
+                <button
+                  onClick={() => {
+                    handleLogout();
+                    setMobileMenuOpen(false);
+                  }}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                    fontSize: '1rem',
+                    color: '#dc2626',
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                    padding: '0.5rem 0',
+                    textAlign: 'left'
+                  }}
+                >
+                  <FiLogOut />
+                  {t('header.logout')}
+                </button>
+              </motion.div>
+            ) : (
+              <motion.button
+                className="mobile-login-button"
+                custom={navLinks.length + 2}
+                variants={linkVariants}
+                onClick={() => {
+                  setShowLoginModal(true);
+                  setMobileMenuOpen(false);
+                }}
+              >
+                <FiLogIn />
+                {t('header.login')}
+              </motion.button>
+            )}
           </motion.div>
         )}
       </AnimatePresence>
+
+      <UnifiedLoginModal 
+        isOpen={showLoginModal}
+        onClose={() => setShowLoginModal(false)}
+        onSuccess={handleLoginSuccess}
+      />
     </StyledHeader>
   );
 };

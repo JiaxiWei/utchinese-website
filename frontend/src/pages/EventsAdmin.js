@@ -10,7 +10,6 @@ const AdminContainer = styled.div`
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
-  padding-top: 120px; /* 增加顶部内边距，防止被header覆盖 */
 `;
 
 const Header = styled.div`
@@ -551,10 +550,10 @@ const EventsAdmin = () => {
     }
     
     try {
-      const response = await axios.post(`${API_BASE_URL}/upload/image`, formDataWithFile, {
+      const response = await axios.post(`${API_BASE_URL}/admin/upload/image`, formDataWithFile, {
         headers: {
           'Content-Type': 'multipart/form-data',
-          'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+          'Authorization': `Bearer ${localStorage.getItem('userToken')}`
         }
       });
       

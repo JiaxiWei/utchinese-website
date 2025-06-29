@@ -8,6 +8,9 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 gsap.registerPlugin(ScrollTrigger);
 
 const StyledAbout = styled.div`
+  overflow-x: hidden;
+  width: 100%;
+  
   .page-header {
     height: 70vh;
     background: linear-gradient(135deg, rgba(224, 43, 32, 0.05) 0%, rgba(252, 185, 0, 0.1) 100%);
@@ -18,6 +21,12 @@ const StyledAbout = styled.div`
     position: relative;
     overflow: hidden;
     padding-top: 5rem;
+    width: 100%;
+    
+    @media (max-width: 768px) {
+      height: 60vh;
+      padding-top: 4rem;
+    }
     
     .header-bg {
       position: absolute;
@@ -59,6 +68,11 @@ const StyledAbout = styled.div`
       z-index: 1;
       max-width: 900px;
       padding: 0 2rem;
+      width: 100%;
+      
+      @media (max-width: 768px) {
+        padding: 0 1rem;
+      }
     }
     
     h1 {
@@ -111,6 +125,15 @@ const StyledAbout = styled.div`
       height: 100%;
       background: rgba(224, 43, 32, 0.1);
       z-index: 0;
+      
+      @media (max-width: 768px) {
+        left: calc(1rem + 9px);
+        transform: none;
+      }
+      
+      @media (max-width: 480px) {
+        left: calc(0.5rem + 9px);
+      }
     }
   }
   
@@ -193,22 +216,21 @@ const StyledAbout = styled.div`
     @media (max-width: 768px) {
       flex-direction: column;
       margin-bottom: 3rem;
+      padding: 0 1rem;
       
       .timeline-dot {
-        left: 0;
+        left: 1rem;
         top: 0.75rem;
       }
       
-      &:before {
-        left: 9px;
-      }
+
       
       &:nth-child(odd), &:nth-child(even) {
         justify-content: flex-start;
         
         .timeline-content {
-          width: 100%;
-          margin-left: 2rem;
+          width: calc(100% - 3rem);
+          margin-left: 3rem;
           margin-right: 0;
           text-align: left;
           
@@ -216,6 +238,24 @@ const StyledAbout = styled.div`
             left: -0.75rem;
             right: auto;
           }
+        }
+      }
+    }
+    
+    @media (max-width: 480px) {
+      padding: 0 0.5rem;
+      
+      .timeline-dot {
+        left: 0.5rem;
+      }
+      
+      
+      
+      &:nth-child(odd), &:nth-child(even) {
+        .timeline-content {
+          width: calc(100% - 2rem);
+          margin-left: 2rem;
+          padding: 1.5rem;
         }
       }
     }
@@ -240,12 +280,32 @@ const StyledAbout = styled.div`
     &:before {
       top: -5rem;
       left: 2rem;
+      
+      @media (max-width: 768px) {
+        left: 1rem;
+        font-size: 10rem;
+        top: -3rem;
+      }
+      
+      @media (max-width: 480px) {
+        display: none;
+      }
     }
     
     &:after {
       bottom: -12rem;
       right: 2rem;
       transform: rotate(180deg);
+      
+      @media (max-width: 768px) {
+        right: 1rem;
+        font-size: 10rem;
+        bottom: -8rem;
+      }
+      
+      @media (max-width: 480px) {
+        display: none;
+      }
     }
     
     .container {
@@ -278,6 +338,15 @@ const StyledAbout = styled.div`
         height: 2px;
         background: var(--primary);
         opacity: 0.3;
+        
+        @media (max-width: 768px) {
+          left: -2rem;
+          width: 1.5rem;
+        }
+        
+        @media (max-width: 480px) {
+          display: none;
+        }
       }
       
       &:after {
@@ -289,6 +358,15 @@ const StyledAbout = styled.div`
         height: 2px;
         background: var(--primary);
         opacity: 0.3;
+        
+        @media (max-width: 768px) {
+          right: -2rem;
+          width: 1.5rem;
+        }
+        
+        @media (max-width: 480px) {
+          display: none;
+        }
       }
     }
   }
@@ -316,6 +394,15 @@ const StyledAbout = styled.div`
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 2rem;
+      
+      @media (max-width: 768px) {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+      
+      @media (max-width: 480px) {
+        gap: 1rem;
+      }
     }
     
     .value-card {
