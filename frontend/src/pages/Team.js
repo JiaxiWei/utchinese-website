@@ -925,11 +925,28 @@ const Team = () => {
                         >
                           <div className="member-content">
                             <div className="member-avatar">
-                              <img 
-                                src={getFullAvatarUrl(member.avatarUrl) || 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80'} 
-                                alt={i18n.language === 'zh' ? member.name_zh : member.name_en}
-                                loading="lazy"
-                              />
+                              {getFullAvatarUrl(member.avatarUrl) ? (
+                                <img 
+                                  src={getFullAvatarUrl(member.avatarUrl)} 
+                                  alt={i18n.language === 'zh' ? member.name_zh : member.name_en}
+                                  loading="lazy"
+                                />
+                              ) : (
+                                <div style={{ 
+                                  width: '100%', 
+                                  height: '100%', 
+                                  borderRadius: '50%', 
+                                  background: 'linear-gradient(135deg, var(--primary), var(--accent))',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  color: 'white',
+                                  fontWeight: 'bold',
+                                  fontSize: '2.5rem'
+                                }}>
+                                  {(i18n.language === 'zh' ? member.name_zh : member.name_en)?.charAt(0).toUpperCase()}
+                                </div>
+                              )}
                             </div>
                             <div className="member-info">
                               <h3 className="member-name">
@@ -1035,11 +1052,28 @@ const Team = () => {
                       >
                         <div className="member-content">
                           <div className="member-avatar">
-                            <img 
-                              src={getFullAvatarUrl(member.avatarUrl) || 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80'} 
-                              alt={i18n.language === 'zh' ? member.name_zh : member.name_en}
-                              loading="lazy"
-                            />
+                            {getFullAvatarUrl(member.avatarUrl) ? (
+                              <img 
+                                src={getFullAvatarUrl(member.avatarUrl)} 
+                                alt={i18n.language === 'zh' ? member.name_zh : member.name_en}
+                                loading="lazy"
+                              />
+                            ) : (
+                              <div style={{ 
+                                width: '100%', 
+                                height: '100%', 
+                                borderRadius: '50%', 
+                                background: 'linear-gradient(135deg, var(--primary), var(--accent))',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                color: 'white',
+                                fontWeight: 'bold',
+                                fontSize: '2.5rem'
+                              }}>
+                                {(i18n.language === 'zh' ? member.name_zh : member.name_en)?.charAt(0).toUpperCase()}
+                              </div>
+                            )}
                           </div>
                           <div className="member-info">
                             <h3 className="member-name">

@@ -676,7 +676,7 @@ const Modal = styled(motion.div)`
 const StaffAdmin = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { hasPermission } = useAuth();
+  const { hasPermission, user } = useAuth();
   
   const [activeTab, setActiveTab] = useState('accounts');
   const [staffAccounts, setStaffAccounts] = useState([]);
@@ -803,7 +803,8 @@ const StaffAdmin = () => {
       role: staff.role,
       canManageEvents: staff.canManageEvents || false,
       canManageStaff: staff.canManageStaff || false,
-      canReviewProfiles: staff.canReviewProfiles || false
+      canReviewProfiles: staff.canReviewProfiles || false,
+      displayOrder: staff.profile?.displayOrder || 0
     });
     setShowModal(true);
   };
@@ -846,11 +847,15 @@ const StaffAdmin = () => {
             canManageEvents: updateData.canManageEvents,
             canManageStaff: updateData.canManageStaff,
             canReviewProfiles: updateData.canReviewProfiles
+          },
+          profileUpdate: {
+            displayOrder: updateData.displayOrder
           }
         };
         delete permissionsData.canManageEvents;
         delete permissionsData.canManageStaff;
         delete permissionsData.canReviewProfiles;
+        delete permissionsData.displayOrder;
         
         await updateStaffAccount(selectedItem.id, permissionsData);
       } else if (modalType === 'review') {
@@ -1635,6 +1640,47 @@ const StaffAdmin = () => {
                           </label>
                         </div>
                       </div>
+                      
+                      {/* Team Display Order - Only for admin */}
+                      {modalType === 'edit' && (user?.role === 'admin' || hasPermission('manageStaff')) && (
+                        <div className="display-order-section" style={{ 
+                          marginTop: '1.5rem', 
+                          padding: '1rem', 
+                          background: 'var(--background-alt)', 
+                          borderRadius: '10px',
+                          border: '1px solid var(--border)'
+                        }}>
+                          <h4 style={{ margin: '0 0 1rem 0', color: 'var(--primary)' }}>
+                            {t('admin.staff.form.displayOrder')}
+                          </h4>
+                          
+                          <div className="form-group">
+                            <label>
+                              <small style={{ color: 'var(--text-light)', display: 'block', fontSize: '0.8rem', marginTop: '0.25rem' }}>
+                                {t('admin.staff.form.displayOrderDesc')}
+                              </small>
+                            </label>
+                            <input
+                              type="number"
+                              min="0"
+                              max="999"
+                              value={formData.displayOrder}
+                              onChange={(e) => setFormData(prev => ({ ...prev, displayOrder: parseInt(e.target.value) || 0 }))}
+                              placeholder="0"
+                              style={{
+                                padding: '0.75rem',
+                                border: '2px solid #e5e7eb',
+                                borderRadius: '10px',
+                                background: 'white',
+                                color: 'var(--text)',
+                                fontSize: '1rem',
+                                transition: 'all 0.3s ease',
+                                width: '150px'
+                              }}
+                            />
+                          </div>
+                        </div>
+                      )}
                     </>
                   )}
 

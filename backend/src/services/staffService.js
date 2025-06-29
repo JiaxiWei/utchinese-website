@@ -46,8 +46,7 @@ class StaffService {
       linkedin,
       github,
       wechat,
-      phone,
-      mbti
+      phone
     } = profileData;
     
     // Validation
@@ -74,7 +73,6 @@ class StaffService {
       github,
       wechat,
       phone,
-      mbti,
       status: 'pending', // Reset to pending when updated
       isVisible: false // Hide until approved
     };

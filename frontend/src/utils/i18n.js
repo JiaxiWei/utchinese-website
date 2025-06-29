@@ -364,6 +364,7 @@ const enTranslations = {
         active: 'Active',
         status: 'Status',
         displayOrder: 'Display Order',
+        displayOrderDesc: 'Lower numbers appear first in team page',
         reviewNote: 'Review Note',
         reviewNotePlaceholder: 'Add a note about this review...',
         roles: {
@@ -770,6 +771,7 @@ const zhTranslations = {
         active: '激活状态',
         status: '状态',
         displayOrder: '显示顺序',
+        displayOrderDesc: '数字越小在团队页面中越靠前',
         reviewNote: '审核备注',
         reviewNotePlaceholder: '添加关于此次审核的备注...',
         roles: {
