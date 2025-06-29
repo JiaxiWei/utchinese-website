@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 
-import { getEvents, getEventById, BASE_URL } from '../utils/api';
+import { getEvents, BASE_URL } from '../utils/api';
 import EventCard from '../components/EventCard';
 import EventDetailModal from '../components/EventDetailModal';
 import EventFilters from '../components/EventFilters';
-import { FiPlus } from 'react-icons/fi';
+
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -86,13 +86,7 @@ const EventsGrid = styled.div`
   }
 `;
 
-const ParallaxBubble = styled(motion.div)`
-  position: absolute;
-  border-radius: 50%;
-  background: linear-gradient(135deg, rgba(var(--primary-rgb), 0.1), rgba(var(--primary-light-rgb), 0.1));
-  filter: blur(2px);
-  z-index: -1;
-`;
+
 
 const LoadingContainer = styled.div`
   display: flex;
@@ -199,7 +193,7 @@ const Events = () => {
 
     // Setup scroll animations
     const cards = document.querySelectorAll('.event-card');
-    cards.forEach((card, index) => {
+    cards.forEach((card) => {
       ScrollTrigger.create({
         trigger: card,
         start: "top bottom-=100",

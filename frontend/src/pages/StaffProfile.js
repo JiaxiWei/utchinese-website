@@ -9,14 +9,12 @@ import {
   FiPhone, 
   FiLinkedin, 
   FiSave, 
-  FiUpload, 
   FiCamera,
   FiCheck,
   FiClock,
   FiX,
   FiEye,
   FiLogOut,
-  FiKey,
   FiSettings,
   FiFileText,
   FiUsers
@@ -294,7 +292,6 @@ const StatusBanner = styled(motion.div)`
     flex: 1;
     
     h4 {
-      margin-bottom: 0.25rem;
       font-weight: 600;
       margin: 0 0 0.25rem 0;
     }
@@ -752,6 +749,7 @@ const CardHeader = styled.div`
   }
 `;
 
+// Personal info container (re-added after accidental removal)
 const PersonalInfo = styled.div`
   margin-top: 1rem;
   
@@ -769,61 +767,7 @@ const PersonalInfo = styled.div`
   }
 `;
 
-const PermissionsTags = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: 0.5rem;
-  
-  .permission-tag {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    padding: 0.4rem 0.8rem;
-    border-radius: 18px;
-    font-size: 0.8rem;
-    font-weight: 500;
-    transition: all 0.2s ease;
-    
-    svg {
-      font-size: 0.9rem;
-    }
-    
-    &.events {
-      background: #dbeafe;
-      color: #1e40af;
-      border: 1px solid #93c5fd;
-      
-      &:hover {
-        background: #bfdbfe;
-        transform: translateY(-1px);
-      }
-    }
-    
-    &.reviews {
-      background: #d1fae5;
-      color: #065f46;
-      border: 1px solid #86efac;
-      
-      &:hover {
-        background: #bbf7d0;
-        transform: translateY(-1px);
-      }
-    }
-    
-    &.staff {
-      background: #fef3c7;
-      color: #92400e;
-      border: 1px solid #fde68a;
-      
-      &:hover {
-        background: #fde047;
-        transform: translateY(-1px);
-      }
-    }
-  }
-`;
-
+// eslint-disable-next-line no-unused-vars
 const PermissionsSection = styled.div`
   .title {
     display: flex;
@@ -894,7 +838,6 @@ const CardFooter = styled.div`
   .contact-info {
     display: flex;
     align-items: center;
-    gap: 2rem;
     flex-wrap: wrap;
     gap: 1.5rem;
     

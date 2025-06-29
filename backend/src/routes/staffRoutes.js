@@ -1,6 +1,5 @@
 const express = require('express');
 const StaffController = require('../controllers/staffController');
-const AuthController = require('../controllers/authController');
 const EventController = require('../controllers/eventController');
 const { 
   authenticateUser, 

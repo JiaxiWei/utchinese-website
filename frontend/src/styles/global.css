@@ -68,7 +68,7 @@ html {
 }
 
 body {
-  font-family: var(--font-primary);
+  font-family: var(--font-primary), sans-serif;
   color: var(--text);
   background-color: var(--background);
   line-height: 1.6;
@@ -81,7 +81,7 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-display);
+  font-family: var(--font-display), sans-serif;
   font-weight: 600;
   line-height: 1.2;
   margin-bottom: 1rem;
@@ -120,7 +120,7 @@ button, .button {
   color: white;
   border: none;
   border-radius: var(--border-radius);
-  font-family: var(--font-primary);
+  font-family: var(--font-primary), sans-serif;
   font-weight: 500;
   font-size: 1rem;
   cursor: pointer;

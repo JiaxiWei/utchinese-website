@@ -1,8 +1,8 @@
 const express = require('express');
 const cors = require('cors');
-const path = require('path');
+// const path = require('path');
 const { PORT, FRONTEND_URL } = require('./config/constants');
-const AuthService = require('./services/authService');
+// const AuthService = require('./services/authService');
 const { uploadsDir } = require('./middleware/upload');
 const routes = require('./routes');
 

@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { FiMail, FiLinkedin, FiUsers, FiFilter } from 'react-icons/fi';
+import { FiMail, FiLinkedin } from 'react-icons/fi';
 import { getTeamMembers, getTeamDepartments } from '../utils/api';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -26,13 +26,15 @@ const StyledTeam = styled.div`
     width: 100%;
     
     @media (max-width: 768px) {
-      height: 70vh;
-      padding-top: 10rem;
+      height: auto;
+      min-height: 60vh;
+      padding: 10rem 0 3rem;
     }
     
     @media (max-width: 480px) {
-      height: 60vh;
-      padding-top: 9rem;
+      height: auto;
+      min-height: 50vh;
+      padding: 9rem 0 2rem;
     }
     
     .header-bg {
@@ -89,20 +91,24 @@ const StyledTeam = styled.div`
     }
     
     h1 {
-      font-size: clamp(2.8rem, 7vw, 6rem);
-      margin-bottom: 1.5rem;
+      font-size: clamp(3.5rem, 8vw, 6rem);
+      margin-bottom: 2rem;
       position: relative;
       display: inline-block;
       background: linear-gradient(135deg, var(--primary), var(--accent));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      line-height: 1.1;
       
       @media (max-width: 768px) {
-        font-size: clamp(2rem, 8vw, 2.8rem);
+        font-size: clamp(2.5rem, 8vw, 3.5rem);
+        margin-bottom: 1.5rem;
+        line-height: 1.1;
+      }
+      
+      @media (max-width: 480px) {
+        font-size: clamp(2rem, 10vw, 2.8rem);
         margin-bottom: 1rem;
-        line-height: 1.2;
       }
       
       &:after {
@@ -119,23 +125,35 @@ const StyledTeam = styled.div`
         @media (max-width: 768px) {
           width: 80px;
           height: 4px;
-          bottom: -0.3rem;
+          bottom: -0.25rem;
+        }
+        
+        @media (max-width: 480px) {
+          width: 60px;
+          height: 3px;
+          bottom: -0.25rem;
         }
       }
     }
     
     p {
-      font-size: clamp(1.1rem, 2.5vw, 1.8rem);
+      font-size: clamp(1.3rem, 3vw, 1.8rem);
       color: var(--text-light);
       max-width: 800px;
       margin: 0 auto 3rem;
-      line-height: 1.6;
+      line-height: 1.5;
       
       @media (max-width: 768px) {
-        font-size: clamp(1rem, 4vw, 1.2rem);
-        margin: 0 auto 2.5rem;
-        line-height: 1.5;
+        font-size: clamp(1.1rem, 3vw, 1.4rem);
+        margin: 0 auto 2rem;
         padding: 0 1rem;
+      }
+      
+      @media (max-width: 480px) {
+        font-size: clamp(1rem, 4vw, 1.2rem);
+        margin: 0 auto 1.5rem;
+        padding: 0 0.5rem;
+        line-height: 1.4;
       }
     }
     
@@ -150,13 +168,15 @@ const StyledTeam = styled.div`
       @media (max-width: 768px) {
         grid-template-columns: repeat(3, 1fr);
         gap: 1rem;
-        max-width: 400px;
+        max-width: 100%;
+        padding: 0 1rem;
       }
       
       @media (max-width: 480px) {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(3, 1fr);
         gap: 0.75rem;
-        max-width: 200px;
+        max-width: 100%;
+        padding: 0 0.5rem;
       }
       
       .stat-item {
@@ -165,12 +185,44 @@ const StyledTeam = styled.div`
         backdrop-filter: blur(10px);
         border-radius: 15px;
         border: 1px solid rgba(255, 255, 255, 0.2);
+        text-align: center;
+        transition: all 0.3s ease;
+        
+        @media (max-width: 768px) {
+          padding: 1.2rem 0.8rem;
+          border-radius: 12px;
+        }
+        
+        @media (max-width: 480px) {
+          padding: 1rem 0.5rem;
+          border-radius: 10px;
+          min-height: 80px;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+        }
+        
+        &:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 15px 35px rgba(224, 43, 32, 0.15);
+        }
         
         .stat-number {
           font-size: 2.5rem;
           font-weight: bold;
           color: var(--primary);
           margin-bottom: 0.5rem;
+          line-height: 1;
+          
+          @media (max-width: 768px) {
+            font-size: 2rem;
+            margin-bottom: 0.25rem;
+          }
+          
+          @media (max-width: 480px) {
+            font-size: 1.8rem;
+            margin-bottom: 0.25rem;
+          }
         }
         
         .stat-label {
@@ -178,6 +230,18 @@ const StyledTeam = styled.div`
           color: var(--text-light);
           text-transform: uppercase;
           letter-spacing: 1px;
+          font-weight: 600;
+          
+          @media (max-width: 768px) {
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+          }
+          
+          @media (max-width: 480px) {
+            font-size: 0.7rem;
+            letter-spacing: 0.5px;
+            line-height: 1.2;
+          }
         }
       }
     }
@@ -556,7 +620,7 @@ const StyledTeam = styled.div`
 `;
 
 const Team = () => {
-  const { t, i18n } = useTranslation();
+  const { i18n } = useTranslation();
   const [teamMembers, setTeamMembers] = useState([]);
   const [departments, setDepartments] = useState([]);
   const [selectedDepartment, setSelectedDepartment] = useState('all');

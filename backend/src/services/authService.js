@@ -1,8 +1,7 @@
-const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const prisma = require('../config/database');
-const { JWT_SECRET, DEFAULT_PASSWORD_HASH } = require('../config/constants');
+const { JWT_SECRET } = require('../config/constants');
 
 class AuthService {
 

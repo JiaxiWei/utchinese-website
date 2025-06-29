@@ -271,7 +271,7 @@ const StyledAbout = styled.div`
     &:before, &:after {
       content: '"';
       position: absolute;
-      font-family: var(--font-display);
+      font-family: var(--font-display), sans-serif;
       font-size: 20rem;
       opacity: 0.03;
       color: var(--primary);
@@ -516,24 +516,6 @@ const AboutPage = () => {
     { title: t('about.story3'), content: t('about.story3') },
     { title: t('about.story4'), content: t('about.story4') },
     { title: t('about.story5'), content: t('about.story5') }
-  ];
-  
-  const values = [
-    {
-      title: "Cultural Exchange",
-      description: "Fostering mutual understanding between Chinese and Western cultures.",
-      icon: "🌏"
-    },
-    {
-      title: "Commitment",
-      description: "Dedicated to excellence in everything we do.",
-      icon: "🔥"
-    },
-    {
-      title: "Innovation",
-      description: "Constantly exploring new ideas and approaches.",
-      icon: "💡"
-    }
   ];
   
   return (

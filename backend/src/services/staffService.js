@@ -7,7 +7,7 @@ const { transformTeamMemberByLanguage } = require('../utils/fileUtils');
 class StaffService {
   // Get staff profile (own profile)
   static async getStaffProfile(staffId) {
-    const profile = await prisma.staffProfile.findUnique({
+    return await prisma.staffProfile.findUnique({
       where: { staffId: staffId },
       include: {
         staff: {
@@ -19,8 +19,6 @@ class StaffService {
         }
       }
     });
-    
-    return profile;
   }
 
   // Create or update staff profile
@@ -211,18 +209,14 @@ class StaffService {
     }
   }
 
-
-
   // Admin: Get all staff accounts
   static async getAllStaff() {
-    const staff = await prisma.staff.findMany({
+    return await prisma.staff.findMany({
       include: {
         profile: true
       },
       orderBy: { createdAt: 'desc' }
     });
-    
-    return staff;
   }
 
   // Admin: Create staff account
@@ -382,7 +376,7 @@ class StaffService {
       };
     }
     
-    const profiles = await prisma.staffProfile.findMany({
+    return await prisma.staffProfile.findMany({
       where: whereCondition,
       include: {
         staff: {
@@ -395,8 +389,6 @@ class StaffService {
       },
       orderBy: { createdAt: 'desc' }
     });
-    
-    return profiles;
   }
 
   // Admin: Review staff profile

@@ -209,20 +209,35 @@ const ActionButton = styled(motion.button)`
     margin-right: ${props => props.text ? '6px' : '0'};
   }
   
-  &.edit {
-    background: #4776E6;
-    &:hover {
-      background: #3366cc;
-      box-shadow: 0 4px 10px rgba(71, 118, 230, 0.3);
+  background: ${({ variant }) => {
+    switch (variant) {
+      case 'delete':
+        return '#FF4B2B';
+      case 'edit':
+      default:
+        return '#4776E6';
     }
-  }
-  
-  &.delete {
-    background: #FF4B2B;
-    &:hover {
-      background: #ff3615;
-      box-shadow: 0 4px 10px rgba(255, 75, 43, 0.3);
-    }
+  }};
+
+  &:hover {
+    background: ${({ variant }) => {
+      switch (variant) {
+        case 'delete':
+          return '#ff3615';
+        case 'edit':
+        default:
+          return '#3366cc';
+      }
+    }};
+    box-shadow: ${({ variant }) => {
+      switch (variant) {
+        case 'delete':
+          return '0 4px 10px rgba(255, 75, 43, 0.3)';
+        case 'edit':
+        default:
+          return '0 4px 10px rgba(71, 118, 230, 0.3)';
+      }
+    }};
   }
 `;
 
@@ -349,15 +364,18 @@ const Button = styled(motion.button)`
   font-weight: 600;
   cursor: pointer;
   
-  &.cancel {
-    background: #f0f0f0;
-    color: #505050;
-  }
-  
-  &.submit {
-    background: linear-gradient(135deg, #FF4B2B, #FF416C);
-    color: white;
-  }
+  background: ${({ variant }) => {
+    switch (variant) {
+      case 'cancel':
+        return '#f0f0f0';
+      case 'submit':
+        return 'linear-gradient(135deg, #FF4B2B, #FF416C)';
+      default:
+        return '#f0f0f0';
+    }
+  }};
+
+  color: ${({ variant }) => (variant === 'cancel' ? '#505050' : 'white')};
 `;
 
 const NoEventsMessage = styled.div`
@@ -576,18 +594,16 @@ const EventsAdmin = () => {
       
       // Combine date and time for startDate
       if (eventData.startDate) {
-        const startDateTime = eventData.startTime 
+        eventData.startDate = eventData.startTime 
           ? `${eventData.startDate}T${eventData.startTime}:00`
           : `${eventData.startDate}T00:00:00`;
-        eventData.startDate = startDateTime;
       }
       
       // Combine date and time for endDate
       if (eventData.endDate) {
-        const endDateTime = eventData.endTime 
+        eventData.endDate = eventData.endTime 
           ? `${eventData.endDate}T${eventData.endTime}:00`
           : `${eventData.endDate}T23:59:59`;
-        eventData.endDate = endDateTime;
       }
       
       // Remove separate time fields before sending to API
@@ -596,8 +612,7 @@ const EventsAdmin = () => {
       
       // If there's a new image file, upload it first
       if (imageFile) {
-        const imageUrl = await uploadImage(imageFile);
-        eventData.imageUrl = imageUrl;
+        eventData.imageUrl = await uploadImage(imageFile);
       }
       
       if (currentEvent) {
@@ -729,7 +744,7 @@ const EventsAdmin = () => {
               </FeaturedIndicator>
               <ActionsContainer>
                 <ActionButton 
-                  className="edit"
+                  variant="edit"
                   onClick={() => handleOpenModal(event)}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
@@ -738,7 +753,7 @@ const EventsAdmin = () => {
                   <FiEdit2 /> 编辑
                 </ActionButton>
                 <ActionButton 
-                  className="delete"
+                  variant="delete"
                   onClick={() => handleDeleteEvent(event.id)}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
@@ -967,7 +982,7 @@ const EventsAdmin = () => {
               
               <ButtonGroup>
                 <Button 
-                  className="cancel" 
+                  variant="cancel" 
                   type="button" 
                   onClick={handleCloseModal}
                   whileHover={{ scale: 1.03 }}
@@ -976,7 +991,7 @@ const EventsAdmin = () => {
                   取消
                 </Button>
                 <Button 
-                  className="submit" 
+                  variant="submit" 
                   type="submit"
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.98 }}

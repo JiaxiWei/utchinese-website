@@ -1,26 +1,22 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   FiUsers, 
-  FiPlus, 
   FiEdit, 
   FiTrash2, 
   FiCheck, 
   FiX, 
   FiClock,
   FiEye,
-  FiFilter,
   FiSearch,
   FiUserPlus,
   FiMail,
   FiKey,
   FiToggleLeft,
-  FiToggleRight,
-  FiChevronUp,
-  FiChevronDown
+  FiToggleRight
 } from 'react-icons/fi';
 import { useAuth } from '../contexts/AuthContext';
 import {
@@ -30,8 +26,7 @@ import {
   deleteStaffAccount,
   batchDeleteStaffAccounts,
   getAllProfiles,
-  reviewProfile,
-  updateProfileOrder
+  reviewProfile
 } from '../utils/api';
 
 const StyledStaffAdmin = styled.div`
@@ -731,7 +726,7 @@ const StaffAdmin = () => {
   // Reset status filter when switching tabs
   useEffect(() => {
     if (activeTab === 'profiles') {
-      setStatusFilter('approved'); // Default to showing approved profiles with move buttons
+      setStatusFilter('pending'); // Default to showing pending profiles only
     } else {
       setStatusFilter('all');
     }
@@ -755,7 +750,11 @@ const StaffAdmin = () => {
   };
 
   const filterData = () => {
-    const data = activeTab === 'accounts' ? staffAccounts : profiles;
+    let data = activeTab === 'accounts' ? staffAccounts : profiles;
+    // For profile reviews, only show pending or rejected statuses
+    if (activeTab === 'profiles') {
+      data = data.filter(item => item.status === 'pending' || item.status === 'rejected');
+    }
     
     let filtered = data.filter(item => {
       const searchMatch = activeTab === 'accounts' 
@@ -814,7 +813,6 @@ const StaffAdmin = () => {
     setFormData({
       status: profile.status,
       reviewNote: profile.reviewNote || '',
-      displayOrder: profile.displayOrder || 0
     });
     setShowModal(true);
   };
@@ -964,16 +962,6 @@ const StaffAdmin = () => {
     }
   };
 
-  const handleMoveProfile = async (profileId, direction) => {
-    try {
-      await updateProfileOrder(profileId, direction);
-      loadData();
-    } catch (error) {
-      console.error(`Error moving profile ${direction}:`, error);
-      alert(`Failed to move profile ${direction}: ${error.response?.data?.error || error.message}`);
-    }
-  };
-
   // 重置选择状态当数据变化时
   useEffect(() => {
     setSelectedItems(new Set());
@@ -1039,7 +1027,6 @@ const StaffAdmin = () => {
               ) : (
                 <>
                   <option value="pending">{t('admin.staff.filters.pending')}</option>
-                  <option value="approved">Approved</option>
                   <option value="rejected">{t('admin.staff.filters.rejected')}</option>
                 </>
               )}
@@ -1481,24 +1468,6 @@ const StaffAdmin = () => {
                           >
                             <FiEye />
                           </button>
-                          {item.status === 'approved' && item.isVisible && (
-                            <>
-                              <button 
-                                className="action-btn secondary"
-                                onClick={() => handleMoveProfile(item.id, 'up')}
-                                title="Move Up"
-                              >
-                                <FiChevronUp />
-                              </button>
-                              <button 
-                                className="action-btn secondary"
-                                onClick={() => handleMoveProfile(item.id, 'down')}
-                                title="Move Down"
-                              >
-                                <FiChevronDown />
-                              </button>
-                            </>
-                          )}
                           {item.status === 'pending' && (
                             <>
                               <button 
@@ -1788,22 +1757,9 @@ const StaffAdmin = () => {
                             onChange={(e) => setFormData(prev => ({ ...prev, status: e.target.value }))}
                           >
                             <option value="pending">{t('admin.staff.form.statuses.pending')}</option>
-                            <option value="approved">{t('admin.staff.form.statuses.approved')}</option>
                             <option value="rejected">{t('admin.staff.form.statuses.rejected')}</option>
                           </select>
                         </div>
-                        
-                        {formData.status === 'approved' && (
-                          <div className="form-group">
-                            <label>{t('admin.staff.form.displayOrder')}</label>
-                            <input
-                              type="number"
-                              value={formData.displayOrder}
-                              onChange={(e) => setFormData(prev => ({ ...prev, displayOrder: parseInt(e.target.value) || 0 }))}
-                              min="0"
-                            />
-                          </div>
-                        )}
                         
                         <div className="form-group">
                           <label>{t('admin.staff.form.reviewNote')}</label>

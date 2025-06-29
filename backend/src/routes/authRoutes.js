@@ -13,7 +13,7 @@ router.put('/password', authenticateUser, AuthController.changePassword);
 router.get('/check-permission/:permission', authenticateUser, AuthController.checkPermission);
 
 // 管理员功能路由
-router.post('/users', authenticateUser, AuthController.createUser);
-router.put('/users/:userId/permissions', authenticateUser, AuthController.updateUserPermissions);
+router.post('/users', authenticateUser, requireStaffManagement, AuthController.createUser);
+router.put('/users/:userId/permissions', authenticateUser, requireStaffManagement, AuthController.updateUserPermissions);
 
 module.exports = router; 
