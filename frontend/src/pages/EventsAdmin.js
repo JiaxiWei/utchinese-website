@@ -22,6 +22,12 @@ const Header = styled.div`
   justify-content: space-between;
   align-items: center;
   text-align: center;
+  
+  /* NEW: prevent horizontal overflow on very narrow screens */
+  @media (max-width: 480px) {
+    flex-direction: column;
+    gap: 12px;
+  }
 `;
 
 const Title = styled.h1`

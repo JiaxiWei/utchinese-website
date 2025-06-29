@@ -92,6 +92,8 @@ const StyledStaffAdmin = styled.div`
     gap: 1rem;
     margin-bottom: 2rem;
     border-bottom: 1px solid #e5e7eb;
+    flex-wrap: wrap;
+    justify-content: center;
     
     [data-theme="dark"] & {
       border-bottom-color: var(--border);
