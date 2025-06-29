@@ -969,6 +969,8 @@ const StaffProfile = () => {
               email: user?.email,
               phone: profile?.phone,
               linkedin: profile?.linkedin,
+              github: profile?.github,
+              wechat: profile?.wechat,
               status: profile?.status,
               username: user?.username
             }}
