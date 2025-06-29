@@ -76,6 +76,24 @@ function App() {
     }
   };
 
+  useEffect(() => {
+    const updateHeaderHeight = () => {
+      const headerEl = document.querySelector('header');
+      if (headerEl) {
+        document.documentElement.style.setProperty('--header-height', `${headerEl.offsetHeight}px`);
+      }
+    };
+
+    updateHeaderHeight();
+    window.addEventListener('resize', updateHeaderHeight);
+    window.addEventListener('scroll', updateHeaderHeight);
+
+    return () => {
+      window.removeEventListener('resize', updateHeaderHeight);
+      window.removeEventListener('scroll', updateHeaderHeight);
+    };
+  }, []);
+
   return (
     <AuthProvider>
       <div className="app" ref={appRef}>

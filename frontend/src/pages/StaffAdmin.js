@@ -268,6 +268,7 @@ const StyledStaffAdmin = styled.div`
 `;
 
 const Card = styled(motion.div)`
+  position: relative;
   background: white;
   border-radius: 15px;
   padding: 1.5rem;
@@ -1183,29 +1184,6 @@ const StaffAdmin = () => {
                   }}
                 >
                   <div className="card-header">
-                    {activeTab === 'accounts' && hasPermission('manageStaff') && (
-                      <div style={{ 
-                        position: 'absolute', 
-                        top: '1rem', 
-                        left: '1rem', 
-                        zIndex: 2,
-                        background: 'var(--card-bg)',
-                        borderRadius: '4px',
-                        padding: '0.25rem',
-                        boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-                      }}>
-                        <input
-                          type="checkbox"
-                          checked={selectedItems.has(item.id)}
-                          onChange={(e) => handleSelectItem(item.id)}
-                          style={{ 
-                            cursor: 'pointer',
-                            transform: 'scale(1.2)',
-                            accentColor: 'var(--primary)'
-                          }}
-                        />
-                      </div>
-                    )}
                     <div className="info">
                       {activeTab === 'accounts' ? (
                         <>
