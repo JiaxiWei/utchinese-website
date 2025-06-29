@@ -28,6 +28,25 @@ async function main() {
       }
     });
 
+    // Create admin staff profile
+    await prisma.staffProfile.create({
+      data: {
+        staffId: admin.id,
+        name_en: 'Xuanyi Lyu',
+        name_zh: '吕宣谊',
+        position_en: 'Information Solution Staff',
+        position_zh: '信息解决方案员工',
+        department: 'OPERATION GROUP',
+        bio_en: 'I am an INFJ-T personality student with a passion for technology and innovation. Currently pursuing a double major in Computer Science and Statistics at the University of Toronto, with a minor in Economics. My areas of interest include Human-Computer Interaction, Artificial Intelligence, and Machine Learning. I enjoy creating solutions that combine technical excellence with user-centered design. I am committed to academic exploration and technological innovation, hoping to make meaningful contributions to society through my work in computer science and data analysis.',
+        bio_zh: '我是一名INFJ-T性格的学生，对技术和创新充满热情。目前在多伦多大学攻读计算机科学与统计学双专业，辅修经济学。我的兴趣领域包括人机交互、人工智能和机器学习。我喜欢创造结合技术卓越和以用户为中心设计的解决方案。我致力于学术探索和技术创新，希望通过我在计算机科学和数据分析方面的工作为社会做出有意义的贡献。',
+        avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+        email: 'xuanyi.lyu@mail.utoronto.ca',
+        status: 'approved',
+        isVisible: true,
+        displayOrder: 1
+      }
+    });
+
     console.log('Admin account created successfully');
 
     // Helper function to calculate event status
@@ -148,6 +167,7 @@ async function main() {
     }
 
     // Create staff accounts with password 123
+    /*
     const staffPassword = await bcrypt.hash('123', 10);
     const staffMembers = [
       // ARTS & CULTURE GROUP
@@ -373,12 +393,9 @@ async function main() {
         }
       });
     }
+    */
 
     console.log('Database has been seeded!');
-    console.log('📋 创建的账户：');
-    console.log('🔑 管理员: xuanyi.lyu@mail.utoronto.ca / 123');
-    console.log('🔑 员工账户: 所有员工密码都是 123');
-    console.log('💡 提示：所有账户都支持用户名或邮箱登录');
   } catch (error) {
     console.error('Error seeding database:', error);
   }
