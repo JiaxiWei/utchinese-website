@@ -70,6 +70,7 @@ model StaffProfile {
   github        String?  // GitHub链接
   wechat        String?  // WeChat微信号
   phone         String?  // 电话
+  mbti          String?  // MBTI性格类型
   
   // 审核状态
   status        String   @default("pending") // pending, approved, rejected
