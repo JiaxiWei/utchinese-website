@@ -67,6 +67,8 @@ model StaffProfile {
   // 联系方式
   email         String?  // 公开邮箱
   linkedin      String?  // LinkedIn链接
+  github        String?  // GitHub链接
+  wechat        String?  // WeChat微信号
   phone         String?  // 电话
   
   // 审核状态
