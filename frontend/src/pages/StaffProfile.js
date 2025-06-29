@@ -30,6 +30,18 @@ const StyledStaffProfile = styled.div`
   background: linear-gradient(135deg, rgba(224, 43, 32, 0.03) 0%, rgba(252, 185, 0, 0.05) 100%);
   padding-top: 5rem;
   
+  @media (max-width: 768px) {
+    padding-top: 8rem;
+  }
+  
+  @media (max-width: 768px) {
+    padding-top: 8rem;
+  }
+  
+  @media (max-width: 768px) {
+    padding-top: 8rem;
+  }
+  
   [data-theme="dark"] & {
     background: linear-gradient(135deg, rgba(224, 43, 32, 0.08) 0%, rgba(252, 185, 0, 0.08) 100%);
   }

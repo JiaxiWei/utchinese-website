@@ -17,12 +17,12 @@ gsap.registerPlugin(ScrollTrigger);
 
 const PageContainer = styled.div`
   min-height: 100vh;
-  padding: 0 20px 100px;
+  padding: 120px 20px 100px;
   background: var(--background-alt);
   transition: background-color 0.3s ease;
   
   @media (max-width: 768px) {
-    padding: 0 16px 80px;
+    padding: 130px 16px 80px;
   }
 `;
 

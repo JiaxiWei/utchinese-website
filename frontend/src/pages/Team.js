@@ -22,17 +22,17 @@ const StyledTeam = styled.div`
     text-align: center;
     position: relative;
     overflow: hidden;
-    padding-top: 5rem;
+    padding-top: 6rem;
     width: 100%;
     
     @media (max-width: 768px) {
       height: 70vh;
-      padding-top: 4rem;
+      padding-top: 10rem;
     }
     
     @media (max-width: 480px) {
       height: 60vh;
-      padding-top: 3rem;
+      padding-top: 9rem;
     }
     
     .header-bg {
@@ -89,14 +89,21 @@ const StyledTeam = styled.div`
     }
     
     h1 {
-      font-size: clamp(3.5rem, 8vw, 6rem);
-      margin-bottom: 2rem;
+      font-size: clamp(2.8rem, 7vw, 6rem);
+      margin-bottom: 1.5rem;
       position: relative;
       display: inline-block;
       background: linear-gradient(135deg, var(--primary), var(--accent));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
+      line-height: 1.1;
+      
+      @media (max-width: 768px) {
+        font-size: clamp(2rem, 8vw, 2.8rem);
+        margin-bottom: 1rem;
+        line-height: 1.2;
+      }
       
       &:after {
         content: '';
@@ -108,14 +115,28 @@ const StyledTeam = styled.div`
         height: 6px;
         background: linear-gradient(135deg, var(--primary), var(--accent));
         border-radius: 3px;
+        
+        @media (max-width: 768px) {
+          width: 80px;
+          height: 4px;
+          bottom: -0.3rem;
+        }
       }
     }
     
     p {
-      font-size: clamp(1.3rem, 3vw, 1.8rem);
+      font-size: clamp(1.1rem, 2.5vw, 1.8rem);
       color: var(--text-light);
       max-width: 800px;
       margin: 0 auto 3rem;
+      line-height: 1.6;
+      
+      @media (max-width: 768px) {
+        font-size: clamp(1rem, 4vw, 1.2rem);
+        margin: 0 auto 2.5rem;
+        line-height: 1.5;
+        padding: 0 1rem;
+      }
     }
     
     .stats-grid {

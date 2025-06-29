@@ -296,6 +296,17 @@ export const reviewProfile = async (id, reviewData) => {
   }
 }; 
 
+// 更新资料顺序
+export const updateProfileOrder = async (profileId, direction) => {
+  try {
+    const response = await api.put(`/admin/profiles/${profileId}/order`, { direction });
+    return response.data;
+  } catch (error) {
+    console.error('Error updating profile order:', error);
+    throw error;
+  }
+};
+
 // ===============================
 // 团队 API (公开)
 // ===============================

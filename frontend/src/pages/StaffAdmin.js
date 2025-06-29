@@ -18,7 +18,9 @@ import {
   FiMail,
   FiKey,
   FiToggleLeft,
-  FiToggleRight
+  FiToggleRight,
+  FiChevronUp,
+  FiChevronDown
 } from 'react-icons/fi';
 import { useAuth } from '../contexts/AuthContext';
 import {
@@ -28,13 +30,18 @@ import {
   deleteStaffAccount,
   batchDeleteStaffAccounts,
   getAllProfiles,
-  reviewProfile
+  reviewProfile,
+  updateProfileOrder
 } from '../utils/api';
 
 const StyledStaffAdmin = styled.div`
   min-height: 100vh;
   background: linear-gradient(135deg, rgba(224, 43, 32, 0.03) 0%, rgba(252, 185, 0, 0.05) 100%);
   padding-top: 5rem;
+  
+  @media (max-width: 768px) {
+    padding-top: 8rem;
+  }
   
   [data-theme="dark"] & {
     background: linear-gradient(135deg, rgba(224, 43, 32, 0.08) 0%, rgba(252, 185, 0, 0.08) 100%);
@@ -707,7 +714,7 @@ const StaffAdmin = () => {
     if (hasPermission('manageStaff') || hasPermission('reviewProfiles')) {
       loadData();
     }
-  }, [hasPermission, activeTab]);
+  }, [hasPermission, activeTab, statusFilter]);
 
   // Filter data
   useEffect(() => {
@@ -724,7 +731,7 @@ const StaffAdmin = () => {
   // Reset status filter when switching tabs
   useEffect(() => {
     if (activeTab === 'profiles') {
-      setStatusFilter('all'); // This will trigger backend to show only pending and rejected
+      setStatusFilter('approved'); // Default to showing approved profiles with move buttons
     } else {
       setStatusFilter('all');
     }
@@ -957,6 +964,16 @@ const StaffAdmin = () => {
     }
   };
 
+  const handleMoveProfile = async (profileId, direction) => {
+    try {
+      await updateProfileOrder(profileId, direction);
+      loadData();
+    } catch (error) {
+      console.error(`Error moving profile ${direction}:`, error);
+      alert(`Failed to move profile ${direction}: ${error.response?.data?.error || error.message}`);
+    }
+  };
+
   // 重置选择状态当数据变化时
   useEffect(() => {
     setSelectedItems(new Set());
@@ -1022,6 +1039,7 @@ const StaffAdmin = () => {
               ) : (
                 <>
                   <option value="pending">{t('admin.staff.filters.pending')}</option>
+                  <option value="approved">Approved</option>
                   <option value="rejected">{t('admin.staff.filters.rejected')}</option>
                 </>
               )}
@@ -1463,6 +1481,24 @@ const StaffAdmin = () => {
                           >
                             <FiEye />
                           </button>
+                          {item.status === 'approved' && item.isVisible && (
+                            <>
+                              <button 
+                                className="action-btn secondary"
+                                onClick={() => handleMoveProfile(item.id, 'up')}
+                                title="Move Up"
+                              >
+                                <FiChevronUp />
+                              </button>
+                              <button 
+                                className="action-btn secondary"
+                                onClick={() => handleMoveProfile(item.id, 'down')}
+                                title="Move Down"
+                              >
+                                <FiChevronDown />
+                              </button>
+                            </>
+                          )}
                           {item.status === 'pending' && (
                             <>
                               <button 

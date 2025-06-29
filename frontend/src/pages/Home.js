@@ -11,14 +11,14 @@ gsap.registerPlugin(ScrollTrigger);
 
 const StyledHome = styled.div`
   .hero {
-    height: calc(100vh - var(--header-height, 5rem));
+    height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
     background: radial-gradient(circle at 50% 50%, rgba(252, 185, 0, 0.1) 0%, rgba(224, 43, 32, 0.05) 50%, rgba(0, 0, 0, 0) 100%);
     overflow: hidden;
-    padding-top: var(--header-height, 5rem);
+    padding-top: 5rem;
   }
 
   .hero-bg {

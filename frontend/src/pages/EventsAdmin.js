@@ -9,7 +9,11 @@ import axios from 'axios';
 const AdminContainer = styled.div`
   max-width: 1200px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 120px 20px 20px;
+  
+  @media (max-width: 768px) {
+    padding: 130px 20px 20px;
+  }
 `;
 
 const Header = styled.div`
