@@ -8,6 +8,7 @@ import {
   FiMail, 
   FiPhone, 
   FiLinkedin, 
+  FiGithub,
   FiSave, 
   FiCamera,
   FiCheck,
@@ -19,6 +20,7 @@ import {
   FiFileText,
   FiUsers
 } from 'react-icons/fi';
+import { FaWeixin } from 'react-icons/fa';
 import { useAuth } from '../contexts/AuthContext';
 import { getStaffProfile, saveStaffProfile, uploadStaffAvatar, getFullAvatarUrl } from '../utils/api';
 import StaffCard from '../components/StaffCard';
@@ -657,6 +659,8 @@ const StaffProfile = () => {
     avatarUrl: '',
     email: '',
     linkedin: '',
+    github: '',
+    wechat: '',
     phone: ''
   });
   const [isLoading, setIsLoading] = useState(true);
@@ -705,6 +709,8 @@ const StaffProfile = () => {
             avatarUrl: profileData.avatarUrl || '',
             email: profileData.email || '',
             linkedin: profileData.linkedin || '',
+            github: profileData.github || '',
+            wechat: profileData.wechat || '',
             phone: profileData.phone || ''
           });
         }
@@ -963,7 +969,8 @@ const StaffProfile = () => {
               email: user?.email,
               phone: profile?.phone,
               linkedin: profile?.linkedin,
-              status: profile?.status
+              status: profile?.status,
+              username: user?.username
             }}
           />
         </motion.div>
@@ -1144,6 +1151,38 @@ const StaffProfile = () => {
                     value={formData.linkedin}
                     onChange={handleInputChange}
                     placeholder={t('staff.profile.linkedinPlaceholder')}
+                  />
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label className="label">
+                  {t('staff.profile.github')}
+                </label>
+                <div className="input-wrapper">
+                  <FiGithub className="input-icon" />
+                  <input
+                    type="url"
+                    name="github"
+                    value={formData.github}
+                    onChange={handleInputChange}
+                    placeholder={t('staff.profile.githubPlaceholder')}
+                  />
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label className="label">
+                  {t('staff.profile.wechat')}
+                </label>
+                <div className="input-wrapper">
+                  <FaWeixin className="input-icon" />
+                  <input
+                    type="text"
+                    name="wechat"
+                    value={formData.wechat}
+                    onChange={handleInputChange}
+                    placeholder={t('staff.profile.wechatPlaceholder')}
                   />
                 </div>
               </div>

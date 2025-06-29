@@ -1395,9 +1395,14 @@ const StaffAdmin = () => {
                             <div style={{ marginBottom: '0.25rem' }}>
                               <strong>Positions:</strong> {item.position_en || 'No Position'} / {item.position_zh || '无职位'}
                             </div>
-                            {item.email && (
+                            {(item.email || item.phone || item.linkedin || item.github || item.wechat) && (
                               <div style={{ marginBottom: '0.25rem' }}>
-                                <strong>Contact:</strong> {item.email}
+                                <strong>Contact:</strong> 
+                                {item.email && <span> {item.email}</span>}
+                                {item.phone && <span>{item.email ? ' | ' : ''}{item.phone}</span>}
+                                {item.linkedin && <span> | <a href={item.linkedin} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--primary)' }}>{item.linkedin}</a></span>}
+                                {item.github && <span> | <a href={item.github} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--primary)' }}>{item.github}</a></span>}
+                                {item.wechat && <span> | WeChat: {item.wechat}</span>}
                               </div>
                             )}
                             {(item.bio_en || item.bio_zh) && (
@@ -1407,7 +1412,12 @@ const StaffAdmin = () => {
                                     const bioText = item.bio_en && item.bio_zh 
                                       ? `${item.bio_en} / ${item.bio_zh}`
                                       : (item.bio_en || item.bio_zh || '');
-                                    return bioText.substring(0, 150) + (bioText.length > 150 ? '...' : '');
+                                    // 显示逻辑：超过1000字符才省略
+                                    if (bioText.length > 1000) {
+                                      return bioText.substring(0, 1000) + '...'; // 超长bio截断到1000字符+省略号
+                                    } else {
+                                      return bioText; // 其他情况显示完整bio
+                                    }
                                   })()
                                 }
                               </div>
@@ -1714,6 +1724,22 @@ const StaffAdmin = () => {
                                   {selectedItem.linkedin}
                                 </a>
                               ) : 'Not provided'}
+                            </div>
+                          </div>
+                          <div className="info-item">
+                            <strong>GitHub:</strong>
+                            <div style={{ padding: '0.5rem', background: 'var(--background-alt)', borderRadius: '5px', marginTop: '0.25rem' }}>
+                              {selectedItem.github ? (
+                                <a href={selectedItem.github} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--primary)' }}>
+                                  {selectedItem.github}
+                                </a>
+                              ) : 'Not provided'}
+                            </div>
+                          </div>
+                          <div className="info-item">
+                            <strong>WeChat:</strong>
+                            <div style={{ padding: '0.5rem', background: 'var(--background-alt)', borderRadius: '5px', marginTop: '0.25rem' }}>
+                              {selectedItem.wechat || 'Not provided'}
                             </div>
                           </div>
                         </div>

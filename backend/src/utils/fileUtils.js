@@ -74,6 +74,8 @@ const transformTeamMemberByLanguage = (member, language = 'en') => {
     avatarUrl: member.avatarUrl,
     email: member.email,
     linkedin: member.linkedin,
+    github: member.github,
+    wechat: member.wechat,
     phone: member.phone,
     status: member.status,
     // Public identifier

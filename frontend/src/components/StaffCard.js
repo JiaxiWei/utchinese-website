@@ -2,9 +2,11 @@ import React from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { FiMail, FiPhone, FiLinkedin, FiUsers } from 'react-icons/fi';
+import { FiMail, FiPhone, FiLinkedin, FiUsers, FiGithub } from 'react-icons/fi';
 import { MdVerified } from 'react-icons/md';
+import { FaWeixin } from 'react-icons/fa';
 import { getFullAvatarUrl } from '../utils/api';
+import QRCode from 'react-qr-code';
 
 const DigitalBusinessCard = styled(motion.div)`
   border-radius: 24px;
@@ -30,10 +32,16 @@ const DigitalBusinessCard = styled(motion.div)`
     height: 100%;
     background-image: url('/logo.png');
     background-repeat: no-repeat;
-    background-position: 95% 120%;
+    background-position: 80% 5%;
     background-size: 200px;
     opacity: 0.05;
     transition: all 0.5s ease;
+    
+    @media (max-width: 768px) {
+      background-position: 105% 95%;
+      background-size: 150px;
+      transform: rotate(15deg);
+    }
   }
   
   &:hover .card-bg {
@@ -71,7 +79,21 @@ const CardHeader = styled.div`
     gap: 1.2rem;
     text-align: center;
   }
-   
+  
+  .avatar-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4rem;
+    flex-shrink: 0;
+    
+    @media (max-width: 768px) {
+      flex-direction: row;
+      gap: 1.5rem;
+      justify-content: center;
+    }
+  }
+  
   .avatar {
     width: 100px;
     height: 100px;
@@ -98,11 +120,24 @@ const CardHeader = styled.div`
     flex-shrink: 0;
   }
 
+  .qr-code {
+    background: white;
+    padding: 8px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100px;
+    height: 100px;
+  }
+
   .identity {
     flex: 1;
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    margin-top: -0.5rem;
     align-items: flex-start;
     text-align: left;
     
@@ -256,8 +291,11 @@ const StaffCard = ({ staff }) => {
     avatarUrl, 
     email,
     linkedin,
+    github,
+    wechat,
     phone,
-    status
+    status,
+    username
   } = staff;
 
   const displayName = i18n.language === 'zh' ? name_zh : name_en;
@@ -268,6 +306,11 @@ const StaffCard = ({ staff }) => {
   // Process avatar URL to get full path
   const processedAvatarUrl = getFullAvatarUrl(avatarUrl);
 
+  // Generate link for QR code (shareable business card link)
+  const cardLink = username 
+    ? `${window.location.origin}/team/${username}?lang=${i18n.language}` 
+    : window.location.href;
+
   return (
     <DigitalBusinessCard
       initial={{ opacity: 0, scale: 0.95 }}
@@ -277,13 +320,21 @@ const StaffCard = ({ staff }) => {
       <div className="card-bg"></div>
       <CardContent>
         <CardHeader>
-          {processedAvatarUrl ? (
-            <img src={processedAvatarUrl} alt="Avatar" className="avatar" />
-          ) : (
-            <div className="placeholder">
-              {displayName?.charAt(0).toUpperCase()}
-            </div>
-          )}
+          <div className="avatar-section">
+            {processedAvatarUrl ? (
+              <img src={processedAvatarUrl} alt="Avatar" className="avatar" />
+            ) : (
+              <div className="placeholder">
+                {displayName?.charAt(0).toUpperCase()}
+              </div>
+            )}
+            {/* QR Code below avatar */}
+            {username && (
+              <div className="qr-code" title="Scan to view profile">
+                <QRCode value={cardLink} size={84} fgColor="#e02b20" bgColor="transparent" level="H" />
+              </div>
+            )}
+          </div>
           <div className="identity">
             <div className="name-section">
               <h2>
@@ -337,6 +388,18 @@ const StaffCard = ({ staff }) => {
               <div className="contact-item">
                 <FiLinkedin className="icon" />
                 <span>LinkedIn</span>
+              </div>
+            )}
+            {github && (
+              <div className="contact-item">
+                <FiGithub className="icon" />
+                <span>GitHub</span>
+              </div>
+            )}
+            {wechat && (
+              <div className="contact-item">
+                <FaWeixin className="icon" />
+                <span>WeChat: {wechat}</span>
               </div>
             )}
           </div>

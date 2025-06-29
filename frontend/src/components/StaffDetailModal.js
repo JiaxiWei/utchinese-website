@@ -2,7 +2,8 @@ import React, { useEffect, useState, memo } from 'react';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { FiX, FiMail, FiLinkedin } from 'react-icons/fi';
+import { FiX, FiMail, FiLinkedin, FiGithub } from 'react-icons/fi';
+import { FaWeixin } from 'react-icons/fa';
 import StaffCard from './StaffCard';
 
 const Overlay = styled(motion.div)`
@@ -124,6 +125,22 @@ const ContactButton = styled.a`
       background: #005885;
     }
   }
+  
+  &.github {
+    background: #333;
+    
+    &:hover {
+      background: #1a1a1a;
+    }
+  }
+  
+  &.wechat {
+    background: #07c160;
+    
+    &:hover {
+      background: #059748;
+    }
+  }
 `;
 
 const overlayVariants = {
@@ -178,7 +195,7 @@ const StaffDetailModal = ({ staff: initialStaff, onClose }) => {
     setStaff(initialStaff);
   }, [initialStaff]);
   
-  const { email, linkedin } = staff;
+  const { email, linkedin, github, wechat } = staff;
 
   // Prevent body scrolling when modal is open
   useEffect(() => {
@@ -210,7 +227,7 @@ const StaffDetailModal = ({ staff: initialStaff, onClose }) => {
           
           <StaffCard staff={staff} />
           
-          {(email || linkedin) && (
+          {(email || linkedin || github || wechat) && (
             <ActionButtons>
               {email && (
                 <ContactButton href={`mailto:${email}`}>
@@ -222,6 +239,22 @@ const StaffDetailModal = ({ staff: initialStaff, onClose }) => {
                 <ContactButton href={linkedin} target="_blank" rel="noopener noreferrer" className="linkedin">
                   <FiLinkedin />
                   LinkedIn
+                </ContactButton>
+              )}
+              {github && (
+                <ContactButton href={github} target="_blank" rel="noopener noreferrer" className="github">
+                  <FiGithub />
+                  GitHub
+                </ContactButton>
+              )}
+              {wechat && (
+                <ContactButton 
+                  as="button" 
+                  onClick={() => alert(i18n.language === 'zh' ? `微信号: ${wechat}` : `WeChat ID: ${wechat}`)}
+                  className="wechat"
+                >
+                  <FaWeixin />
+                  WeChat
                 </ContactButton>
               )}
             </ActionButtons>

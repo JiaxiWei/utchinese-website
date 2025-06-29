@@ -44,6 +44,8 @@ class StaffService {
       avatarUrl,
       email,
       linkedin,
+      github,
+      wechat,
       phone
     } = profileData;
     
@@ -68,6 +70,8 @@ class StaffService {
       avatarUrl,
       email,
       linkedin,
+      github,
+      wechat,
       phone,
       status: 'pending', // Reset to pending when updated
       isVisible: false // Hide until approved

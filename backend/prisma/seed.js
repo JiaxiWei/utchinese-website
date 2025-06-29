@@ -41,6 +41,8 @@ async function main() {
         bio_zh: '我是一名INFJ-T性格的学生，对技术和创新充满热情。目前在多伦多大学攻读计算机科学与统计学双专业，辅修经济学。我的兴趣领域包括人机交互、人工智能和机器学习。我喜欢创造结合技术卓越和以用户为中心设计的解决方案。我致力于学术探索和技术创新，希望通过我在计算机科学和数据分析方面的工作为社会做出有意义的贡献。',
         avatarUrl: 'xuanyilyu.jpg',
         email: 'xuanyi.lyu@mail.utoronto.ca',
+        github: 'https://github.com/justLxy',
+        wechat: 'yukiyah',
         status: 'approved',
         isVisible: true,
         displayOrder: 1
