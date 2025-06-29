@@ -46,7 +46,8 @@ class StaffService {
       linkedin,
       github,
       wechat,
-      phone
+      phone,
+      mbti
     } = profileData;
     
     // Validation
@@ -73,6 +74,7 @@ class StaffService {
       github,
       wechat,
       phone,
+      mbti,
       status: 'pending', // Reset to pending when updated
       isVisible: false // Hide until approved
     };
@@ -304,7 +306,8 @@ class StaffService {
       email, 
       isActive, 
       role,
-      permissions = {}
+      permissions = {},
+      profileUpdate = {}
     } = updateData;
     
     const updateFields = {};
@@ -325,6 +328,29 @@ class StaffService {
         profile: true
       }
     });
+    
+    // 更新 Staff Profile 的 displayOrder (如果提供了)
+    if (profileUpdate.displayOrder !== undefined && updatedStaff.profile) {
+      await prisma.staffProfile.update({
+        where: { staffId: parseInt(id) },
+        data: {
+          displayOrder: profileUpdate.displayOrder
+        }
+      });
+      
+      // 重新获取更新后的 staff 和 profile 数据
+      const refreshedStaff = await prisma.staff.findUnique({
+        where: { id: parseInt(id) },
+        include: {
+          profile: true
+        }
+      });
+      
+      return { 
+        staff: refreshedStaff, 
+        message: 'Staff account and profile updated successfully' 
+      };
+    }
     
     return { 
       staff: updatedStaff, 

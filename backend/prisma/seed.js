@@ -42,7 +42,9 @@ async function main() {
         avatarUrl: 'xuanyilyu.jpg',
         email: 'xuanyi.lyu@mail.utoronto.ca',
         github: 'https://github.com/justLxy',
+        linkedin: 'https://linkedin.com/in/xuanyi-lyu',
         wechat: 'yukiyah',
+        mbti: 'INFJ-T',
         status: 'approved',
         isVisible: true,
         displayOrder: 1

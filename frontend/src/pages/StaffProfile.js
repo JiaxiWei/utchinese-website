@@ -661,7 +661,8 @@ const StaffProfile = () => {
     linkedin: '',
     github: '',
     wechat: '',
-    phone: ''
+    phone: '',
+    mbti: ''
   });
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -711,7 +712,8 @@ const StaffProfile = () => {
             linkedin: profileData.linkedin || '',
             github: profileData.github || '',
             wechat: profileData.wechat || '',
-            phone: profileData.phone || ''
+            phone: profileData.phone || '',
+            mbti: profileData.mbti || ''
           });
         }
       } catch (error) {
@@ -971,6 +973,7 @@ const StaffProfile = () => {
               linkedin: profile?.linkedin,
               github: profile?.github,
               wechat: profile?.wechat,
+              mbti: profile?.mbti,
               status: profile?.status,
               username: user?.username
             }}
@@ -1186,6 +1189,70 @@ const StaffProfile = () => {
                     onChange={handleInputChange}
                     placeholder={t('staff.profile.wechatPlaceholder')}
                   />
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label className="label">
+                  {t('staff.profile.mbti')}
+                </label>
+                <div className="input-wrapper">
+                  <FiUser className="input-icon" />
+                  <select
+                    name="mbti"
+                    value={formData.mbti}
+                    onChange={handleInputChange}
+                  >
+                    <option value="">{t('staff.profile.mbtiPlaceholder')}</option>
+                    <option value="INTJ">INTJ - The Architect</option>
+                    <option value="INTP">INTP - The Thinker</option>
+                    <option value="ENTJ">ENTJ - The Commander</option>
+                    <option value="ENTP">ENTP - The Debater</option>
+                    <option value="INFJ">INFJ - The Advocate</option>
+                    <option value="INFP">INFP - The Mediator</option>
+                    <option value="ENFJ">ENFJ - The Protagonist</option>
+                    <option value="ENFP">ENFP - The Campaigner</option>
+                    <option value="ISTJ">ISTJ - The Logistician</option>
+                    <option value="ISFJ">ISFJ - The Protector</option>
+                    <option value="ESTJ">ESTJ - The Executive</option>
+                    <option value="ESFJ">ESFJ - The Consul</option>
+                    <option value="ISTP">ISTP - The Virtuoso</option>
+                    <option value="ISFP">ISFP - The Adventurer</option>
+                    <option value="ESTP">ESTP - The Entrepreneur</option>
+                    <option value="ESFP">ESFP - The Entertainer</option>
+                    <option value="INFJ-T">INFJ-T - The Advocate (Turbulent)</option>
+                    <option value="INFJ-A">INFJ-A - The Advocate (Assertive)</option>
+                    <option value="INTJ-T">INTJ-T - The Architect (Turbulent)</option>
+                    <option value="INTJ-A">INTJ-A - The Architect (Assertive)</option>
+                    <option value="INTP-T">INTP-T - The Thinker (Turbulent)</option>
+                    <option value="INTP-A">INTP-A - The Thinker (Assertive)</option>
+                    <option value="ENTJ-T">ENTJ-T - The Commander (Turbulent)</option>
+                    <option value="ENTJ-A">ENTJ-A - The Commander (Assertive)</option>
+                    <option value="ENTP-T">ENTP-T - The Debater (Turbulent)</option>
+                    <option value="ENTP-A">ENTP-A - The Debater (Assertive)</option>
+                    <option value="INFP-T">INFP-T - The Mediator (Turbulent)</option>
+                    <option value="INFP-A">INFP-A - The Mediator (Assertive)</option>
+                    <option value="ENFJ-T">ENFJ-T - The Protagonist (Turbulent)</option>
+                    <option value="ENFJ-A">ENFJ-A - The Protagonist (Assertive)</option>
+                    <option value="ENFP-T">ENFP-T - The Campaigner (Turbulent)</option>
+                    <option value="ENFP-A">ENFP-A - The Campaigner (Assertive)</option>
+                    <option value="ISTJ-T">ISTJ-T - The Logistician (Turbulent)</option>
+                    <option value="ISTJ-A">ISTJ-A - The Logistician (Assertive)</option>
+                    <option value="ISFJ-T">ISFJ-T - The Protector (Turbulent)</option>
+                    <option value="ISFJ-A">ISFJ-A - The Protector (Assertive)</option>
+                    <option value="ESTJ-T">ESTJ-T - The Executive (Turbulent)</option>
+                    <option value="ESTJ-A">ESTJ-A - The Executive (Assertive)</option>
+                    <option value="ESFJ-T">ESFJ-T - The Consul (Turbulent)</option>
+                    <option value="ESFJ-A">ESFJ-A - The Consul (Assertive)</option>
+                    <option value="ISTP-T">ISTP-T - The Virtuoso (Turbulent)</option>
+                    <option value="ISTP-A">ISTP-A - The Virtuoso (Assertive)</option>
+                    <option value="ISFP-T">ISFP-T - The Adventurer (Turbulent)</option>
+                    <option value="ISFP-A">ISFP-A - The Adventurer (Assertive)</option>
+                    <option value="ESTP-T">ESTP-T - The Entrepreneur (Turbulent)</option>
+                    <option value="ESTP-A">ESTP-A - The Entrepreneur (Assertive)</option>
+                    <option value="ESFP-T">ESFP-T - The Entertainer (Turbulent)</option>
+                    <option value="ESFP-A">ESFP-A - The Entertainer (Assertive)</option>
+                  </select>
                 </div>
               </div>
 

@@ -1395,7 +1395,7 @@ const StaffAdmin = () => {
                             <div style={{ marginBottom: '0.25rem' }}>
                               <strong>Positions:</strong> {item.position_en || 'No Position'} / {item.position_zh || '无职位'}
                             </div>
-                            {(item.email || item.phone || item.linkedin || item.github || item.wechat) && (
+                            {(item.email || item.phone || item.linkedin || item.github || item.wechat || item.mbti) && (
                               <div style={{ marginBottom: '0.25rem' }}>
                                 <strong>Contact:</strong> 
                                 {item.email && <span> {item.email}</span>}
@@ -1403,6 +1403,7 @@ const StaffAdmin = () => {
                                 {item.linkedin && <span> | <a href={item.linkedin} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--primary)' }}>{item.linkedin}</a></span>}
                                 {item.github && <span> | <a href={item.github} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--primary)' }}>{item.github}</a></span>}
                                 {item.wechat && <span> | WeChat: {item.wechat}</span>}
+                                {item.mbti && <span> | MBTI: {item.mbti}</span>}
                               </div>
                             )}
                             {(item.bio_en || item.bio_zh) && (

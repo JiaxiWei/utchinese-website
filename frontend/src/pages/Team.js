@@ -5,7 +5,8 @@ import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { FiMail, FiLinkedin } from 'react-icons/fi';
+import { FiMail, FiLinkedin, FiGithub, FiPhone } from 'react-icons/fi';
+import { FaWeixin } from 'react-icons/fa';
 import { getTeamMembers, getTeamDepartments, getFullAvatarUrl } from '../utils/api';
 import StaffDetailModal from '../components/StaffDetailModal';
 import i18n from 'i18next';
@@ -566,7 +567,7 @@ const StyledTeam = styled.div`
         justify-content: center;
         gap: 1rem;
         
-        a {
+        a, span {
           display: flex;
           align-items: center;
           justify-content: center;
@@ -576,6 +577,7 @@ const StyledTeam = styled.div`
           background: rgba(224, 43, 32, 0.1);
           color: var(--primary);
           transition: all 0.3s ease;
+          cursor: pointer;
           
           &:hover {
             background: var(--primary);
@@ -968,6 +970,29 @@ const Team = () => {
                                     <FiLinkedin />
                                   </a>
                                 )}
+                                {member.github && (
+                                  <a 
+                                    href={member.github}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    title="GitHub"
+                                  >
+                                    <FiGithub />
+                                  </a>
+                                )}
+                                {member.phone && (
+                                  <a 
+                                    href={`tel:${member.phone}`}
+                                    title="Phone"
+                                  >
+                                    <FiPhone />
+                                  </a>
+                                )}
+                                {member.wechat && (
+                                  <span title={`WeChat: ${member.wechat}`}>
+                                    <FaWeixin />
+                                  </span>
+                                )}
                               </div>
                             </div>
                           </div>
@@ -1054,6 +1079,29 @@ const Team = () => {
                                 >
                                   <FiLinkedin />
                                 </a>
+                              )}
+                              {member.github && (
+                                <a 
+                                  href={member.github}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  title="GitHub"
+                                >
+                                  <FiGithub />
+                                </a>
+                              )}
+                              {member.phone && (
+                                <a 
+                                  href={`tel:${member.phone}`}
+                                  title="Phone"
+                                >
+                                  <FiPhone />
+                                </a>
+                              )}
+                              {member.wechat && (
+                                <span title={`WeChat: ${member.wechat}`}>
+                                  <FaWeixin />
+                                </span>
                               )}
                             </div>
                           </div>

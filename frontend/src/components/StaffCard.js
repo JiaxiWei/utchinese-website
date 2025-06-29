@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { FiMail, FiPhone, FiLinkedin, FiUsers, FiGithub } from 'react-icons/fi';
+import { FiMail, FiPhone, FiLinkedin, FiUsers, FiGithub, FiUser } from 'react-icons/fi';
 import { MdVerified } from 'react-icons/md';
 import { FaWeixin } from 'react-icons/fa';
 import { getFullAvatarUrl } from '../utils/api';
@@ -294,6 +294,7 @@ const StaffCard = ({ staff }) => {
     github,
     wechat,
     phone,
+    mbti,
     status,
     username
   } = staff;
@@ -400,6 +401,12 @@ const StaffCard = ({ staff }) => {
               <div className="contact-item">
                 <FaWeixin className="icon" />
                 <span>WeChat: {wechat}</span>
+              </div>
+            )}
+            {mbti && (
+              <div className="contact-item">
+                <FiUser className="icon" />
+                <span>MBTI: {mbti}</span>
               </div>
             )}
           </div>
