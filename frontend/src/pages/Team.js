@@ -271,19 +271,6 @@ const StyledTeam = styled.div`
         padding: 0 0.25rem;
       }
       
-      .filter-label {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        color: var(--text-light);
-        font-weight: 500;
-        margin-right: 1rem;
-        
-        svg {
-          color: var(--primary);
-        }
-      }
-      
       .filter-button {
         padding: 0.8rem 1.5rem;
         border: 2px solid transparent;
@@ -404,10 +391,10 @@ const StyledTeam = styled.div`
         max-width: 1200px;
         margin: 0 auto;
         
-        /* 默认布局 */
+        /* Default layout */
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
         
-        /* 少量成员时的特殊布局 */
+        /* Special layouts for small member counts */
         &.single-member {
           grid-template-columns: minmax(300px, 400px);
           justify-content: center;
@@ -710,7 +697,7 @@ const Team = () => {
   const totalMembers = teamMembers.length;
   const totalDepartments = departments.length;
 
-  // 根据成员数量获取合适的网格类名
+  // Get appropriate grid class name based on member count
   const getGridClassName = (memberCount) => {
     let className = 'members-grid';
     if (memberCount === 1) {

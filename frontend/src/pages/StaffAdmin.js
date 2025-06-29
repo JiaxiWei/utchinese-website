@@ -694,7 +694,11 @@ const StaffAdmin = () => {
     email: '',
     password: '',
     isActive: true,
-    role: 'staff'
+    role: 'staff',
+    canManageEvents: false,
+    canManageStaff: false,
+    canReviewProfiles: false,
+    displayOrder: 0
   });
 
   // Redirect if no staff management permissions
@@ -786,7 +790,8 @@ const StaffAdmin = () => {
       role: 'staff',
       canManageEvents: false,
       canManageStaff: false,
-      canReviewProfiles: false
+      canReviewProfiles: false,
+      displayOrder: 0
     });
     setShowModal(true);
   };
@@ -802,7 +807,8 @@ const StaffAdmin = () => {
       role: staff.role,
       canManageEvents: staff.canManageEvents || false,
       canManageStaff: staff.canManageStaff || false,
-      canReviewProfiles: staff.canReviewProfiles || false
+      canReviewProfiles: staff.canReviewProfiles || false,
+      displayOrder: staff.profile?.displayOrder || 0
     });
     setShowModal(true);
   };
@@ -851,7 +857,10 @@ const StaffAdmin = () => {
         delete permissionsData.canManageStaff;
         delete permissionsData.canReviewProfiles;
         
-        await updateStaffAccount(selectedItem.id, permissionsData);
+        await updateStaffAccount(selectedItem.id, { 
+          ...permissionsData,
+          displayOrder: formData.displayOrder
+        });
       } else if (modalType === 'review') {
         await reviewProfile(selectedItem.id, formData);
       }
