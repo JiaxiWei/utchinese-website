@@ -75,6 +75,9 @@ const transformTeamMemberByLanguage = (member, language = 'en') => {
     email: member.email,
     linkedin: member.linkedin,
     phone: member.phone,
+    status: member.status,
+    // Public identifier
+    username: member.staff ? member.staff.username : undefined,
     // Include original fields for admin purposes
     name_en: member.name_en,
     name_zh: member.name_zh,

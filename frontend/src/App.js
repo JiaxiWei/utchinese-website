@@ -60,6 +60,16 @@ function App() {
     document.documentElement.setAttribute('data-theme', theme);
   }, [theme]);
 
+  // Sync language with ?lang= parameter in URL on every navigation
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.search);
+    const langParam = urlParams.get('lang');
+    if (langParam && ['en', 'zh'].includes(langParam) && langParam !== i18n.language) {
+      i18n.changeLanguage(langParam);
+      document.documentElement.lang = langParam;
+    }
+  }, [location.search, i18n]);
+
   // Toggle theme between light and dark
   const toggleTheme = () => {
     const newTheme = theme === 'light' ? 'dark' : 'light';
@@ -92,6 +102,7 @@ function App() {
                 <Route path="/about" element={<About />} />
                 <Route path="/join" element={<Join />} />
                 <Route path="/team" element={<Team />} />
+                <Route path="/team/:member" element={<Team />} />
                 <Route path="/events" element={<Events />} />
                 <Route path="/admin/events" element={<EventsAdmin />} />
                 <Route path="/admin/staff" element={<StaffAdmin />} />

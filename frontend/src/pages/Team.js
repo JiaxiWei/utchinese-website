@@ -1,11 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { FiMail, FiLinkedin } from 'react-icons/fi';
-import { getTeamMembers, getTeamDepartments } from '../utils/api';
+import { getTeamMembers, getTeamDepartments, getFullAvatarUrl } from '../utils/api';
+import StaffDetailModal from '../components/StaffDetailModal';
+import i18n from 'i18next';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -447,7 +450,7 @@ const StyledTeam = styled.div`
     border: 1px solid rgba(224, 43, 32, 0.1);
     position: relative;
     overflow: hidden;
-    transition: all 0.4s ease;
+    transition: all 0.2s ease;
     cursor: pointer;
     width: 100%;
     max-width: 100%;
@@ -477,12 +480,17 @@ const StyledTeam = styled.div`
       box-shadow: 0 20px 40px rgba(224, 43, 32, 0.15);
       
       .member-avatar {
-        transform: scale(1.1);
+        transform: scale(1.05);
       }
       
       .member-info {
-        transform: translateY(-5px);
+        transform: translateY(-2px);
       }
+    }
+    
+    &:active {
+      transform: translateY(-5px);
+      transition: transform 0.1s ease;
     }
     
     .member-content {
@@ -497,19 +505,19 @@ const StyledTeam = styled.div`
       margin: 0 auto 1.5rem;
       overflow: hidden;
       border: 4px solid rgba(224, 43, 32, 0.1);
-      transition: all 0.4s ease;
+      transition: all 0.2s ease;
       
       img {
         width: 100%;
         height: 100%;
         object-fit: cover;
-        transition: transform 0.4s ease;
+        transition: transform 0.2s ease;
       }
     }
     
     .member-info {
       text-align: center;
-      transition: transform 0.4s ease;
+      transition: transform 0.2s ease;
       
       .member-name {
         font-size: 1.4rem;
@@ -608,9 +616,13 @@ const StyledTeam = styled.div`
 
 const Team = () => {
   const { i18n } = useTranslation();
+  const location = useLocation();
+  const { member: memberParam } = useParams();
+  const navigate = useNavigate();
   const [teamMembers, setTeamMembers] = useState([]);
   const [departments, setDepartments] = useState([]);
   const [selectedDepartment, setSelectedDepartment] = useState('all');
+  const [selectedStaff, setSelectedStaff] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const headerRef = useRef(null);
@@ -625,6 +637,32 @@ const Team = () => {
       initializeAnimations();
     }
   }, [loading, teamMembers]);
+
+  // Handle route param / query for staff detail modal (username based)
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.search);
+    const staffQuery = urlParams.get('member');
+    const usernameKey = memberParam || staffQuery;
+
+    if (usernameKey && teamMembers.length > 0) {
+      const staff = teamMembers.find(member => member.username === usernameKey);
+      if (staff) {
+        setSelectedStaff(staff);
+      }
+    } else if (!usernameKey && selectedStaff) {
+      setSelectedStaff(null);
+    }
+  }, [location.search, memberParam, teamMembers]);
+
+  // Update selected staff when teamMembers change (for language switching)
+  useEffect(() => {
+    if (selectedStaff && teamMembers.length > 0) {
+      const updatedStaff = teamMembers.find(member => member.id === selectedStaff.id);
+      if (updatedStaff) {
+        setSelectedStaff(updatedStaff);
+      }
+    }
+  }, [teamMembers, selectedStaff?.id]);
 
   const fetchTeamData = async () => {
     try {
@@ -696,6 +734,33 @@ const Team = () => {
 
   const totalMembers = teamMembers.length;
   const totalDepartments = departments.length;
+
+  // Handle route param / query for staff detail modal (username based)
+  const handleStaffClick = (staffUsername) => {
+    const staff = teamMembers.find(member => member.username === staffUsername);
+    if (staff) {
+      // Set selected staff immediately for faster UI response
+      setSelectedStaff(staff);
+      
+      // Update URL asynchronously using path param and lang query
+      setTimeout(() => {
+        const langParam = i18n.language;
+        navigate(`/team/${staffUsername}?lang=${langParam}`, { replace: true });
+      }, 0);
+    }
+  };
+
+  // Handle modal close
+  const handleCloseModal = () => {
+    setSelectedStaff(null);
+    // Remove member parameter from URL
+    const newSearchParams = new URLSearchParams(location.search);
+    newSearchParams.delete('member');
+    const newUrl = newSearchParams.toString() 
+      ? `${location.pathname}?${newSearchParams.toString()}`
+      : location.pathname;
+    navigate(newUrl, { replace: true });
+  };
 
   // Get appropriate grid class name based on member count
   const getGridClassName = (memberCount) => {
@@ -853,14 +918,33 @@ const Team = () => {
                             ease: "easeOut" 
                           }}
                           whileHover={{ y: -5 }}
+                          onClick={() => handleStaffClick(member.username)}
+                          style={{ cursor: 'pointer' }}
                         >
                           <div className="member-content">
                             <div className="member-avatar">
-                              <img 
-                                src={member.avatarUrl || 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80'} 
-                                alt={i18n.language === 'zh' ? member.name_zh : member.name_en}
-                                loading="lazy"
-                              />
+                              {getFullAvatarUrl(member.avatarUrl) ? (
+                                <img 
+                                  src={getFullAvatarUrl(member.avatarUrl)} 
+                                  alt={i18n.language === 'zh' ? member.name_zh : member.name_en}
+                                  loading="lazy"
+                                />
+                              ) : (
+                                <div style={{ 
+                                  width: '100%', 
+                                  height: '100%', 
+                                  borderRadius: '50%', 
+                                  background: 'linear-gradient(135deg, var(--primary), var(--accent))',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  color: 'white',
+                                  fontWeight: 'bold',
+                                  fontSize: '2.5rem'
+                                }}>
+                                  {(i18n.language === 'zh' ? member.name_zh : member.name_en)?.charAt(0).toUpperCase()}
+                                </div>
+                              )}
                             </div>
                             <div className="member-info">
                               <h3 className="member-name">
@@ -932,20 +1016,39 @@ const Team = () => {
                         className="member-card"
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={{ opacity: 1, scale: 1 }}
-                                                 transition={{ 
+                        transition={{ 
                            duration: 0.5, 
                            delay: index * 0.1,
                            ease: "easeOut" 
                          }}
                         whileHover={{ y: -5 }}
+                        onClick={() => handleStaffClick(member.username)}
+                        style={{ cursor: 'pointer' }}
                       >
                         <div className="member-content">
                           <div className="member-avatar">
-                            <img 
-                              src={member.avatarUrl || 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80'} 
-                              alt={i18n.language === 'zh' ? member.name_zh : member.name_en}
-                              loading="lazy"
-                            />
+                            {getFullAvatarUrl(member.avatarUrl) ? (
+                              <img 
+                                src={getFullAvatarUrl(member.avatarUrl)} 
+                                alt={i18n.language === 'zh' ? member.name_zh : member.name_en}
+                                loading="lazy"
+                              />
+                            ) : (
+                              <div style={{ 
+                                width: '100%', 
+                                height: '100%', 
+                                borderRadius: '50%', 
+                                background: 'linear-gradient(135deg, var(--primary), var(--accent))',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                color: 'white',
+                                fontWeight: 'bold',
+                                fontSize: '2.5rem'
+                              }}>
+                                {(i18n.language === 'zh' ? member.name_zh : member.name_en)?.charAt(0).toUpperCase()}
+                              </div>
+                            )}
                           </div>
                           <div className="member-info">
                             <h3 className="member-name">
@@ -998,6 +1101,13 @@ const Team = () => {
           </div>
         </section>
       </StyledTeam>
+
+      {selectedStaff && (
+        <StaffDetailModal
+          staff={selectedStaff}
+          onClose={handleCloseModal}
+        />
+      )}
     </motion.div>
   );
 };

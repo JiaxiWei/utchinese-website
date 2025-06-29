@@ -5,6 +5,17 @@ import i18n from 'i18next';
 export const BASE_URL = (process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000').replace(/\/+$/, '');
 export const API_BASE_URL = `${BASE_URL}/api`;
 
+// 工具函数：处理头像URL
+export const getFullAvatarUrl = (avatarUrl) => {
+  if (!avatarUrl) return null;
+  // 如果已经是完整URL，直接返回
+  if (avatarUrl.startsWith('http')) return avatarUrl;
+  // 如果是相对路径，拼接BASE_URL
+  if (avatarUrl.startsWith('/')) return `${BASE_URL}${avatarUrl}`;
+  // 如果只是文件名，拼接完整路径
+  return `${BASE_URL}/uploads/staff/${avatarUrl}`;
+};
+
 // 创建axios实例
 const api = axios.create({
   baseURL: API_BASE_URL,

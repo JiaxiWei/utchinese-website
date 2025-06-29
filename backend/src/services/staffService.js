@@ -7,7 +7,7 @@ const { transformTeamMemberByLanguage } = require('../utils/fileUtils');
 class StaffService {
   // Get staff profile (own profile)
   static async getStaffProfile(staffId) {
-    return await prisma.staffProfile.findUnique({
+    const profile = await prisma.staffProfile.findUnique({
       where: { staffId: staffId },
       include: {
         staff: {
@@ -19,6 +19,16 @@ class StaffService {
         }
       }
     });
+
+    // Process avatar URL to ensure it's a relative path
+    if (profile && profile.avatarUrl) {
+      // Check if avatarUrl is not already a relative or complete URL
+      if (!profile.avatarUrl.startsWith('/') && !profile.avatarUrl.startsWith('http')) {
+        profile.avatarUrl = `/uploads/staff/${profile.avatarUrl}`;
+      }
+    }
+
+    return profile;
   }
 
   // Create or update staff profile
@@ -160,12 +170,8 @@ class StaffService {
       throw new Error('Failed to process avatar file');
     }
     
-    // Get the server URL
-    const protocol = req.protocol;
-    const host = req.get('host');
-    
-    // Generate the avatar URL with new filename
-    const avatarUrl = `${protocol}://${host}/uploads/staff/${newFilename}`;
+    // Generate the avatar relative path
+    const avatarUrl = `/uploads/staff/${newFilename}`;
 
     // Update existing staff profile with the new avatar URL
     await prisma.staffProfile.update({
@@ -211,12 +217,22 @@ class StaffService {
 
   // Admin: Get all staff accounts
   static async getAllStaff() {
-    return await prisma.staff.findMany({
+    const staffData = await prisma.staff.findMany({
       include: {
         profile: true
       },
       orderBy: { createdAt: 'desc' }
     });
+
+    // Process avatar URLs for all staff profiles
+    const processedStaff = staffData.map(staff => {
+      if (staff.profile && staff.profile.avatarUrl && !staff.profile.avatarUrl.startsWith('/') && !staff.profile.avatarUrl.startsWith('http')) {
+        staff.profile.avatarUrl = `/uploads/staff/${staff.profile.avatarUrl}`;
+      }
+      return staff;
+    });
+
+    return processedStaff;
   }
 
   // Admin: Create staff account
@@ -376,7 +392,7 @@ class StaffService {
       };
     }
     
-    return await prisma.staffProfile.findMany({
+    const profiles = await prisma.staffProfile.findMany({
       where: whereCondition,
       include: {
         staff: {
@@ -389,6 +405,16 @@ class StaffService {
       },
       orderBy: { createdAt: 'desc' }
     });
+
+    // Process avatar URLs for all profiles
+    const processedProfiles = profiles.map(profile => {
+      if (profile.avatarUrl && !profile.avatarUrl.startsWith('/') && !profile.avatarUrl.startsWith('http')) {
+        profile.avatarUrl = `/uploads/staff/${profile.avatarUrl}`;
+      }
+      return profile;
+    });
+
+    return processedProfiles;
   }
 
   // Admin: Review staff profile
@@ -469,7 +495,15 @@ class StaffService {
       orderBy: { displayOrder: 'asc' }
     });
     
-    return teamMembers.map(member => transformTeamMemberByLanguage(member, language));
+    // Process avatar URLs for all team members
+    const processedMembers = teamMembers.map(member => {
+      if (member.avatarUrl && !member.avatarUrl.startsWith('/') && !member.avatarUrl.startsWith('http')) {
+        member.avatarUrl = `/uploads/staff/${member.avatarUrl}`;
+      }
+      return member;
+    });
+    
+    return processedMembers.map(member => transformTeamMemberByLanguage(member, language));
   }
 
   // Public: Get team member by ID
@@ -492,6 +526,11 @@ class StaffService {
     
     if (!member) {
       throw new Error('Team member not found');
+    }
+    
+    // Process avatar URL
+    if (member.avatarUrl && !member.avatarUrl.startsWith('/') && !member.avatarUrl.startsWith('http')) {
+      member.avatarUrl = `/uploads/staff/${member.avatarUrl}`;
     }
     
     return transformTeamMemberByLanguage(member, language);

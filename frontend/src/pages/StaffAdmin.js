@@ -26,7 +26,8 @@ import {
   deleteStaffAccount,
   batchDeleteStaffAccounts,
   getAllProfiles,
-  reviewProfile
+  reviewProfile,
+  getFullAvatarUrl
 } from '../utils/api';
 
 const StyledStaffAdmin = styled.div`
@@ -1197,7 +1198,7 @@ const StaffAdmin = () => {
                             <div style={{ flexShrink: 0 }}>
                               {item.profile?.avatarUrl ? (
                                 <img 
-                                  src={item.profile.avatarUrl} 
+                                  src={getFullAvatarUrl(item.profile.avatarUrl)} 
                                   alt={`${item.username} avatar`}
                                   style={{ 
                                     width: '45px', 
@@ -1340,7 +1341,7 @@ const StaffAdmin = () => {
                             <div style={{ flexShrink: 0 }}>
                               {item.avatarUrl ? (
                                 <img 
-                                  src={item.avatarUrl} 
+                                  src={getFullAvatarUrl(item.avatarUrl)} 
                                   alt={`${item.name_en} avatar`}
                                   style={{ 
                                     width: '50px', 
@@ -1638,7 +1639,7 @@ const StaffAdmin = () => {
                         {selectedItem.avatarUrl && (
                           <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
                             <img 
-                              src={selectedItem.avatarUrl} 
+                              src={getFullAvatarUrl(selectedItem.avatarUrl)} 
                               alt="Profile Avatar"
                               style={{ 
                                 width: '100px', 
