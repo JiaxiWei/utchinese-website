@@ -419,16 +419,6 @@ const Card = styled(motion.div)`
           }
         }
         
-        &.delete {
-          background: rgba(239, 68, 68, 0.1);
-          color: #ef4444;
-          
-          &:hover {
-            background: #ef4444;
-            color: white;
-          }
-        }
-        
         &.secondary {
           background: rgba(107, 114, 128, 0.1);
           color: #6b7280;
@@ -804,6 +794,18 @@ const StaffAdmin = () => {
       canManageEvents: staff.canManageEvents || false,
       canManageStaff: staff.canManageStaff || false,
       canReviewProfiles: staff.canReviewProfiles || false,
+      name_en: staff.profile?.name_en || '',
+      name_zh: staff.profile?.name_zh || '',
+      position_en: staff.profile?.position_en || '',
+      position_zh: staff.profile?.position_zh || '',
+      department: staff.profile?.department || '',
+      bio_en: staff.profile?.bio_en || '',
+      bio_zh: staff.profile?.bio_zh || '',
+      profileEmail: staff.profile?.email || '',
+      linkedin: staff.profile?.linkedin || '',
+      github: staff.profile?.github || '',
+      wechat: staff.profile?.wechat || '',
+      phone: staff.profile?.phone || '',
       displayOrder: staff.profile?.displayOrder || 0
     });
     setShowModal(true);
@@ -840,7 +842,22 @@ const StaffAdmin = () => {
         await createStaffAccount(createData);
       } else if (modalType === 'edit') {
         const { password, ...updateData } = formData;
-        // Structure permissions data
+        const profileUpdate = {
+          name_en: updateData.name_en,
+          name_zh: updateData.name_zh,
+          position_en: updateData.position_en,
+          position_zh: updateData.position_zh,
+          department: updateData.department,
+          bio_en: updateData.bio_en,
+          bio_zh: updateData.bio_zh,
+          email: updateData.profileEmail,
+          linkedin: updateData.linkedin,
+          github: updateData.github,
+          wechat: updateData.wechat,
+          phone: updateData.phone,
+          displayOrder: updateData.displayOrder
+        };
+
         const permissionsData = {
           ...updateData,
           permissions: {
@@ -848,15 +865,27 @@ const StaffAdmin = () => {
             canManageStaff: updateData.canManageStaff,
             canReviewProfiles: updateData.canReviewProfiles
           },
-          profileUpdate: {
-            displayOrder: updateData.displayOrder
-          }
+          profileUpdate
         };
+
+        // Remove non-account fields from top level
         delete permissionsData.canManageEvents;
         delete permissionsData.canManageStaff;
         delete permissionsData.canReviewProfiles;
+        delete permissionsData.name_en;
+        delete permissionsData.name_zh;
+        delete permissionsData.position_en;
+        delete permissionsData.position_zh;
+        delete permissionsData.department;
+        delete permissionsData.bio_en;
+        delete permissionsData.bio_zh;
+        delete permissionsData.profileEmail;
+        delete permissionsData.linkedin;
+        delete permissionsData.github;
+        delete permissionsData.wechat;
+        delete permissionsData.phone;
         delete permissionsData.displayOrder;
-        
+
         await updateStaffAccount(selectedItem.id, permissionsData);
       } else if (modalType === 'review') {
         await reviewProfile(selectedItem.id, formData);
@@ -1684,165 +1713,66 @@ const StaffAdmin = () => {
                     </>
                   )}
 
-                  {modalType === 'review' && selectedItem && (
+                  {modalType === 'edit' && (
                     <>
-                      {/* Profile Information Display */}
-                      <div className="profile-review-section">
-                        <h4 style={{ marginBottom: '1rem', color: 'var(--primary)', borderBottom: '2px solid var(--primary)', paddingBottom: '0.5rem' }}>
-                          Profile Information
-                        </h4>
-                        
-                        {/* Avatar */}
-                        {selectedItem.avatarUrl && (
-                          <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
-                            <img 
-                              src={getFullAvatarUrl(selectedItem.avatarUrl)} 
-                              alt="Profile Avatar"
-                              style={{ 
-                                width: '100px', 
-                                height: '100px', 
-                                borderRadius: '50%', 
-                                objectFit: 'cover',
-                                border: '3px solid var(--primary)'
-                              }}
-                            />
-                          </div>
-                        )}
-                        
-                        {/* Basic Information */}
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1.5rem' }}>
-                          <div className="info-item">
-                            <strong>English Name:</strong>
-                            <div style={{ padding: '0.5rem', background: 'var(--background-alt)', borderRadius: '5px', marginTop: '0.25rem' }}>
-                              {selectedItem.name_en || 'Not provided'}
-                            </div>
-                          </div>
-                          <div className="info-item">
-                            <strong>Chinese Name:</strong>
-                            <div style={{ padding: '0.5rem', background: 'var(--background-alt)', borderRadius: '5px', marginTop: '0.25rem' }}>
-                              {selectedItem.name_zh || 'Not provided'}
-                            </div>
-                          </div>
-                          <div className="info-item">
-                            <strong>English Position:</strong>
-                            <div style={{ padding: '0.5rem', background: 'var(--background-alt)', borderRadius: '5px', marginTop: '0.25rem' }}>
-                              {selectedItem.position_en || 'Not provided'}
-                            </div>
-                          </div>
-                          <div className="info-item">
-                            <strong>Chinese Position:</strong>
-                            <div style={{ padding: '0.5rem', background: 'var(--background-alt)', borderRadius: '5px', marginTop: '0.25rem' }}>
-                              {selectedItem.position_zh || 'Not provided'}
-                            </div>
-                          </div>
-                          <div className="info-item">
-                            <strong>Department:</strong>
-                            <div style={{ padding: '0.5rem', background: 'var(--background-alt)', borderRadius: '5px', marginTop: '0.25rem' }}>
-                              {selectedItem.department || 'Not provided'}
-                            </div>
-                          </div>
-                          <div className="info-item">
-                            <strong>Username:</strong>
-                            <div style={{ padding: '0.5rem', background: 'var(--background-alt)', borderRadius: '5px', marginTop: '0.25rem' }}>
-                              {selectedItem.staff?.username || 'Not available'}
-                            </div>
-                          </div>
-                        </div>
-                        
-                        {/* Contact Information */}
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1.5rem' }}>
-                          <div className="info-item">
-                            <strong>Email:</strong>
-                            <div style={{ padding: '0.5rem', background: 'var(--background-alt)', borderRadius: '5px', marginTop: '0.25rem' }}>
-                              {selectedItem.email || 'Not provided'}
-                            </div>
-                          </div>
-                          <div className="info-item">
-                            <strong>Phone:</strong>
-                            <div style={{ padding: '0.5rem', background: 'var(--background-alt)', borderRadius: '5px', marginTop: '0.25rem' }}>
-                              {selectedItem.phone || 'Not provided'}
-                            </div>
-                          </div>
-                          <div className="info-item" style={{ gridColumn: '1 / -1' }}>
-                            <strong>LinkedIn:</strong>
-                            <div style={{ padding: '0.5rem', background: 'var(--background-alt)', borderRadius: '5px', marginTop: '0.25rem' }}>
-                              {selectedItem.linkedin ? (
-                                <a href={selectedItem.linkedin} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--primary)' }}>
-                                  {selectedItem.linkedin}
-                                </a>
-                              ) : 'Not provided'}
-                            </div>
-                          </div>
-                          <div className="info-item">
-                            <strong>GitHub:</strong>
-                            <div style={{ padding: '0.5rem', background: 'var(--background-alt)', borderRadius: '5px', marginTop: '0.25rem' }}>
-                              {selectedItem.github ? (
-                                <a href={selectedItem.github} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--primary)' }}>
-                                  {selectedItem.github}
-                                </a>
-                              ) : 'Not provided'}
-                            </div>
-                          </div>
-                          <div className="info-item">
-                            <strong>WeChat:</strong>
-                            <div style={{ padding: '0.5rem', background: 'var(--background-alt)', borderRadius: '5px', marginTop: '0.25rem' }}>
-                              {selectedItem.wechat || 'Not provided'}
-                            </div>
-                          </div>
-                        </div>
-                        
-                        {/* Bio Information */}
-                        <div style={{ marginBottom: '1.5rem' }}>
-                          <div className="info-item" style={{ marginBottom: '1rem' }}>
-                            <strong>English Bio:</strong>
-                            <div style={{ padding: '0.75rem', background: 'var(--background-alt)', borderRadius: '5px', marginTop: '0.25rem', minHeight: '60px', whiteSpace: 'pre-wrap' }}>
-                              {selectedItem.bio_en || 'Not provided'}
-                            </div>
-                          </div>
-                          <div className="info-item">
-                            <strong>Chinese Bio:</strong>
-                            <div style={{ padding: '0.75rem', background: 'var(--background-alt)', borderRadius: '5px', marginTop: '0.25rem', minHeight: '60px', whiteSpace: 'pre-wrap' }}>
-                              {selectedItem.bio_zh || 'Not provided'}
-                            </div>
-                          </div>
-                        </div>
-                        
-                        {/* Timestamps */}
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '2rem', fontSize: '0.9rem', color: 'var(--text-light)' }}>
-                          <div>
-                            <strong>Created:</strong> {selectedItem.createdAt ? new Date(selectedItem.createdAt).toLocaleString() : 'Not available'}
-                          </div>
-                          <div>
-                            <strong>Updated:</strong> {selectedItem.updatedAt ? new Date(selectedItem.updatedAt).toLocaleString() : 'Not available'}
-                          </div>
-                        </div>
+                      <h4 style={{ marginTop: '2rem', marginBottom: '1rem', color: 'var(--primary)' }}>Profile Details</h4>
+                      <div className="form-group">
+                        <label>English Name</label>
+                        <input type="text" value={formData.name_en || ''} onChange={(e)=>setFormData(prev=>({...prev,name_en:e.target.value}))} />
                       </div>
-                      
-                      {/* Review Controls */}
-                      <div className="review-controls-section" style={{ borderTop: '1px solid var(--border)', paddingTop: '1.5rem' }}>
-                        <h4 style={{ marginBottom: '1rem', color: 'var(--primary)' }}>
-                          Review Actions
-                        </h4>
-                        
-                        <div className="form-group">
-                          <label>{t('admin.staff.form.status')}</label>
-                          <select
-                            value={formData.status}
-                            onChange={(e) => setFormData(prev => ({ ...prev, status: e.target.value }))}
-                          >
-                            <option value="pending">{t('admin.staff.form.statuses.pending')}</option>
-                            <option value="rejected">{t('admin.staff.form.statuses.rejected')}</option>
-                          </select>
-                        </div>
-                        
-                        <div className="form-group">
-                          <label>{t('admin.staff.form.reviewNote')}</label>
-                          <textarea
-                            value={formData.reviewNote}
-                            onChange={(e) => setFormData(prev => ({ ...prev, reviewNote: e.target.value }))}
-                            placeholder={t('admin.staff.form.reviewNotePlaceholder')}
-                          />
-                        </div>
+                      <div className="form-group">
+                        <label>Chinese Name</label>
+                        <input type="text" value={formData.name_zh || ''} onChange={(e)=>setFormData(prev=>({...prev,name_zh:e.target.value}))} />
+                      </div>
+                      <div className="form-group">
+                        <label>English Position</label>
+                        <input type="text" value={formData.position_en || ''} onChange={(e)=>setFormData(prev=>({...prev,position_en:e.target.value}))} />
+                      </div>
+                      <div className="form-group">
+                        <label>Chinese Position</label>
+                        <input type="text" value={formData.position_zh || ''} onChange={(e)=>setFormData(prev=>({...prev,position_zh:e.target.value}))} />
+                      </div>
+                      <div className="form-group">
+                        <label>Department</label>
+                        <select value={formData.department || ''} onChange={(e)=>setFormData(prev=>({...prev,department:e.target.value}))}>
+                          <option value="">Select Department</option>
+                          <option value="ARTS & CULTURE GROUP">Arts & Culture Group</option>
+                          <option value="CAREER & ACADEMIC GROUP">Career & Academic Group</option>
+                          <option value="OPERATION GROUP">Operation Group</option>
+                          <option value="SUPPORT GROUP">Support Group</option>
+                        </select>
+                      </div>
+                      <div className="form-group">
+                        <label>English Bio</label>
+                        <textarea value={formData.bio_en || ''} onChange={(e)=>setFormData(prev=>({...prev,bio_en:e.target.value}))} />
+                      </div>
+                      <div className="form-group">
+                        <label>Chinese Bio</label>
+                        <textarea value={formData.bio_zh || ''} onChange={(e)=>setFormData(prev=>({...prev,bio_zh:e.target.value}))} />
+                      </div>
+                      <div className="form-group">
+                        <label>Contact Email</label>
+                        <input type="email" value={formData.profileEmail || ''} onChange={(e)=>setFormData(prev=>({...prev,profileEmail:e.target.value}))} />
+                      </div>
+                      <div className="form-group">
+                        <label>Phone</label>
+                        <input type="text" value={formData.phone || ''} onChange={(e)=>setFormData(prev=>({...prev,phone:e.target.value}))} />
+                      </div>
+                      <div className="form-group">
+                        <label>LinkedIn</label>
+                        <input type="text" value={formData.linkedin || ''} onChange={(e)=>setFormData(prev=>({...prev,linkedin:e.target.value}))} />
+                      </div>
+                      <div className="form-group">
+                        <label>GitHub</label>
+                        <input type="text" value={formData.github || ''} onChange={(e)=>setFormData(prev=>({...prev,github:e.target.value}))} />
+                      </div>
+                      <div className="form-group">
+                        <label>WeChat</label>
+                        <input type="text" value={formData.wechat || ''} onChange={(e)=>setFormData(prev=>({...prev,wechat:e.target.value}))} />
+                      </div>
+                      <div className="form-group">
+                        <label>Display Order</label>
+                        <input type="number" value={formData.displayOrder || 0} onChange={(e)=>setFormData(prev=>({...prev,displayOrder:parseInt(e.target.value)}))} />
                       </div>
                     </>
                   )}

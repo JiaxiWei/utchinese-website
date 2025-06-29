@@ -327,32 +327,48 @@ class StaffService {
       }
     });
     
-    // 更新 Staff Profile 的 displayOrder (如果提供了)
-    if (profileUpdate.displayOrder !== undefined && updatedStaff.profile) {
-      await prisma.staffProfile.update({
-        where: { staffId: parseInt(id) },
-        data: {
-          displayOrder: profileUpdate.displayOrder
-        }
+    // 更新 Staff Profile 信息（如果提供了 profileUpdate）
+    if (profileUpdate && Object.keys(profileUpdate).length > 0) {
+      const existingProfile = await prisma.staffProfile.findUnique({
+        where: { staffId: parseInt(id) }
       });
-      
-      // 重新获取更新后的 staff 和 profile 数据
-      const refreshedStaff = await prisma.staff.findUnique({
-        where: { id: parseInt(id) },
-        include: {
-          profile: true
-        }
-      });
-      
-      return { 
-        staff: refreshedStaff, 
-        message: 'Staff account and profile updated successfully' 
-      };
+
+      if (existingProfile) {
+        // 保留原有状态字段，除非调用方显式提供新状态
+        const { status: _status, reviewedAt: _ra, reviewedBy: _rb, createdAt: _ca, updatedAt: _ua, id: _pid, staffId: _sid, ...updatableFields } = profileUpdate;
+
+        await prisma.staffProfile.update({
+          where: { staffId: parseInt(id) },
+          data: {
+            ...updatableFields,
+            updatedAt: new Date(),
+          }
+        });
+      } else {
+        // 如果该员工尚未创建资料，则直接创建
+        await prisma.staffProfile.create({
+          data: {
+            ...profileUpdate,
+            staffId: parseInt(id),
+            // 新建资料默认设为 approved 并可见，管理员可稍后调整
+            status: 'approved',
+            isVisible: true,
+          }
+        });
+      }
     }
-    
-    return { 
-      staff: updatedStaff, 
-      message: 'Staff account updated successfully' 
+
+    // 重新获取更新后的数据（包含 profile）
+    const refreshedStaff = await prisma.staff.findUnique({
+      where: { id: parseInt(id) },
+      include: {
+        profile: true,
+      },
+    });
+
+    return {
+      staff: refreshedStaff,
+      message: 'Staff account and profile updated successfully',
     };
   }
 
