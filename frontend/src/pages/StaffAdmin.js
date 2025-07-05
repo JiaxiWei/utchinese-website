@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import i18n from '../utils/i18n';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -1308,7 +1309,11 @@ const StaffAdmin = () => {
                                 )}
                               </h3>
                               <div style={{ fontSize: '0.85rem', color: 'var(--text-light)' }}>
-                                {item.profile?.name_en || 'No profile'} • {item.profile?.department || 'No department'}
+                                {item.profile ? (
+                                  i18n.language === 'zh' 
+                                    ? `${item.profile.name_zh || item.profile.name_en || '无姓名'} • ${item.profile.department || '无部门'}`
+                                    : `${item.profile.name_en || item.profile.name_zh || 'No Name'} • ${item.profile.department || 'No Department'}`
+                                ) : (i18n.language === 'zh' ? '无档案' : 'No profile')}
                               </div>
                             </div>
                           </div>
@@ -1435,7 +1440,12 @@ const StaffAdmin = () => {
                             </div>
                             {/* Name and basic info */}
                             <div style={{ flex: 1 }}>
-                              <h3 style={{ margin: '0 0 0.25rem 0' }}>{item.name_en || 'No Name'} / {item.name_zh || '无姓名'}</h3>
+                              <h3 style={{ margin: '0 0 0.25rem 0' }}>
+                                {i18n.language === 'zh' 
+                                  ? `${item.name_zh || '无姓名'} / ${item.name_en || 'No Name'}`
+                                  : `${item.name_en || 'No Name'} / ${item.name_zh || '无姓名'}`
+                                }
+                              </h3>
                             </div>
                           </div>
                           <div className="meta">
@@ -1457,26 +1467,33 @@ const StaffAdmin = () => {
                           {/* Additional profile info preview */}
                           <div className="profile-preview" style={{ marginTop: '0.75rem', fontSize: '0.9rem', color: 'var(--text-light)' }}>
                             <div style={{ marginBottom: '0.25rem' }}>
-                              <strong>Positions:</strong> {item.position_en || 'No Position'} / {item.position_zh || '无职位'}
+                              <strong>{i18n.language === 'zh' ? '职位：' : 'Positions:'}</strong> {i18n.language === 'zh' 
+                                ? `${item.position_zh || '无职位'} / ${item.position_en || 'No Position'}`
+                                : `${item.position_en || 'No Position'} / ${item.position_zh || '无职位'}`
+                              }
                             </div>
                             {(item.email || item.phone || item.linkedin || item.github || item.wechat || item.mbti) && (
                               <div style={{ marginBottom: '0.25rem' }}>
-                                <strong>Contact:</strong> 
+                                <strong>{i18n.language === 'zh' ? '联系方式：' : 'Contact:'}</strong> 
                                 {item.email && <span> {item.email}</span>}
                                 {item.phone && <span>{item.email ? ' | ' : ''}{item.phone}</span>}
                                 {item.linkedin && <span> | <a href={item.linkedin} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--primary)' }}>{item.linkedin}</a></span>}
                                 {item.github && <span> | <a href={item.github} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--primary)' }}>{item.github}</a></span>}
-                                {item.wechat && <span> | WeChat: {item.wechat}</span>}
+                                {item.wechat && <span> | {i18n.language === 'zh' ? '微信：' : 'WeChat:'} {item.wechat}</span>}
                                 {item.mbti && <span> | MBTI: {item.mbti}</span>}
                               </div>
                             )}
                             {(item.bio_en || item.bio_zh) && (
                               <div style={{ marginBottom: '0.25rem' }}>
-                                <strong>Bio:</strong> {
+                                <strong>{i18n.language === 'zh' ? '个人简介：' : 'Bio:'}</strong> {
                                   (() => {
                                     const bioText = item.bio_en && item.bio_zh 
-                                      ? `${item.bio_en} / ${item.bio_zh}`
-                                      : (item.bio_en || item.bio_zh || '');
+                                      ? (i18n.language === 'zh' 
+                                          ? `${item.bio_zh} / ${item.bio_en}`
+                                          : `${item.bio_en} / ${item.bio_zh}`)
+                                      : (i18n.language === 'zh' 
+                                          ? (item.bio_zh || item.bio_en || '无个人简介')
+                                          : (item.bio_en || item.bio_zh || 'No bio available'));
                                     // 显示逻辑：超过1000字符才省略
                                     if (bioText.length > 1000) {
                                       return bioText.substring(0, 1000) + '...'; // 超长bio截断到1000字符+省略号
@@ -1489,14 +1506,14 @@ const StaffAdmin = () => {
                             )}
                             {item.reviewNote && (
                               <div style={{ marginBottom: '0.25rem' }}>
-                                <strong style={{ color: '#8b5cf6' }}>Review Note: </strong> 
+                                <strong style={{ color: '#8b5cf6' }}>{i18n.language === 'zh' ? '审核备注：' : 'Review Note:'} </strong> 
                                 <span style={{ color: '#8b5cf6', fontStyle: 'italic' }}>
                                   {item.reviewNote.length > 80 ? `${item.reviewNote.substring(0, 80)}...` : item.reviewNote}
                                 </span>
                               </div>
                             )}
                             <div style={{ fontSize: '0.8rem', color: 'var(--text-light)', marginTop: '0.5rem' }}>
-                              <strong>Last Updated:</strong> {item.updatedAt ? new Date(item.updatedAt).toLocaleDateString() : 'Not available'}
+                              <strong>{i18n.language === 'zh' ? '最后更新：' : 'Last Updated:'}</strong> {item.updatedAt ? new Date(item.updatedAt).toLocaleDateString() : (i18n.language === 'zh' ? '不可用' : 'Not available')}
                             </div>
                           </div>
                         </>
