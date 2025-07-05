@@ -53,6 +53,23 @@ async function main() {
 
     console.log('Admin account created successfully');
 
+    // Create superuser account
+    const superuserPassword = adminPassword; // reuse hashed '123'
+    const superuser = await prisma.staff.create({
+      data: {
+        username: 'karenjiujiu.shu',
+        email: 'karenjiujiu.shu@mail.utoronto.ca',
+        passwordHash: superuserPassword,
+        role: 'admin',
+        canManageEvents: true,
+        canReviewProfiles: true,
+        canManageStaff: true,
+        isActive: true
+      }
+    });
+
+    console.log('Superuser account created successfully');
+
     // Helper function to calculate event status
     const calculateEventStatus = (startDate, endDate) => {
       const now = new Date();
