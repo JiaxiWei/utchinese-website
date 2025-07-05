@@ -12,17 +12,20 @@ class AuthService {
     }
     
     // 查找用户 - 支持用户名或邮箱登录
+    const searchConditions = [
+      { username: identifier },
+      { email: identifier }
+    ];
+    
+    // 如果输入的不是邮箱格式（不包含@），则尝试补全为多伦多大学邮箱（向后兼容）
+    if (!identifier.includes('@')) {
+      searchConditions.push({ email: `${identifier}@mail.utoronto.ca` });
+    }
+    
     const staff = await prisma.staff.findFirst({
       where: {
         AND: [
-          {
-            OR: [
-              { username: identifier },
-              { email: identifier },
-              // 支持不带@mail.utoronto.ca的用户名登录
-              { email: `${identifier}@mail.utoronto.ca` }
-            ]
-          },
+          { OR: searchConditions },
           { isActive: true }
         ]
       },
@@ -181,8 +184,9 @@ class AuthService {
     }
     
     // 验证邮箱格式
-    if (!email.endsWith('@mail.utoronto.ca')) {
-      throw new Error('邮箱必须是多伦多大学邮箱格式 (xx.xx@mail.utoronto.ca)');
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      throw new Error('请输入有效的邮箱格式');
     }
     
     // 检查用户名和邮箱是否已存在

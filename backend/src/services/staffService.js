@@ -254,8 +254,9 @@ class StaffService {
     }
     
     // 验证邮箱格式
-    if (!email.endsWith('@mail.utoronto.ca')) {
-      throw new Error('邮箱必须是多伦多大学邮箱格式 (xx.xx@mail.utoronto.ca)');
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      throw new Error('请输入有效的邮箱格式');
     }
     
     // Check if username or email already exists
