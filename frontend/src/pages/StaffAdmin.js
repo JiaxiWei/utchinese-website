@@ -704,104 +704,58 @@ const StaffAdmin = () => {
     }
   }, [hasPermission]);
 
-  // Reset status filter when switching tabs and load data
+  // This is the single source of truth for loading data.
+  // It reacts to changes in tab, filter, or permissions.
   useEffect(() => {
-    // Clear current data to avoid showing stale data
-    setFilteredData([]);
-    
-    // Clear selection states when switching tabs
-    setSelectedItems(new Set());
-    setSelectAll(false);
-    
-    // Clear search term when switching tabs
-    setSearchTerm('');
-    
-    if (activeTab === 'profiles') {
-      setStatusFilter('pending'); // Default to showing pending profiles only
-    } else {
-      setStatusFilter('all');
-    }
-    
-    // Load data after setting the appropriate status filter
-    const loadDataAfterStatusReset = async () => {
-      if (hasPermission('manageStaff') || hasPermission('reviewProfiles')) {
-        setIsLoading(true);
-        try {
-          if (activeTab === 'accounts') {
-            const data = await getAllStaff();
-            setStaffAccounts(data);
-          } else {
-            // For profiles, use the correct status filter
-            const statusToUse = activeTab === 'profiles' ? 'pending' : (statusFilter === 'all' ? '' : statusFilter);
-            const data = await getAllProfiles(statusToUse);
-            setProfiles(data);
-          }
-        } catch (error) {
-          console.error('Error loading data:', error);
-        } finally {
-          setIsLoading(false);
-        }
+    const loadData = async () => {
+      if (!hasPermission('manageStaff') && !hasPermission('reviewProfiles')) {
+        return;
       }
-    };
-    
-    loadDataAfterStatusReset();
-  }, [activeTab, hasPermission]);
 
-  // Load data when status filter changes (but not when switching tabs)
-  useEffect(() => {
-    const loadDataForStatusChange = async () => {
-      if (hasPermission('manageStaff') || hasPermission('reviewProfiles')) {
-        setIsLoading(true);
-        try {
-          if (activeTab === 'accounts') {
-            const data = await getAllStaff();
-            setStaffAccounts(data);
-          } else {
-            const data = await getAllProfiles(statusFilter === 'all' ? '' : statusFilter);
-            setProfiles(data);
-          }
-        } catch (error) {
-          console.error('Error loading data:', error);
-        } finally {
-          setIsLoading(false);
-        }
-      }
-    };
-    
-    loadDataForStatusChange();
-  }, [statusFilter, hasPermission]);
-
-  // Filter data
-  useEffect(() => {
-    filterData();
-  }, [staffAccounts, profiles, searchTerm, statusFilter, activeTab]);
-
-  // Simplified loadData function for manual refresh if needed
-  const loadData = async () => {
-    if (hasPermission('manageStaff') || hasPermission('reviewProfiles')) {
       setIsLoading(true);
       try {
         if (activeTab === 'accounts') {
           const data = await getAllStaff();
           setStaffAccounts(data);
-        } else {
+          setProfiles([]); // Clear the other data source
+        } else { // activeTab === 'profiles'
           const data = await getAllProfiles(statusFilter === 'all' ? '' : statusFilter);
           setProfiles(data);
+          setStaffAccounts([]); // Clear the other data source
         }
       } catch (error) {
         console.error('Error loading data:', error);
       } finally {
         setIsLoading(false);
       }
-    }
-  };
+    };
 
-  const filterData = () => {
-    let data = activeTab === 'accounts' ? staffAccounts : profiles;
-    // For profile reviews, only show pending or rejected statuses
+    loadData();
+  }, [activeTab, statusFilter, hasPermission]);
+
+
+  // This effect handles the side-effects of tab switching that are NOT data loading.
+  // It's responsible for resetting UI state.
+  useEffect(() => {
+    // Clear dynamic UI states
+    setSearchTerm('');
+    setSelectedItems(new Set());
+    setSelectAll(false);
+    setFilteredData([]); // Clear old data immediately to prevent flicker
+
+    // Set the default filter for the new tab.
+    // This will trigger the data-loading useEffect above.
     if (activeTab === 'profiles') {
-      data = data.filter(item => item.status === 'pending' || item.status === 'rejected');
+      setStatusFilter(currentStatus => currentStatus === 'pending' ? currentStatus : 'pending');
+    } else { // activeTab === 'accounts'
+      setStatusFilter(currentStatus => currentStatus === 'all' ? currentStatus : 'all');
     }
+  }, [activeTab]);
+
+
+  // Filter data whenever the source data, search term, or filter changes.
+  useEffect(() => {
+    let data = activeTab === 'accounts' ? staffAccounts : profiles;
     
     let filtered = data.filter(item => {
       const searchMatch = activeTab === 'accounts' 
@@ -811,6 +765,9 @@ const StaffAdmin = () => {
            item.name_zh?.toLowerCase().includes(searchTerm.toLowerCase()) ||
            item.staff?.username?.toLowerCase().includes(searchTerm.toLowerCase()));
       
+      // For profile reviews, the API already filters by status,
+      // but we might want to retain this for client-side filtering if 'all' is ever used.
+      // For now, the main filtering by status is done at the API level via the `statusFilter` state.
       const statusMatch = statusFilter === 'all' || 
         (activeTab === 'accounts' 
           ? (statusFilter === 'active' ? item.isActive : !item.isActive)
@@ -819,8 +776,19 @@ const StaffAdmin = () => {
       return searchMatch && statusMatch;
     });
     
+    // For profile reviews, after initial load, we only want to show pending or rejected.
+    // The API call uses the filter, but this ensures the UI is consistent.
+    if (activeTab === 'profiles') {
+      if (statusFilter === 'pending' || statusFilter === 'rejected') {
+        filtered = filtered.filter(item => item.status === statusFilter);
+      } else if (statusFilter === 'all') {
+        // If for some reason we are showing all, filter out approved ones on the client side.
+        filtered = filtered.filter(item => item.status === 'pending' || item.status === 'rejected');
+      }
+    }
+
     setFilteredData(filtered);
-  };
+  }, [staffAccounts, profiles, searchTerm, statusFilter, activeTab]);
 
   const handleCreateStaff = () => {
     setModalType('create');
