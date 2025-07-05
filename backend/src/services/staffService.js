@@ -303,6 +303,7 @@ class StaffService {
     const { 
       username, 
       email, 
+      password,
       isActive, 
       role,
       permissions = {},
@@ -312,6 +313,7 @@ class StaffService {
     const updateFields = {};
     if (username !== undefined) updateFields.username = username;
     if (email !== undefined) updateFields.email = email;
+    if (password !== undefined) updateFields.passwordHash = await bcrypt.hash(password, 10);
     if (isActive !== undefined) updateFields.isActive = isActive;
     if (role !== undefined) updateFields.role = role;
     

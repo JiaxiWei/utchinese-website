@@ -965,14 +965,17 @@ const StaffAdmin = () => {
     const action = staff.isActive ? 'deactivate' : 'activate';
     if (window.confirm(`Are you sure you want to ${action} ${staff.username}'s account?`)) {
       try {
-        await updateStaffAccount(staff.id, { 
+        const response = await updateStaffAccount(staff.id, { 
           isActive: !staff.isActive,
           permissions: {} // Keep existing permissions
         });
+        console.log('Toggle account response:', response);
+        alert(`Successfully ${action}d account`);
         loadData();
       } catch (error) {
         console.error(`Error ${action}ing account:`, error);
-        alert(`Failed to ${action} account`);
+        console.error('Error details:', error.response?.data || error.message);
+        alert(`Failed to ${action} account: ${error.response?.data?.error || error.message}`);
       }
     }
   };
