@@ -18,12 +18,14 @@ import {
   FiLogOut,
   FiSettings,
   FiFileText,
-  FiUsers
+  FiUsers,
+  FiLock
 } from 'react-icons/fi';
 import { FaWeixin } from 'react-icons/fa';
 import { useAuth } from '../contexts/AuthContext';
 import { getStaffProfile, saveStaffProfile, uploadStaffAvatar, getFullAvatarUrl } from '../utils/api';
 import StaffCard from '../components/StaffCard';
+import ChangePasswordModal from '../components/ChangePasswordModal';
 
 const StyledStaffProfile = styled.div`
   min-height: 100vh;
@@ -160,7 +162,8 @@ const StyledStaffProfile = styled.div`
       
       @media (max-width: 768px) {
         justify-content: center;
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
+        gap: 0.5rem;
       }
       
       .permission-dropdown {
@@ -229,6 +232,13 @@ const StyledStaffProfile = styled.div`
         align-items: center;
         gap: 0.5rem;
         font-weight: 500;
+        white-space: nowrap;
+        
+        @media (max-width: 768px) {
+          padding: 0.5rem 0.75rem;
+          font-size: 0.85rem;
+          gap: 0.25rem;
+        }
         
         &.primary {
           background: linear-gradient(135deg, var(--primary), var(--accent));
@@ -669,6 +679,7 @@ const StaffProfile = () => {
   const [isUploading, setIsUploading] = useState(false);
   const [message, setMessage] = useState('');
   const [showPermissionMenu, setShowPermissionMenu] = useState(false);
+  const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
 
   // Redirect if not authenticated
   useEffect(() => {
@@ -927,6 +938,14 @@ const StaffProfile = () => {
                 )}
               </AnimatePresence>
             </div>
+            
+            <button 
+              className="action-button primary"
+              onClick={() => setShowChangePasswordModal(true)}
+            >
+              <FiLock />
+              {t('changePassword.title')}
+            </button>
             
             <button 
               className="action-button danger"
@@ -1323,6 +1342,15 @@ const StaffProfile = () => {
           </form>
         </ProfileCard>
       </div>
+      
+      <ChangePasswordModal
+        isOpen={showChangePasswordModal}
+        onClose={() => setShowChangePasswordModal(false)}
+        onSuccess={() => {
+          setShowChangePasswordModal(false);
+          // You could show a success message here if needed
+        }}
+      />
     </StyledStaffProfile>
   );
 };

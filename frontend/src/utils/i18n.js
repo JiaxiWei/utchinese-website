@@ -351,6 +351,29 @@ const enTranslations = {
       failed: 'Login failed. Please check your credentials.'
     }
   },
+  changePassword: {
+    title: 'Change Password',
+    subtitle: 'Update your account password to keep it secure',
+    currentPassword: 'Current Password',
+    currentPasswordPlaceholder: 'Enter your current password',
+    newPassword: 'New Password',
+    newPasswordPlaceholder: 'Enter new password',
+    confirmPassword: 'Confirm New Password',
+    confirmPasswordPlaceholder: 'Confirm new password',
+    passwordRequirements: 'Password must be at least 6 characters long',
+    changeButton: 'Change Password',
+    changing: 'Changing...',
+    success: 'Password changed successfully!',
+    error: {
+      currentPasswordRequired: 'Current password is required',
+      newPasswordRequired: 'New password is required',
+      confirmPasswordRequired: 'Please confirm your new password',
+      passwordTooShort: 'Password must be at least 6 characters long',
+      passwordsDoNotMatch: 'New passwords do not match',
+      samePassword: 'New password must be different from current password',
+      failed: 'Failed to change password. Please try again.'
+    }
+  },
   admin: {
     login: {
       title: 'Admin Authentication',
@@ -784,6 +807,29 @@ const zhTranslations = {
     error: {
       required: '请输入用户名和密码',
       failed: '登录失败，请检查您的凭据。'
+    }
+  },
+  changePassword: {
+    title: '更改密码',
+    subtitle: '更新您的账户密码以保证安全',
+    currentPassword: '当前密码',
+    currentPasswordPlaceholder: '请输入当前密码',
+    newPassword: '新密码',
+    newPasswordPlaceholder: '请输入新密码',
+    confirmPassword: '确认新密码',
+    confirmPasswordPlaceholder: '请确认新密码',
+    passwordRequirements: '密码长度至少为6位',
+    changeButton: '更改密码',
+    changing: '更改中...',
+    success: '密码更改成功！',
+    error: {
+      currentPasswordRequired: '请输入当前密码',
+      newPasswordRequired: '请输入新密码',
+      confirmPasswordRequired: '请确认新密码',
+      passwordTooShort: '密码长度至少为6位',
+      passwordsDoNotMatch: '新密码不一致',
+      samePassword: '新密码必须与当前密码不同',
+      failed: '更改密码失败，请重试。'
     }
   },
   admin: {

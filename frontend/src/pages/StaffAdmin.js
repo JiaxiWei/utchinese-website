@@ -757,10 +757,19 @@ const StaffAdmin = () => {
            item.name_zh?.toLowerCase().includes(searchTerm.toLowerCase()) ||
            item.staff?.username?.toLowerCase().includes(searchTerm.toLowerCase()));
       
-      const statusMatch = statusFilter === 'all' || 
-        (activeTab === 'accounts' 
-          ? (statusFilter === 'active' ? item.isActive : !item.isActive)
-          : item.status === statusFilter);
+      const statusMatch = activeTab === 'accounts'
+        ? (
+            statusFilter === 'all'
+              ? true
+              : statusFilter === 'active'
+                ? item.isActive
+                : statusFilter === 'inactive'
+                  ? !item.isActive
+                  : true // Fallback – treat any other value as "all"
+          )
+        : (
+            statusFilter === 'all' ? true : item.status === statusFilter
+          );
       
       return searchMatch && statusMatch;
     });
@@ -1021,7 +1030,10 @@ const StaffAdmin = () => {
           {hasPermission('manageStaff') && (
             <button 
               className={`tab ${activeTab === 'accounts' ? 'active' : ''}`}
-              onClick={() => setActiveTab('accounts')}
+              onClick={() => {
+                setStatusFilter('all');
+                setActiveTab('accounts');
+              }}
             >
               <FiUsers />
               {t('admin.staff.tabs.accounts')}
@@ -1030,7 +1042,10 @@ const StaffAdmin = () => {
           {hasPermission('reviewProfiles') && (
             <button
               className={`tab ${activeTab === 'profiles' ? 'active' : ''}`}
-              onClick={() => setActiveTab('profiles')}
+              onClick={() => {
+                setStatusFilter('pending');
+                setActiveTab('profiles');
+              }}
             >
               <FiClock />
               {t('admin.staff.tabs.profiles')}
