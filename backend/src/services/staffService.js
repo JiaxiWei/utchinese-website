@@ -520,7 +520,10 @@ class StaffService {
   static async getTeamMembers(department, language = 'en') {
     const whereCondition = {
       status: 'approved',
-      isVisible: true
+      isVisible: true,
+      staff: {
+        isActive: true
+      }
     };
     
     if (department) {
@@ -557,7 +560,10 @@ class StaffService {
       where: { 
         id: parseInt(id),
         status: 'approved',
-        isVisible: true
+        isVisible: true,
+        staff: {
+          isActive: true
+        }
       },
       include: {
         staff: {
@@ -587,7 +593,10 @@ class StaffService {
       by: ['department'],
       where: { 
         status: 'approved',
-        isVisible: true 
+        isVisible: true,
+        staff: {
+          isActive: true
+        }
       },
       _count: {
         department: true
