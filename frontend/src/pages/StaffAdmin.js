@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -704,34 +704,35 @@ const StaffAdmin = () => {
     }
   }, [hasPermission]);
 
+  // Define loadData function at component level so it can be accessed by handlers
+  const loadData = useCallback(async () => {
+    if (!hasPermission('manageStaff') && !hasPermission('reviewProfiles')) {
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      if (activeTab === 'accounts') {
+        const data = await getAllStaff();
+        setStaffAccounts(data);
+        setProfiles([]); // Clear the other data source
+      } else { // activeTab === 'profiles'
+        const data = await getAllProfiles(statusFilter === 'all' ? '' : statusFilter);
+        setProfiles(data);
+        setStaffAccounts([]); // Clear the other data source
+      }
+    } catch (error) {
+      console.error('Error loading data:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [activeTab, statusFilter, hasPermission]);
+
   // This is the single source of truth for loading data.
   // It reacts to changes in tab, filter, or permissions.
   useEffect(() => {
-    const loadData = async () => {
-      if (!hasPermission('manageStaff') && !hasPermission('reviewProfiles')) {
-        return;
-      }
-
-      setIsLoading(true);
-      try {
-        if (activeTab === 'accounts') {
-          const data = await getAllStaff();
-          setStaffAccounts(data);
-          setProfiles([]); // Clear the other data source
-        } else { // activeTab === 'profiles'
-          const data = await getAllProfiles(statusFilter === 'all' ? '' : statusFilter);
-          setProfiles(data);
-          setStaffAccounts([]); // Clear the other data source
-        }
-      } catch (error) {
-        console.error('Error loading data:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
     loadData();
-  }, [activeTab, statusFilter, hasPermission]);
+  }, [loadData]);
 
 
   // This effect handles the side-effects of tab switching that are NOT data loading.
