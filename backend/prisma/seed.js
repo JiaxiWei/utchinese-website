@@ -7,16 +7,20 @@ async function main() {
   try {
     console.log('开始数据库种子数据填充...');
 
-    // Clear existing data
-    await prisma.staffProfileHistory.deleteMany();
-    await prisma.staffProfile.deleteMany();
-    await prisma.staff.deleteMany();
-    await prisma.event.deleteMany();
-
-    // Create admin account
+    // Create or update admin account
     const adminPassword = await bcrypt.hash('123', 10);
-    const admin = await prisma.staff.create({
-      data: {
+    const admin = await prisma.staff.upsert({
+      where: { username: 'xuanyi.lyu' },
+      update: {
+        // 只更新必要的字段，保留现有数据
+        email: 'xuanyi.lyu@mail.utoronto.ca',
+        role: 'admin',
+        canManageEvents: true,
+        canReviewProfiles: true,
+        canManageStaff: true,
+        isActive: true
+      },
+      create: {
         username: 'xuanyi.lyu',
         email: 'xuanyi.lyu@mail.utoronto.ca',
         passwordHash: adminPassword,
@@ -28,9 +32,28 @@ async function main() {
       }
     });
 
-    // Create admin staff profile
-    await prisma.staffProfile.create({
-      data: {
+    // Create or update admin staff profile
+    await prisma.staffProfile.upsert({
+      where: { staffId: admin.id },
+      update: {
+        name_en: 'Xuanyi Lyu',
+        name_zh: '吕宣谊',
+        position_en: 'Information Solution Director',
+        position_zh: '信息解决方案部负责人',
+        department: 'OPERATION GROUP',
+        bio_en: 'I am currently pursuing a double major in Computer Science and Statistics at the University of Toronto, with a minor in Economics. My areas of interest include Human-Computer Interaction, Artificial Intelligence, and Machine Learning. I enjoy creating solutions that combine technical excellence with user-centered design. I am committed to academic exploration and technological innovation, hoping to make meaningful contributions to society through my work in computer science and data analysis.',
+        bio_zh: '我目前在多伦多大学攻读计算机科学与统计学双专业，辅修经济学。我的兴趣领域包括人机交互、人工智能和机器学习。我喜欢创造结合技术卓越和以用户为中心设计的解决方案。我致力于学术探索和技术创新，希望通过我在计算机科学和数据分析方面的工作为社会做出有意义的贡献。',
+        avatarUrl: 'xuanyilyu.jpg',
+        email: 'xuanyi.lyu@mail.utoronto.ca',
+        github: 'https://github.com/justLxy',
+        linkedin: 'https://linkedin.com/in/xuanyi-lyu',
+        wechat: 'yukiyah',
+        mbti: 'INFJ-T',
+        status: 'approved',
+        isVisible: true,
+        displayOrder: 1
+      },
+      create: {
         staffId: admin.id,
         name_en: 'Xuanyi Lyu',
         name_zh: '吕宣谊',
@@ -51,12 +74,21 @@ async function main() {
       }
     });
 
-    console.log('Admin account created successfully');
+    console.log('Admin account created/updated successfully');
 
-    // Create superuser account
+    // Create or update superuser account
     const superuserPassword = adminPassword; // reuse hashed '123'
-    const superuser = await prisma.staff.create({
-      data: {
+    const superuser = await prisma.staff.upsert({
+      where: { username: 'karenjiujiu.shu' },
+      update: {
+        email: 'karenjiujiu.shu@mail.utoronto.ca',
+        role: 'admin',
+        canManageEvents: true,
+        canReviewProfiles: true,
+        canManageStaff: true,
+        isActive: true
+      },
+      create: {
         username: 'karenjiujiu.shu',
         email: 'karenjiujiu.shu@mail.utoronto.ca',
         passwordHash: superuserPassword,
@@ -68,7 +100,7 @@ async function main() {
       }
     });
 
-    console.log('Superuser account created successfully');
+    console.log('Superuser account created/updated successfully');
 
     // Helper function to calculate event status
     const calculateEventStatus = (startDate, endDate) => {
@@ -85,7 +117,7 @@ async function main() {
       }
     };
 
-    // Add seed events with bilingual content
+    // Add seed events with bilingual content - 只在不存在时才创建
     const events = [
       {
         title_en: 'UNIC Case Competition',
@@ -175,246 +207,30 @@ async function main() {
       }
     ];
 
+    // 使用事件的title_en作为唯一标识符来避免重复
     for (const event of events) {
       // Calculate status dynamically based on dates
       const status = calculateEventStatus(event.startDate, event.endDate);
       
-      await prisma.event.create({
-        data: {
-          ...event,
-          status: status,
-        },
-      });
-    }
-
-    // Create staff accounts with password 123
-    /*
-    const staffPassword = await bcrypt.hash('123', 10);
-    const staffMembers = [
-      // ARTS & CULTURE GROUP
-      {
-        username: 'emily.chen',
-        email: 'emily.chen@mail.utoronto.ca',
-        name_en: 'Emily Chen',
-        name_zh: '陈雨薇',
-        department: 'ARTS & CULTURE GROUP',
-        position_en: 'Director',
-        position_zh: '总监',
-        bio_en: 'Leading cultural events and artistic initiatives to bridge Eastern and Western cultures.',
-        bio_zh: '负责领导文化活动和艺术倡议，架起东西方文化的桥梁。',
-        avatarUrl: 'https://images.unsplash.com/photo-1494790108755-2616b612b002?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
-        email_public: 'emily.chen@example.com',
-        order: 1,
-      },
-      {
-        username: 'david.liu',
-        email: 'david.liu@mail.utoronto.ca',
-        name_en: 'David Liu',
-        name_zh: '刘思辰',
-        department: 'ARTS & CULTURE GROUP',
-        position_en: 'Event Coordinator',
-        position_zh: '活动协调员',
-        bio_en: 'Passionate about organizing cultural performances and community engagement.',
-        bio_zh: '热衷于组织文化表演和社区参与活动。',
-        avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
-        email_public: 'david.liu@example.com',
-        order: 2,
-      },
-      {
-        username: 'sophie.wang',
-        email: 'sophie.wang@mail.utoronto.ca',
-        name_en: 'Sophie Wang',
-        name_zh: '王雪菲',
-        department: 'ARTS & CULTURE GROUP',
-        position_en: 'Music Coordinator',
-        position_zh: '音乐协调员',
-        bio_en: 'Coordinating our annual charity concert and musical events.',
-        bio_zh: '协调我们的年度慈善音乐会和音乐活动。',
-        avatarUrl: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
-        email_public: 'sophie.wang@example.com',
-        order: 3,
-      },
-
-      // CAREER & ACADEMIC GROUP
-      {
-        username: 'michael.zhang',
-        email: 'michael.zhang@mail.utoronto.ca',
-        name_en: 'Michael Zhang',
-        name_zh: '张浩然',
-        department: 'CAREER & ACADEMIC GROUP',
-        position_en: 'Director',
-        position_zh: '总监',
-        bio_en: 'Connecting students with industry professionals and career opportunities.',
-        bio_zh: '连接学生与行业专业人士和职业机会。',
-        avatarUrl: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
-        email_public: 'michael.zhang@example.com',
-        order: 4,
-      },
-      {
-        username: 'jessica.li',
-        email: 'jessica.li@mail.utoronto.ca',
-        name_en: 'Jessica Li',
-        name_zh: '李佳怡',
-        department: 'CAREER & ACADEMIC GROUP',
-        position_en: 'Ace Committee Lead',
-        position_zh: 'Ace委员会负责人',
-        bio_en: 'Leading the Ace Career Fair and connecting students with dream companies.',
-        bio_zh: '领导Ace招聘会，连接学生与梦想公司。',
-        avatarUrl: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
-        email_public: 'jessica.li@example.com',
-        order: 5,
-      },
-      {
-        username: 'alex.chen',
-        email: 'alex.chen@mail.utoronto.ca',
-        name_en: 'Alex Chen',
-        name_zh: '陈志远',
-        department: 'CAREER & ACADEMIC GROUP',
-        position_en: 'EXCITE Committee Lead',
-        position_zh: 'EXCITE委员会负责人',
-        bio_en: 'Organizing panel talks and peer-to-peer learning opportunities.',
-        bio_zh: '组织小组讨论和同伴学习机会。',
-        avatarUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
-        email_public: 'alex.chen@example.com',
-        order: 6,
-      },
-
-      // OPERATION GROUP
-      {
-        username: 'sarah.zhou',
-        email: 'sarah.zhou@mail.utoronto.ca',
-        name_en: 'Sarah Zhou',
-        name_zh: '周思雨',
-        department: 'OPERATION GROUP',
-        position_en: 'Operations Director',
-        position_zh: '运营总监',
-        bio_en: 'Overseeing design, technology, and sponsorship operations.',
-        bio_zh: '监督设计、技术和赞助运营。',
-        avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
-        email_public: 'sarah.zhou@example.com',
-        order: 7,
-      },
-      {
-        username: 'kevin.wu',
-        email: 'kevin.wu@mail.utoronto.ca',
-        name_en: 'Kevin Wu',
-        name_zh: '吴凯文',
-        department: 'OPERATION GROUP',
-        position_en: 'Lead Developer',
-        position_zh: '首席开发工程师',
-        bio_en: 'Building innovative technical solutions for the community.',
-        bio_zh: '为社区构建创新的技术解决方案。',
-        avatarUrl: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
-        email_public: 'kevin.wu@example.com',
-        linkedin: 'https://linkedin.com/in/kevinwu',
-        order: 8,
-      },
-      {
-        username: 'grace.liu',
-        email: 'grace.liu@mail.utoronto.ca',
-        name_en: 'Grace Liu',
-        name_zh: '刘雨欣',
-        department: 'OPERATION GROUP',
-        position_en: 'Design Lead',
-        position_zh: '设计负责人',
-        bio_en: 'Creating visual identity and designing promotional materials.',
-        bio_zh: '创建视觉形象和设计宣传材料。',
-        avatarUrl: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
-        email_public: 'grace.liu@example.com',
-        order: 9,
-      },
-      {
-        username: 'ryan.kim',
-        email: 'ryan.kim@mail.utoronto.ca',
-        name_en: 'Ryan Kim',
-        name_zh: '金润雨',
-        department: 'OPERATION GROUP',
-        position_en: 'Sponsorship Manager',
-        position_zh: '赞助经理',
-        bio_en: 'Building partnerships and managing sponsorship relationships.',
-        bio_zh: '建立合作伙伴关系和管理赞助关系。',
-        avatarUrl: 'https://images.unsplash.com/photo-1566492031773-4f4e44671d66?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
-        email_public: 'ryan.kim@example.com',
-        order: 10,
-      },
-
-      // SUPPORT GROUP
-      {
-        username: 'amanda.zhang',
-        email: 'amanda.zhang@mail.utoronto.ca',
-        name_en: 'Amanda Zhang',
-        name_zh: '张晓雯',
-        department: 'SUPPORT GROUP',
-        position_en: 'Support Director',
-        position_zh: '支持总监',
-        bio_en: 'Leading content marketing and human resources initiatives.',
-        bio_zh: '领导内容营销和人力资源倡议。',
-        avatarUrl: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
-        email_public: 'amanda.zhang@example.com',
-        order: 11,
-      },
-      {
-        username: 'tony.huang',
-        email: 'tony.huang@mail.utoronto.ca',
-        name_en: 'Tony Huang',
-        name_zh: '黄志强',
-        department: 'SUPPORT GROUP',
-        position_en: 'Content Marketing Lead',
-        position_zh: '内容营销负责人',
-        bio_en: 'Managing social media presence and content creation strategies.',
-        bio_zh: '管理社交媒体存在和内容创建策略。',
-        avatarUrl: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
-        email_public: 'tony.huang@example.com',
-        order: 12,
-      },
-      {
-        username: 'lisa.chen',
-        email: 'lisa.chen@mail.utoronto.ca',
-        name_en: 'Lisa Chen',
-        name_zh: '陈丽莎',
-        department: 'SUPPORT GROUP',
-        position_en: 'HR Manager',
-        position_zh: '人力资源经理',
-        bio_en: 'Organizing team building activities and member engagement.',
-        bio_zh: '组织团队建设活动和成员参与。',
-        avatarUrl: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
-        email_public: 'lisa.chen@example.com',
-        order: 13,
-      },
-    ];
-
-    // Create staff accounts and profiles
-    for (const member of staffMembers) {
-      const staff = await prisma.staff.create({
-        data: {
-          username: member.username,
-          email: member.email,
-          passwordHash: staffPassword,
-          role: 'staff',
-          isActive: true
+      // 检查事件是否已存在
+      const existingEvent = await prisma.event.findFirst({
+        where: {
+          title_en: event.title_en
         }
       });
-      
-      await prisma.staffProfile.create({
-        data: {
-          staffId: staff.id,
-          name_en: member.name_en,
-          name_zh: member.name_zh,
-          position_en: member.position_en,
-          position_zh: member.position_zh,
-          department: member.department,
-          bio_en: member.bio_en,
-          bio_zh: member.bio_zh,
-          avatarUrl: member.avatarUrl,
-          email: member.email_public,
-          linkedin: member.linkedin || null,
-          status: 'approved',
-          isVisible: true,
-          displayOrder: member.order
-        }
-      });
+
+      if (!existingEvent) {
+        await prisma.event.create({
+          data: {
+            ...event,
+            status: status,
+          },
+        });
+        console.log(`Event created: ${event.title_en}`);
+      } else {
+        console.log(`Event already exists, skipping: ${event.title_en}`);
+      }
     }
-    */
 
     console.log('Database has been seeded!');
   } catch (error) {
