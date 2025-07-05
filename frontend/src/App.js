@@ -38,6 +38,7 @@ function App() {
   const changeLanguage = (lng) => {
     i18n.changeLanguage(lng);
     document.documentElement.lang = lng;
+    localStorage.setItem('preferredLanguage', lng);
     
     // Animation for language change
     const flashElement = document.querySelector('.language-change-flash');
@@ -67,8 +68,14 @@ function App() {
     if (langParam && ['en', 'zh'].includes(langParam) && langParam !== i18n.language) {
       i18n.changeLanguage(langParam);
       document.documentElement.lang = langParam;
+      localStorage.setItem('preferredLanguage', langParam);
     }
   }, [location.search, i18n]);
+
+  // Ensure html lang attribute stays in sync with i18n language
+  useEffect(() => {
+    document.documentElement.lang = i18n.language;
+  }, [i18n.language]);
 
   // Toggle theme between light and dark
   const toggleTheme = () => {

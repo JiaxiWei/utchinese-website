@@ -917,6 +917,9 @@ const zhTranslations = {
   }
 };
 
+// Add saved language preference from localStorage
+const savedLanguage = typeof window !== 'undefined' ? localStorage.getItem('preferredLanguage') : null;
+
 i18n
   .use(initReactI18next)
   .init({
@@ -924,7 +927,7 @@ i18n
       en: { translation: enTranslations },
       zh: { translation: zhTranslations }
     },
-    lng: 'en',
+    lng: savedLanguage || 'en',
     fallbackLng: 'en',
     interpolation: {
       escapeValue: false
