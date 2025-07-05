@@ -677,7 +677,7 @@ const JoinPage = () => {
             </p>
             
             {/* Architecture Diagram */}
-            <div className="architecture-diagram animated-element" style={{ margin: '2rem auto', maxWidth: '900px' }}>
+            <div className="architecture-diagram animated-element" style={{ margin: '2rem auto', maxWidth: '900px', display: 'flex', justifyContent: 'center' }}>
               <svg width="100%" viewBox="0 0 1200 700" xmlns="http://www.w3.org/2000/svg" style={{ maxWidth: '100%', height: 'auto' }}>
                 <defs>
                   <filter id="shadow2" x="-10%" y="-10%" width="120%" height="120%">
@@ -691,12 +691,12 @@ const JoinPage = () => {
                 </defs>
 
                 {/* President */}
-                <rect x="60" y="290" width="180" height="90" rx="14" fill="#e9def2" stroke="#a78bc6" strokeWidth="2" filter="url(#shadow2)" />
-                <text x="150" y="340" textAnchor="middle" className="title">President</text>
+                <rect x="120" y="290" width="180" height="90" rx="14" fill="#e9def2" stroke="#a78bc6" strokeWidth="2" filter="url(#shadow2)" />
+                <text x="210" y="340" textAnchor="middle" className="title">President</text>
 
                 {/* Executive Committee */}
-                <rect x="330" y="200" width="220" height="270" rx="14" fill="#fff5dd" stroke="#e4b749" strokeWidth="2" filter="url(#shadow2)" />
-                <text x="440" y="235" textAnchor="middle" className="title">Executive Committee</text>
+                <rect x="390" y="200" width="220" height="270" rx="14" fill="#fff5dd" stroke="#e4b749" strokeWidth="2" filter="url(#shadow2)" />
+                <text x="500" y="250" textAnchor="middle" className="title" style={{ fontSize: '18px' }}>Executive Committee</text>
                 {[
                   'VP Arts & Culture',
                   'VP Career & Academic',
@@ -705,7 +705,7 @@ const JoinPage = () => {
                   'Finance Executive',
                   'Secretary'
                 ].map((txt, idx) => (
-                  <text key={idx} x="440" y={265 + idx * 25} textAnchor="middle" className="item">{txt}</text>
+                  <text key={idx} x="500" y={280 + idx * 25} textAnchor="middle" className="item">{txt}</text>
                 ))}
 
                 {/* Department Data */}
@@ -714,21 +714,21 @@ const JoinPage = () => {
                   { y: 200, color:'#fde5e0', stroke:'#d88d85', title:'Career & Academic', items:['Ace Career Fair','Ace Firm Visit','Excite Conference'] },
                   { y: 320, color:'#fff6c9', stroke:'#e4b749', title:'Operation',         items:['Information Solutions','Human Resources'] },
                   { y: 430, color:'#fff6c9', stroke:'#e4b749', title:'Support',           items:['Sponsorship','Design & Art','Content Marketing'] },
-                  { y: 560, color:'#def5e4', stroke:'#7fbf8d', title:'Engagement',       items:['Independent'] }
+                  { y: 560, color:'#def5e4', stroke:'#7fbf8d', title:'Engagement',       items:[] }
                 ].map((dept, di) => (
                   <g key={dept.title}>
                     {/* compute height dynamically */}
-                    <rect x="700" y={dept.y} width="260" height={60 + dept.items.length * 26} rx="14" fill={dept.color} stroke={dept.stroke} strokeWidth="2" filter="url(#shadow2)" />
-                    <text x="830" y={dept.y + 35} textAnchor="middle" className="title">{dept.title}</text>
+                    <rect x="760" y={dept.y} width="260" height={60 + dept.items.length * 26} rx="14" fill={dept.color} stroke={dept.stroke} strokeWidth="2" filter="url(#shadow2)" />
+                    <text x="890" y={dept.y + 35} textAnchor="middle" className="title">{dept.title}</text>
                     {dept.items.map((it, ii) => (
-                      <text key={ii} x="830" y={dept.y + 60 + ii * 24} textAnchor="middle" className="item">{it}</text>
+                      <text key={ii} x="890" y={dept.y + 60 + ii * 24} textAnchor="middle" className="item">{it}</text>
                     ))}
                   </g>
                 ))}
 
                 {/* Links */}
                 {/* President -> Exec */}
-                <line x1="240" y1="335" x2="330" y2="335" className="link" />
+                <line x1="300" y1="335" x2="390" y2="335" className="link" />
                 {/* Exec -> Departments */}
                 {[
                   { sy:260, ty:95 },  // Art & Culture
@@ -737,7 +737,7 @@ const JoinPage = () => {
                   { sy:410, ty:500 }, // Support
                   { sy:450, ty:590 }  // Engagement
                 ].map((l, idx) => (
-                  <line key={idx} x1="550" y1={l.sy} x2="700" y2={l.ty} className="link" />
+                  <line key={idx} x1="610" y1={l.sy} x2="760" y2={l.ty} className="link" />
                 ))}
               </svg>
             </div>
