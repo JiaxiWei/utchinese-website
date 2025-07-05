@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import SEO from '../components/SEO';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -623,6 +624,11 @@ const JoinPage = () => {
   
   return (
     <StyledJoin>
+      <SEO
+        title="加入我们 | UTChinese Network 多大中文"
+        description="加入多大中文 (UTChinese Network) 社团，探索各种部门并申请成为志愿者，寻找你的舞台。"
+        url="https://www.utchinese.org/join"
+      />
       {/* Header Section */}
       <section className="join-header">
         <div className="floating-shapes">

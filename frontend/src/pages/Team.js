@@ -10,6 +10,7 @@ import { FaWeixin } from 'react-icons/fa';
 import { getTeamMembers, getTeamDepartments, getFullAvatarUrl } from '../utils/api';
 import StaffDetailModal from '../components/StaffDetailModal';
 import i18n from 'i18next';
+import SEO from '../components/SEO';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -807,6 +808,11 @@ const Team = () => {
       transition={{ duration: 0.5 }}
     >
       <StyledTeam>
+        <SEO
+          title="团队 | UTChinese Network 多大中文"
+          description="认识多大中文 (UTChinese Network) 的管理层与志愿者团队成员。"
+          url="https://www.utchinese.org/team"
+        />
         {/* Page Header */}
         <section className="page-header">
           <div className="header-bg"></div>

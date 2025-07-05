@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import SEO from '../components/SEO';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -520,6 +521,11 @@ const AboutPage = () => {
   
   return (
     <StyledAbout>
+      <SEO
+        title="关于我们 | UTChinese Network 多大中文"
+        description="了解多大中文 (UTChinese Network) 的历史与使命，加入我们的文化、职业与社区活动。"
+        url="https://www.utchinese.org/about"
+      />
       {/* Header Section */}
       <section className="page-header">
         <div className="header-bg"></div>

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
+import SEO from '../components/SEO';
 
 import { getEvents, BASE_URL } from '../utils/api';
 import EventCard from '../components/EventCard';
@@ -311,6 +312,11 @@ const Events = () => {
 
   return (
     <PageContainer>
+      <SEO
+        title="活动 | UTChinese Network 多大中文"
+        description="查看多大中文 (UTChinese Network) 的最新与往期活动：职业招聘会、文化节、音乐会等。"
+        url="https://www.utchinese.org/events"
+      />
       <ContentWrapper>
         <Header ref={headerRef}>
           <motion.div
