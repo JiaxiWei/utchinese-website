@@ -697,18 +697,6 @@ const StaffAdmin = () => {
     }
   }, [hasPermission, navigate]);
 
-  // Load data
-  useEffect(() => {
-    if (hasPermission('manageStaff') || hasPermission('reviewProfiles')) {
-      loadData();
-    }
-  }, [hasPermission, activeTab, statusFilter]);
-
-  // Filter data
-  useEffect(() => {
-    filterData();
-  }, [staffAccounts, profiles, searchTerm, statusFilter, activeTab]);
-
   // Set default tab based on permissions
   useEffect(() => {
     if (!hasPermission('manageStaff') && hasPermission('reviewProfiles')) {
@@ -716,29 +704,95 @@ const StaffAdmin = () => {
     }
   }, [hasPermission]);
 
-  // Reset status filter when switching tabs
+  // Reset status filter when switching tabs and load data
   useEffect(() => {
+    // Clear current data to avoid showing stale data
+    setFilteredData([]);
+    
+    // Clear selection states when switching tabs
+    setSelectedItems(new Set());
+    setSelectAll(false);
+    
+    // Clear search term when switching tabs
+    setSearchTerm('');
+    
     if (activeTab === 'profiles') {
       setStatusFilter('pending'); // Default to showing pending profiles only
     } else {
       setStatusFilter('all');
     }
-  }, [activeTab]);
-
-  const loadData = async () => {
-    setIsLoading(true);
-    try {
-      if (activeTab === 'accounts') {
-        const data = await getAllStaff();
-        setStaffAccounts(data);
-      } else {
-        const data = await getAllProfiles(statusFilter === 'all' ? '' : statusFilter);
-        setProfiles(data);
+    
+    // Load data after setting the appropriate status filter
+    const loadDataAfterStatusReset = async () => {
+      if (hasPermission('manageStaff') || hasPermission('reviewProfiles')) {
+        setIsLoading(true);
+        try {
+          if (activeTab === 'accounts') {
+            const data = await getAllStaff();
+            setStaffAccounts(data);
+          } else {
+            // For profiles, use the correct status filter
+            const statusToUse = activeTab === 'profiles' ? 'pending' : (statusFilter === 'all' ? '' : statusFilter);
+            const data = await getAllProfiles(statusToUse);
+            setProfiles(data);
+          }
+        } catch (error) {
+          console.error('Error loading data:', error);
+        } finally {
+          setIsLoading(false);
+        }
       }
-    } catch (error) {
-      console.error('Error loading data:', error);
-    } finally {
-      setIsLoading(false);
+    };
+    
+    loadDataAfterStatusReset();
+  }, [activeTab, hasPermission]);
+
+  // Load data when status filter changes (but not when switching tabs)
+  useEffect(() => {
+    const loadDataForStatusChange = async () => {
+      if (hasPermission('manageStaff') || hasPermission('reviewProfiles')) {
+        setIsLoading(true);
+        try {
+          if (activeTab === 'accounts') {
+            const data = await getAllStaff();
+            setStaffAccounts(data);
+          } else {
+            const data = await getAllProfiles(statusFilter === 'all' ? '' : statusFilter);
+            setProfiles(data);
+          }
+        } catch (error) {
+          console.error('Error loading data:', error);
+        } finally {
+          setIsLoading(false);
+        }
+      }
+    };
+    
+    loadDataForStatusChange();
+  }, [statusFilter, hasPermission]);
+
+  // Filter data
+  useEffect(() => {
+    filterData();
+  }, [staffAccounts, profiles, searchTerm, statusFilter, activeTab]);
+
+  // Simplified loadData function for manual refresh if needed
+  const loadData = async () => {
+    if (hasPermission('manageStaff') || hasPermission('reviewProfiles')) {
+      setIsLoading(true);
+      try {
+        if (activeTab === 'accounts') {
+          const data = await getAllStaff();
+          setStaffAccounts(data);
+        } else {
+          const data = await getAllProfiles(statusFilter === 'all' ? '' : statusFilter);
+          setProfiles(data);
+        }
+      } catch (error) {
+        console.error('Error loading data:', error);
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -757,19 +811,10 @@ const StaffAdmin = () => {
            item.name_zh?.toLowerCase().includes(searchTerm.toLowerCase()) ||
            item.staff?.username?.toLowerCase().includes(searchTerm.toLowerCase()));
       
-      const statusMatch = activeTab === 'accounts'
-        ? (
-            statusFilter === 'all'
-              ? true
-              : statusFilter === 'active'
-                ? item.isActive
-                : statusFilter === 'inactive'
-                  ? !item.isActive
-                  : true // Fallback – treat any other value as "all"
-          )
-        : (
-            statusFilter === 'all' ? true : item.status === statusFilter
-          );
+      const statusMatch = statusFilter === 'all' || 
+        (activeTab === 'accounts' 
+          ? (statusFilter === 'active' ? item.isActive : !item.isActive)
+          : item.status === statusFilter);
       
       return searchMatch && statusMatch;
     });
@@ -1008,10 +1053,12 @@ const StaffAdmin = () => {
     }
   };
 
-  // 重置选择状态当数据变化时
+  // Reset selection states when filtered data changes (but not when switching tabs)
   useEffect(() => {
-    setSelectedItems(new Set());
-    setSelectAll(false);
+    if (filteredData.length > 0) {
+      setSelectedItems(new Set());
+      setSelectAll(false);
+    }
   }, [filteredData]);
 
   if (!hasPermission('manageStaff') && !hasPermission('reviewProfiles')) {
@@ -1030,10 +1077,7 @@ const StaffAdmin = () => {
           {hasPermission('manageStaff') && (
             <button 
               className={`tab ${activeTab === 'accounts' ? 'active' : ''}`}
-              onClick={() => {
-                setStatusFilter('all');
-                setActiveTab('accounts');
-              }}
+              onClick={() => setActiveTab('accounts')}
             >
               <FiUsers />
               {t('admin.staff.tabs.accounts')}
@@ -1042,10 +1086,7 @@ const StaffAdmin = () => {
           {hasPermission('reviewProfiles') && (
             <button
               className={`tab ${activeTab === 'profiles' ? 'active' : ''}`}
-              onClick={() => {
-                setStatusFilter('pending');
-                setActiveTab('profiles');
-              }}
+              onClick={() => setActiveTab('profiles')}
             >
               <FiClock />
               {t('admin.staff.tabs.profiles')}
