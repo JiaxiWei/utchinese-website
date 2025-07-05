@@ -62,12 +62,28 @@ const enTranslations = {
     title: 'Are You Ready to Join UTChinese?',
     intro: 'We\'re not a high-end, prestigious club - just a group of perfectionists who never compromise on the things we love. We invite all kinds of friends to join our team and find a sense of belonging in college during your spare time.',
     requirements: 'You don\'t need special skills or outstanding experiences. As long as you like us and are willing to pursue perfection with us, laughing through our youth together, our doors are always open to you!',
-    sections: 'The following will introduce UTChinese\'s four business groups and their recruitment requirements. We welcome friends to click the link at the end to fill out the application questionnaire. We look forward to your joining us!',
+    sections: 'The following will introduce UTChinese\'s five departments and their recruitment requirements. We welcome friends to click the link at the end to fill out the application questionnaire. We look forward to your joining us!',
     welcomeMembers: 'What kind of members are we looking for?',
     arts: {
       req1: 'Interested in culture and art, with curiosity and humanistic care',
       req2: 'Responsible for project operations, including but not limited to platform construction and content planning',
-      req3: 'Good at communication and expression, with execution ability and responsibility'
+      req3: 'Good at communication and expression, with execution ability and responsibility',
+      subgroup1: {
+        title: 'New Year Concert',
+        description: 'New Year Concert is a charity music event meticulously crafted by UTChinese Network, representing our tradition and pride. This concert brings together artists and music lovers from around the world, offering audiences a cross-cultural audiovisual feast through beautiful melodies. Most importantly, all proceeds are donated to UNICEF Canada to provide medical care and living assistance to children in need worldwide, spreading hope and care through music. Since its inception in 2007, the concert has been successfully held for multiple years, raising over $110,000 CAD for UNICEF Canada and other charitable organizations.'
+      },
+      subgroup2: {
+        title: 'Book Club',
+        description: 'The Book Club is a cozy intellectual gathering where literature enthusiasts come together to explore the depths of Chinese and international literature. Through regular reading sessions, book discussions, and author meet-and-greets, we create a space for meaningful conversations about books, ideas, and cultural perspectives. Whether you\'re passionate about classical Chinese literature, contemporary fiction, or cross-cultural narratives, our book club offers a platform to share insights, discover new voices, and deepen your understanding of diverse cultures through the power of reading.'
+      },
+      subgroup3: {
+        title: 'Cultural Exchange',
+        description: 'In the multicultural landscape of Toronto, we are dedicated to promoting authentic Chinese traditional culture through rich, diverse, and highly interactive activities that build bridges for cross-cultural exchange. Through traditional festival celebrations, handicraft experiences, culinary culture sharing, and themed discussions, we showcase the charm of festivals like Mid-Autumn and Spring Festival, while organizing activities such as paper cutting, calligraphy, and pottery to let more people experience the essence of Chinese culture firsthand. We actively connect with students from different cultural backgrounds, promoting cross-cultural understanding and integration.'
+      },
+      subgroup4: {
+        title: 'Qin Society',
+        description: 'The Qin Society is dedicated to preserving and promoting the art of Guqin, a traditional Chinese instrument with over 3,000 years of history. As one of the most ancient and culturally significant instruments in China, the Guqin has long been cherished by Chinese scholars and intellectuals, embodying the profound essence of Chinese aesthetics. Our society provides a platform for students who love Chinese traditional culture to learn about and experience the cultural charm of Guqin through regular workshops, masterclasses with renowned Toronto Guqin artists, and elegant gatherings where members can immerse themselves in the grace and beauty of this ancient art form.'
+      }
     },
     career: {
       req1: 'Creative, with novel and bold ideas in the business workplace',
@@ -92,22 +108,19 @@ const enTranslations = {
       req1: 'Love photography and be good at discovering interesting details in life',
       req2: 'Have the necessary photographic equipment',
       req3: 'Have the ability to shoot videos, process images, and edit videos',
-      req4: 'Love computer technology',
-      req5: 'Have a certain programming foundation, at least above CSC108 level',
-      req6: 'Love negotiation and have certain negotiation skills',
-      req7: 'Have strong understanding, communication, and coordination abilities, with team awareness',
-      req8: 'Are careful and thorough, agile in thinking, with a strong sense of responsibility',
+      req4: 'Experience with full-stack web development (e.g., JavaScript, React, Express.js, Prisma)',
+      req5: 'Experience with version control systems (Git/GitHub) and collaborative development workflows',
+      req6: 'B or above in CSC309 (Programming on the Web) or a similar course is a strong asset',
+      req8: 'Love negotiation and have certain negotiation skills',
+      req9: 'Have strong understanding, communication, and coordination abilities, with team awareness',
+      req10: 'Are careful and thorough, agile in thinking, with a strong sense of responsibility',
       subgroup1: {
-        title: 'Design and Art',
-        description: 'We believe that art, images, and design can provide people with better interactive experiences, and we hope to bring positive and effective energy to society through these methods.'
-      },
-      subgroup2: {
         title: 'Information Solutions',
         description: 'If you are a CS or Engineering major student and want to develop a software product, then at UTChinese, you have the opportunity to participate in the development of some practical tools or larger applications.'
       },
-      subgroup3: {
-        title: 'Sponsorship',
-        description: 'We are the "investment promotion" department of UTChinese. We are responsible for coordinating the social relations between UTChinese and sponsoring institutions, maintaining communication and good cooperation with off-campus enterprises and businesses.'
+      subgroup2: {
+        title: 'Human Resources',
+        description: 'The HR department brings together the internal personnel of the organization, organizing online and offline team building activities, ensuring everyone can eat well, drink well, play well, and get to know each other better.'
       }
     },
     support: {
@@ -123,9 +136,19 @@ const enTranslations = {
         description: 'At UTChinese, there are no marketing experts; we are explorers, learners, and executors. We wrote the freshman manual, built a new media creation platform, held charity classical music concerts, and coordinated job fairs.'
       },
       subgroup2: {
-        title: 'Human Resources',
-        description: 'The HR department brings together the internal personnel of the club, organizes online and offline team building, so that everyone can eat well, drink well, play well, and get to know each other better.'
+        title: 'Sponsorship',
+        description: 'We are the "investment promotion" department of UTChinese. We are responsible for coordinating the social relations between UTChinese and sponsoring institutions, maintaining communication and good cooperation with off-campus enterprises and businesses.'
+      },
+      subgroup3: {
+        title: 'Design and Art',
+        description: 'We believe that art, images, and design can provide people with better interactive experiences, and we hope to bring positive and effective energy to society through these methods.'
       }
+    },
+    engagement: {
+      req1: 'Passionate about building community and connecting people',
+      req2: 'Have strong interpersonal skills and enjoy organizing social activities',
+      req3: 'Able to work independently and take initiative in member engagement activities',
+      req4: 'Committed to fostering an inclusive and welcoming environment for all members'
     },
     form: {
       name: 'Your Name',
@@ -144,7 +167,7 @@ const enTranslations = {
   groups: {
     overview: {
       title: 'UTChinese Departments',
-      description: 'UTChinese Network is comprised of four key departments that work together to create a vibrant community. From cultural events and career services to operational support and content creation, each department plays a vital role in our mission to connect Chinese culture with the UofT community.'
+      description: 'UTChinese Network is comprised of five key departments that work together to create a vibrant community. From cultural events and career services to operational support, content creation, and member engagement, each department plays a vital role in our mission to connect Chinese culture with the UofT community.'
     },
     arts: {
       title: 'ARTS & CULTURE GROUP',
@@ -156,11 +179,15 @@ const enTranslations = {
     },
     operation: {
       title: 'OPERATION GROUP',
-      description: 'We believe that art, images, and design can provide people with better interactive experiences, and we hope to bring positive and effective energy to society through these methods.'
+      description: 'The Operation Group is dedicated to providing technical support and human resources management for the organization. Our team includes Information Solutions and Human Resources divisions, responsible for developing technical tools, managing internal team building, and optimizing operational processes.'
     },
     support: {
       title: 'SUPPORT GROUP',
-      description: 'At UTChinese, there are no marketing experts; we are explorers, learners, and executors. We wrote the freshman manual, built a new media creation platform, held charity classical music concerts, coordinated job fairs, and even held events that compete with world-class brands. Although every promotion is a huge challenge, these are invaluable opportunities to step out of the ivory tower.'
+      description: 'The Support Group is responsible for the organization\'s external image building and resource acquisition. Our team includes Content Marketing, Sponsorship, and Design & Art divisions, committed to promoting the organization\'s brand and activities through creative content, partnerships, and visual design.'
+    },
+    engagement: {
+      title: 'ENGAGEMENT',
+      description: 'The Engagement department is an independent division focused on member engagement, community building, and maintaining strong relationships within the organization. We organize team activities, foster member connections, and ensure everyone feels included and valued in our community.'
     }
   },
   contact: {
@@ -250,7 +277,8 @@ const enTranslations = {
         arts: 'ARTS & CULTURE GROUP',
         career: 'CAREER & ACADEMIC GROUP',
         operation: 'OPERATION GROUP',
-        support: 'SUPPORT GROUP'
+        support: 'SUPPORT GROUP',
+        engagement: 'ENGAGEMENT'
       },
       bioEn: 'Bio (English)',
       bioEnPlaceholder: 'Tell us about yourself in English...',
@@ -469,12 +497,28 @@ const zhTranslations = {
     title: '你准备好加入多大中文了吗?',
     intro: '我们不是高端大气上档次的社团，只是一群强迫症患者，对自己喜欢的事情从不将就。我们诚邀各路小伙伴加入我们的团队，在课余时间找到大学的归属。',
     requirements: '你不必身怀绝技，也不必有出众的经历。只要你喜欢我们，愿意跟我们强迫症到底，一起笑傲青春，我们的大门永远为你敞开！',
-    sections: '以下内容将介绍多大中文四个部门及其招新要求，欢迎小伙伴们点击文末链接填写报名问卷。我们期待你的加入！',
+    sections: '以下内容将介绍多大中文五个部门及其招新要求，欢迎小伙伴们点击文末链接填写报名问卷。我们期待你的加入！',
     welcomeMembers: '欢迎什么样的小伙伴？',
     arts: {
       req1: '对文化艺术感兴趣，怀有好奇心与人文关怀',
       req2: '负责项目的运营工作，包括但不限于平台建设、内容规划等',
-      req3: '善于沟通和表达，具有执行能力和责任感'
+      req3: '善于沟通和表达，具有执行能力和责任感',
+      subgroup1: {
+        title: 'New Year Concert',
+        description: 'New Year Concert 是多大中文倾力打造的新年慈善音乐会，也是我们社团的传统与骄傲。音乐会汇聚了来自世界各地热爱音乐的艺术家与爱好者，用美妙的旋律为观众带来一场跨越国界的视听盛宴。更重要的是，音乐会的所有盈利将全数捐赠给 UNICEF Canada（联合国儿童基金会），为全球受难的儿童提供医疗和生活援助，用音乐传递希望与关怀。自 2007 年创办以来，New Year Concert 已成功举办多届，共筹集善款超过 11 万加币，并悉数捐赠给 UNICEF Canada 等慈善机构。'
+      },
+      subgroup2: {
+        title: 'Book Club',
+        description: 'Book Club 是一个温馨的学术聚会，文学爱好者们聚集在一起，探索中国及国际文学的深度。通过定期的阅读会、书籍讨论和作家见面会，我们为有意义的对话创造了一个交流书籍、思想和文化观点的空间。无论你热爱中国古典文学、当代小说还是跨文化叙事，我们的读书会都为你提供了一个分享见解、发现新声音、通过阅读力量加深对多元文化理解的平台。'
+      },
+      subgroup3: {
+        title: 'Cultural Exchange',
+        description: '在多元文化交融的多伦多，我们致力于宣扬真正的中国传统文化，通过丰富多样且互动性强的活动，搭建跨文化交流的桥梁。通过传统节日庆祝、手工艺体验、美食文化分享及主题对话等形式，我们不仅展示中秋、春节等节日的魅力，还组织剪纸、书法、陶艺等手工活动，让更多人亲身感受中国文化的精髓。我们积极与不同文化背景的学子连接，促进跨文化理解与融合，让中国传统文化成为校园里的一抹亮色。'
+      },
+      subgroup4: {
+        title: 'Qin Society',
+        description: '古琴会致力于传承和推广古琴艺术，这是一种有着 3000 多年历史的中国传统乐器。古琴拥有中华民族最古老且文化地位最高的地位，承载着中式美学的深厚内涵。多大中文古琴会为热爱中国传统文化的学子提供一个了解古琴艺术的平台，通过定期的工作坊、与多伦多知名琴家的大师班以及优雅的雅集活动，让成员们沉浸在古琴音乐的优雅与美妙中，感受这一古老艺术形式的独特魅力。'
+      }
     },
     career: {
       req1: '有创造力，在商业职场方面有新奇，大胆的想法',
@@ -499,22 +543,19 @@ const zhTranslations = {
       req1: '热爱摄影、善于发现生活中有趣的细节',
       req2: '拥有必要的摄影器材',
       req3: '有视频拍摄、图片处理、视频剪辑的能力',
-      req4: '热爱计算机技术',
-      req5: '有一定编程的基础，至少CSC108以上水平',
-      req6: '热爱谈判，拥有一定的谈判技巧',
-      req7: '有较强的理解、沟通、协调能力，具备团队意识',
-      req8: '认真细致，思维敏捷，具有较强的责任感',
+      req4: '具有全栈网页开发经验（如 JavaScript、React、Express.js、Prisma）',
+      req5: '具有版本控制系统（Git/GitHub）和协作开发流程的经验',
+      req6: 'CSC309（网页编程）或类似课程取得 B 及以上成绩者优先',
+      req8: '热爱谈判，拥有一定的谈判技巧',
+      req9: '有较强的理解、沟通、协调能力，具备团队意识',
+      req10: '认真细致，思维敏捷，具有较强的责任感',
       subgroup1: {
-        title: 'Design and Art',
-        description: '相信艺术、影像和设计能够给人更好的交互体验，希望通过这些方式来给这个社会带来积极且有效的能量。'
-      },
-      subgroup2: {
         title: 'Information Solutions',
         description: '如果你是CS或者Engineering专业的学生，并且想要开发一个软件产品，那么在多大中文，你有机会参与开发一些实用的工具或者规模大一些的应用程序。'
       },
-      subgroup3: {
-        title: 'Sponsorship',
-        description: '我们是多大中文的"招商引资"部门，我们负责协调多大中文与赞助机构的社会关系，保持与校外企业和商家的沟通以及良好合作。'
+      subgroup2: {
+        title: 'Human Resources',
+        description: 'HR 部门凝聚社团的内部人员，组织线上线下团建，让大家吃好喝好玩好的同时对彼此更加熟悉。'
       }
     },
     support: {
@@ -530,9 +571,19 @@ const zhTranslations = {
         description: '在多大中文，没有 marketing 的专家，我们是探索者、学习者和执行者。我们撰写了新生手册、搭建了新媒体创作平台，举办了慈善古典音乐会，统筹了招聘会，甚至还会举办跟世界级品牌竞争的活动。虽然每一场宣传都是一次巨大的挑战，但这都是走出象牙塔，无比宝贵的机会。'
       },
       subgroup2: {
-        title: 'Human Resources',
-        description: 'HR 部门凝聚社团的内部人员，组织线上线下团建，让大家吃好喝好玩好的同时对彼此更加熟悉。'
+        title: 'Sponsorship',
+        description: '我们是多大中文的"招商引资"部门，我们负责协调多大中文与赞助机构的社会关系，保持与校外企业和商家的沟通以及良好合作。'
+      },
+      subgroup3: {
+        title: 'Design and Art',
+        description: '相信艺术、影像和设计能够给人更好的交互体验，希望通过这些方式来给这个社会带来积极且有效的能量。'
       }
+    },
+    engagement: {
+      req1: '热爱社区建设，善于连接人与人之间的关系',
+      req2: '具有较强的人际交往能力，喜欢组织社交活动',
+      req3: '能够独立工作，在成员参与活动方面积极主动',
+      req4: '致力于为所有成员营造包容友好的环境'
     },
     form: {
       name: '您的姓名',
@@ -551,7 +602,7 @@ const zhTranslations = {
   groups: {
     overview: {
       title: '多大中文部门',
-      description: '多大中文由四个关键部门组成，共同创建一个充满活力的社区。从文化活动和职业服务到运营支持和内容创作，每个部门在我们连接中国文化与多伦多大学社区的使命中都发挥着重要作用。'
+      description: '多大中文由五个关键部门组成，共同创建一个充满活力的社区。从文化活动和职业服务到运营支持、内容创作和成员参与，每个部门在我们连接中国文化与多伦多大学社区的使命中都发挥着重要作用。'
     },
     arts: {
       title: '文化艺术部门',
@@ -563,11 +614,15 @@ const zhTranslations = {
     },
     operation: {
       title: '运营部门',
-      description: '相信艺术、影像和设计能够给人更好的交互体验，希望通过这些方式来给这个社会带来积极且有效的能量。我们的团队包括摄影/视频、信息解决方案和赞助三个小组，致力于为社团提供全方位的运营支持。'
+      description: '运营部门致力于为社团提供技术支持和人力资源管理。我们的团队包括信息解决方案和人力资源两个小组，负责开发技术工具、管理内部团队建设和优化运营流程。'
     },
     support: {
       title: '支持部门',
-      description: '在多大中文，没有营销专家，我们是探索者、学习者和执行者。我们撰写了新生手册、搭建了新媒体创作平台，举办了慈善古典音乐会，统筹了招聘会，甚至还会举办跟世界级品牌竞争的活动。虽然每一场宣传都是一次巨大的挑战，但这都是走出象牙塔，无比宝贵的机会。'
+      description: '支持部门负责社团的对外形象建设和资源获取。我们的团队包括内容营销、赞助合作和设计艺术三个小组，致力于通过创意内容、合作伙伴关系和视觉设计来推广社团品牌和活动。'
+    },
+    engagement: {
+      title: '参与度部门',
+      description: '参与度部门是一个独立的部门，专注于成员参与、社区建设和维护组织内部的良好关系。我们组织团队活动，促进成员之间的联系，确保每个人都能在我们的社区中感受到被包容和重视。'
     }
   },
   contact: {
@@ -657,7 +712,8 @@ const zhTranslations = {
         arts: '文化艺术部门',
         career: '职业学术部门',
         operation: '运营部门',
-        support: '支持部门'
+        support: '支持部门',
+        engagement: '参与度部门'
       },
       bioEn: '个人简介（英文）',
       bioEnPlaceholder: '请用英文介绍一下您自己...',

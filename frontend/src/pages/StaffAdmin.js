@@ -1742,6 +1742,7 @@ const StaffAdmin = () => {
                           <option value="CAREER & ACADEMIC GROUP">Career & Academic Group</option>
                           <option value="OPERATION GROUP">Operation Group</option>
                           <option value="SUPPORT GROUP">Support Group</option>
+                          <option value="ENGAGEMENT">Engagement</option>
                         </select>
                       </div>
                       <div className="form-group">
