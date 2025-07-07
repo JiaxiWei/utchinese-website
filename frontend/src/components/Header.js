@@ -6,19 +6,8 @@ import styled from 'styled-components';
 import { FiUser, FiLogIn, FiLogOut, FiSettings, FiUsers } from 'react-icons/fi';
 import { useAuth } from '../contexts/AuthContext';
 import UnifiedLoginModal from './UnifiedLoginModal';
-
-const ThemeToggleIcon = ({ theme }) => {
-  return theme === 'light' ? (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-    </svg>
-  ) : (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M12 17C14.7614 17 17 14.7614 17 12C17 9.23858 14.7614 7 12 7C9.23858 7 7 9.23858 7 12C7 14.7614 9.23858 17 12 17Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-      <path d="M12 1V3M12 21V23M4.22 4.22L5.64 5.64M18.36 18.36L19.78 19.78M1 12H3M21 12H23M4.22 19.78L5.64 18.36M18.36 5.64L19.78 4.22" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-    </svg>
-  );
-};
+import ThemeSwitch from './ThemeSwitch';
+import LanguageSelector from './LanguageSelector';
 
 const StyledHeader = styled.header`
   position: fixed;
@@ -44,11 +33,16 @@ const StyledHeader = styled.header`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     gap: 1rem;
     
     @media (max-width: 1024px) {
       gap: 0.5rem;
+    }
+    
+    @media (max-width: 768px) {
+      gap: 0.75rem;
+      padding: 0 1rem;
     }
   }
 
@@ -57,10 +51,15 @@ const StyledHeader = styled.header`
     align-items: center;
     gap: 0.5rem;
     z-index: 101;
+    flex-shrink: 0;
     
     img {
       height: 2.5rem;
       transition: height 0.3s ease;
+      
+      @media (max-width: 768px) {
+        height: 2rem;
+      }
     }
     
     h1 {
@@ -68,6 +67,10 @@ const StyledHeader = styled.header`
       margin: 0;
       white-space: nowrap;
       font-weight: 600;
+      
+      @media (max-width: 768px) {
+        font-size: 1.1rem;
+      }
     }
   }
 
@@ -80,6 +83,31 @@ const StyledHeader = styled.header`
     
     @media (max-width: 1024px) {
       gap: 0.8rem;
+    }
+    
+    @media (max-width: 768px) {
+      flex: 0;
+      justify-content: flex-end;
+    }
+  }
+
+  .header-controls-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 50px;
+    padding: 0.15rem;
+    
+    [data-theme="dark"] & {
+      background: rgba(255, 255, 255, 0.03);
+      border-color: rgba(255, 255, 255, 0.08);
+    }
+    
+    @media (max-width: 768px) {
+      display: none;
     }
   }
 
@@ -207,6 +235,16 @@ const StyledHeader = styled.header`
       }
     }
     
+    .mobile-controls-section {
+      background: rgba(255, 255, 255, 0.08) !important;
+      border: 1px solid rgba(255, 255, 255, 0.12) !important;
+      
+      [data-theme="dark"] & {
+        background: rgba(255, 255, 255, 0.05) !important;
+        border: 1px solid rgba(255, 255, 255, 0.08) !important;
+      }
+    }
+    
     .mobile-login-button {
       background: linear-gradient(135deg, var(--primary), var(--accent));
       color: white;
@@ -230,145 +268,25 @@ const StyledHeader = styled.header`
     }
   }
 
-  .language-switch {
-    position: relative;
-    display: flex;
-    align-items: center;
-    background-color: rgba(0, 0, 0, 0.04);
-    border-radius: 24px;
-    padding: 3px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-    overflow: hidden;
-    
-    [data-theme="dark"] & {
-      background-color: rgba(255, 255, 255, 0.07);
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-    }
-    
-    &::before {
-      content: '';
-      position: absolute;
-      width: 50%;
-      height: calc(100% - 6px);
-      border-radius: 20px;
-      background: linear-gradient(45deg, rgba(255,255,255,0.9), rgba(255,255,255,0.7));
-      top: 3px;
-      z-index: 0;
-      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-      box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
-      
-      [data-theme="dark"] & {
-        background: linear-gradient(45deg, rgba(50,50,50,0.9), rgba(40,40,40,0.7));
-        box-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
-      }
-    }
-    
-    &.en::before {
-      transform: translateX(0);
-    }
-    
-    &.zh::before {
-      transform: translateX(100%);
-    }
-    
-    button {
-      background: none;
-      border: none;
-      padding: 6px 10px;
-      font-size: 0.85rem;
-      letter-spacing: 0.3px;
-      cursor: pointer;
-      border-radius: 20px;
-      color: var(--text-secondary);
-      transition: all 0.3s ease;
-      position: relative;
-      z-index: 1;
-      flex: 1;
-      text-align: center;
-      min-width: 35px;
-      white-space: nowrap;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      
-      &.active {
-        font-weight: 600;
-        color: var(--text);
-        transform: scale(1.05);
-      }
-      
-      &:hover:not(.active) {
-        color: var(--text);
-      }
-      
-      &:active {
-        transform: scale(0.95);
-      }
-    }
-    
-    .divider {
-      width: 1px;
-      height: 1rem;
-      background-color: rgba(0, 0, 0, 0.1);
-      margin: 0 1px;
-      z-index: 1;
-      
-      [data-theme="dark"] & {
-        background-color: rgba(255, 255, 255, 0.1);
-      }
-    }
-  }
-
-  .theme-toggle {
-    margin-left: 5px;
-    padding: 8px;
-    background: none;
-    border: none;
-    color: var(--text);
-    cursor: pointer;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-    
-    &:hover {
-      background-color: rgba(0, 0, 0, 0.05);
-      transform: rotate(15deg);
-    }
-    
-    &:active {
-      transform: scale(0.9);
-    }
-    
-    [data-theme="dark"] &:hover {
-      background-color: rgba(255, 255, 255, 0.1);
-    }
-    
-    svg {
-      transition: transform 0.5s ease;
-    }
-    
-    &:hover svg {
-      transform: rotate(30deg);
-    }
-  }
-  
   .controls-group {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.6rem;
+    
+    @media (max-width: 768px) {
+      display: none;
+    }
   }
 
   .auth-section {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    margin-left: 0.5rem;
+    gap: 0.6rem;
+    margin-left: 0.2rem;
     
     @media (max-width: 1024px) {
       gap: 0.5rem;
-      margin-left: 0.25rem;
+      margin-left: 0.1rem;
     }
     
     @media (max-width: 768px) {
@@ -377,23 +295,40 @@ const StyledHeader = styled.header`
   }
 
   .login-button {
-    border: none;
-    padding: 0.6rem 1.2rem;
-    border-radius: 8px;
+    border: 1px solid rgba(224, 43, 32, 0.2);
+    padding: 0.35rem 0.75rem;
+    border-radius: 50px;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
     display: flex;
     align-items: center;
     gap: 0.5rem;
     font-weight: 500;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     white-space: nowrap;
-    background: linear-gradient(135deg, var(--primary), var(--accent));
-    color: white;
+    background: rgba(224, 43, 32, 0.08);
+    color: var(--primary);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    min-width: 90px;
+    height: 32px;
+    justify-content: center;
     
     &:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(224, 43, 32, 0.3);
+      transform: translateY(-1px);
+      background: rgba(224, 43, 32, 0.12);
+      border-color: rgba(224, 43, 32, 0.3);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    }
+
+    [data-theme="dark"] & {
+      border-color: rgba(224, 43, 32, 0.3);
+      background: rgba(224, 43, 32, 0.1);
+      color: var(--primary);
+    }
+
+    [data-theme="dark"] &:hover {
+      background: rgba(224, 43, 32, 0.15);
+      border-color: rgba(224, 43, 32, 0.5);
     }
     
     span {
@@ -406,21 +341,36 @@ const StyledHeader = styled.header`
     position: relative;
     
     .user-button {
-      background: rgba(224, 43, 32, 0.1);
-      color: var(--primary);
-      border: none;
-      padding: 0.5rem 1rem;
-      border-radius: 8px;
+      background: transparent;
+      color: var(--text);
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      padding: 0.35rem 0.75rem;
+      border-radius: 50px;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: all 0.2s ease;
       display: flex;
       align-items: center;
       gap: 0.5rem;
       font-weight: 500;
-      font-size: 0.9rem;
+      font-size: 0.8rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      min-width: 90px;
+      height: 32px;
+      justify-content: space-between;
       
       &:hover {
-        background: rgba(224, 43, 32, 0.2);
+        border-color: rgba(224, 43, 32, 0.2);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+        transform: translateY(-1px);
+      }
+
+      [data-theme="dark"] & {
+        border-color: rgba(255, 255, 255, 0.08);
+        color: var(--text);
+      }
+
+      [data-theme="dark"] &:hover {
+        border-color: rgba(224, 43, 32, 0.5);
       }
     }
     
@@ -592,29 +542,8 @@ const Header = ({ changeLanguage, theme, toggleTheme }) => {
             ))}
           </div>
           
-          <div className="controls-group">
-            <div className={`language-switch ${i18n.language}`}>
-              <button 
-                className={i18n.language === 'en' ? 'active' : ''} 
-                onClick={() => changeLanguage('en')}
-              >
-                EN
-              </button>
-              <div className="divider"></div>
-              <button 
-                className={i18n.language === 'zh' ? 'active' : ''} 
-                onClick={() => changeLanguage('zh')}
-              >
-                中文
-              </button>
-            </div>
-            
-            <button className="theme-toggle" onClick={toggleTheme} aria-label={theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}>
-              <ThemeToggleIcon theme={theme} />
-            </button>
-          </div>
-
-          <div className="auth-section">
+          <div className="header-controls-wrapper">
+            <div className="auth-section">
             {isAuthenticated ? (
               <div className="user-menu">
                 <button 
@@ -692,6 +621,13 @@ const Header = ({ changeLanguage, theme, toggleTheme }) => {
               </button>
             )}
           </div>
+
+            <div className="controls-group">
+              <LanguageSelector changeLanguage={changeLanguage} />
+              
+              <ThemeSwitch theme={theme} toggleTheme={toggleTheme} />
+            </div>
+          </div>
           
           <div 
             className={`mobile-menu-btn ${mobileMenuOpen ? 'open' : ''}`}
@@ -728,41 +664,72 @@ const Header = ({ changeLanguage, theme, toggleTheme }) => {
               </motion.div>
             ))}
             
-            <motion.div 
-              className={`language-switch ${i18n.language}`}
+            {/* Settings and Controls Section */}
+            <motion.div
+              className="mobile-controls-section"
               custom={navLinks.length}
               variants={linkVariants}
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '1.5rem',
+                padding: '1.5rem',
+                background: 'rgba(255, 255, 255, 0.05)',
+                borderRadius: '16px',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                backdropFilter: 'blur(10px)',
+                width: '100%',
+                maxWidth: '280px'
+              }}
             >
-              <button 
-                className={i18n.language === 'en' ? 'active' : ''} 
-                onClick={() => changeLanguage('en')}
-              >
-                EN
-              </button>
-              <div className="divider"></div>
-              <button 
-                className={i18n.language === 'zh' ? 'active' : ''} 
-                onClick={() => changeLanguage('zh')}
-              >
-                中文
-              </button>
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                gap: '1rem'
+              }}>
+                <div style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '0.25rem'
+                }}>
+                  <span style={{
+                    fontSize: '0.75rem',
+                    color: 'var(--text-secondary)',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.5px',
+                    fontWeight: '500'
+                  }}>
+                    Language
+                  </span>
+                  <LanguageSelector changeLanguage={changeLanguage} />
+                </div>
+                
+                <div style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '0.25rem',
+                  alignItems: 'center'
+                }}>
+                  <span style={{
+                    fontSize: '0.75rem',
+                    color: 'var(--text-secondary)',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.5px',
+                    fontWeight: '500'
+                  }}>
+                    Theme
+                  </span>
+                  <ThemeSwitch theme={theme} toggleTheme={toggleTheme} />
+                </div>
+              </div>
             </motion.div>
-            
-            <motion.button 
-              className="theme-toggle"
-              custom={navLinks.length + 1}
-              variants={linkVariants}
-              onClick={toggleTheme}
-            >
-              {theme === 'light' ? t('header.darkMode') : t('header.lightMode')}
-              <ThemeToggleIcon theme={theme} />
-            </motion.button>
             
             {/* Mobile Login/User Menu */}
             {isAuthenticated ? (
               <motion.div
                 className="mobile-user-section"
-                custom={navLinks.length + 2}
+                custom={navLinks.length + 1}
                 variants={linkVariants}
                                  style={{
                    display: 'flex',
@@ -864,7 +831,7 @@ const Header = ({ changeLanguage, theme, toggleTheme }) => {
             ) : (
               <motion.button
                 className="mobile-login-button"
-                custom={navLinks.length + 2}
+                custom={navLinks.length + 1}
                 variants={linkVariants}
                 onClick={() => {
                   setShowLoginModal(true);
