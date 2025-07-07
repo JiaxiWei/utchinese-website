@@ -99,7 +99,8 @@ const StyledHeader = styled.header`
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 50px;
-    padding: 0.15rem;
+    padding: 0.1rem;
+    transform: translateY(-1px);
     
     [data-theme="dark"] & {
       background: rgba(255, 255, 255, 0.03);
