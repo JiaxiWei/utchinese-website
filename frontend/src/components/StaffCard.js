@@ -230,6 +230,7 @@ const PersonalInfo = styled.div`
     line-height: 1.5;
     margin: 0;
     max-width: 100%;
+    white-space: pre-wrap;
     
     &.no-bio {
       color: var(--text-light);

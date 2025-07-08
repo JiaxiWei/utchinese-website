@@ -332,6 +332,7 @@ const StyledJoin = styled.div`
       p {
         color: var(--text-light);
         margin-bottom: 1.5rem;
+        white-space: pre-wrap;
       }
       
       h5 {
@@ -802,6 +803,8 @@ const JoinPage = () => {
                           <div>
                             <h5>{t('join.welcomeMembers')}</h5>
                             <ul>
+                              <li>{t('join.operation.req7')}</li>
+                              <li>{t('join.operation.req11')}</li>
                               <li>{t('join.operation.req4')}</li>
                               <li>{t('join.operation.req5')}</li>
                               <li>{t('join.operation.req6')}</li>
