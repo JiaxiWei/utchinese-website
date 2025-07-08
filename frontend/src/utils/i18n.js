@@ -108,9 +108,9 @@ const enTranslations = {
       req1: 'Love photography and be good at discovering interesting details in life',
       req2: 'Have the necessary photographic equipment',
       req3: 'Have the ability to shoot videos, process images, and edit videos',
-      req4: 'Experience with full-stack web development (e.g., JavaScript, React, Express.js, Prisma)',
+      req4: 'Familiar with or interested in diving deep into mainstream full-stack development technologies like JavaScript, React, Express.js, Prisma',
       req5: 'Experience with version control systems (Git/GitHub) and collaborative development workflows',
-      req6: 'B or above in CSC309 (Programming on the Web) or a similar course is a strong asset',
+      req6: 'CSC309 (Programming on the Web) or similar course with B or above grade is preferred',
       req7: 'Passionate about programming, eager to learn, and pursuing code quality and user experience',
       req8: 'Love negotiation and have certain negotiation skills',
       req9: 'Have strong understanding, communication, and coordination abilities, with team awareness',
@@ -118,7 +118,7 @@ const enTranslations = {
       req11: 'Good at communication, team spirit, innovation, and willing to take initiative',
       subgroup1: {
         title: 'Information Solutions',
-        description: 'Information Solutions is the technical engine of UTChinese Network, responsible for supporting and driving the design and development of our official website. We are a young but professional full-stack development team, focusing on using cutting-edge technology to efficiently display and manage campus event information, helping more students conveniently learn about, participate in, and join our community.\n\nHere, you will not only work with mainstream technology stacks (React, Node.js, Prisma), but also deeply participate in the complete product development process: from requirements gathering and architecture design to deployment and maintenance - every step is implemented by your own hands. We believe you are as great as your product, and you are as young as your dreams.\n\nWe encourage efficient collaboration and open discussion, welcoming everyone to hone their skills, accumulate works, and amplify their influence through practice, using code to turn ideas into reality.'
+        description: 'Information Solutions is the technical engine of UTChinese Network, responsible for supporting and driving the design and development of our official website. We are a young but professional full-stack development team, focusing on using cutting-edge technology to efficiently display and manage campus event information, helping more students conveniently learn about, participate in, and join our community.\n\nHere, you will not only work with mainstream technology stacks (React、Express.js、Prisma), but also deeply participate in the complete product development process: from requirements gathering and architecture design to deployment and maintenance - every step is implemented by your own hands. We believe you are as great as your product, and you are as young as your dreams.\n\nWe encourage efficient collaboration and open discussion, welcoming everyone to hone their skills, accumulate works, and amplify their influence through practice, using code to turn ideas into reality.'
       },
       subgroup2: {
         title: 'Human Resources',
@@ -568,9 +568,9 @@ const zhTranslations = {
       req1: '热爱摄影、善于发现生活中有趣的细节',
       req2: '拥有必要的摄影器材',
       req3: '有视频拍摄、图片处理、视频剪辑的能力',
-      req4: '具有全栈网页开发经验（如 JavaScript、React、Express.js、Prisma）',
+      req4: '熟悉或有兴趣深入 JavaScript、React、Express.js、Prisma 等主流全栈开发技术',
       req5: '具有版本控制系统（Git/GitHub）和协作开发流程的经验',
-      req6: 'CSC309（网页编程）或类似课程取得 B 及以上成绩者优先',
+      req6: 'CSC309（网页编程）或类似课程成绩 B 及以上者优先考虑',
       req7: '热爱编程，乐于钻研，追求代码质量与用户体验',
       req8: '热爱谈判，拥有一定的谈判技巧',
       req9: '有较强的理解、沟通、协调能力，具备团队意识',
@@ -578,7 +578,7 @@ const zhTranslations = {
       req11: '善于沟通、富有团队精神、敢于创新，愿意主动承担责任',
       subgroup1: {
         title: 'Information Solutions',
-        description: 'Information Solutions 是 UTChinese Network 的技术引擎，负责支撑和推动整个官方网站的设计与开发。我们是一支年轻但专业的全栈开发团队，专注用前沿技术实现校园活动信息的高效展示与管理，帮更多同学更方便地了解、参与、加入我们的社团。\n\n在这里，你不仅能用到主流技术栈（React、Node.js、Prisma），还能深度参与完整的产品开发流程：从需求对接、架构设计到上线维护，每一步都由你亲手落地。我们相信，你和你的产品一样伟大，你和你的梦想一样年轻。\n\n我们鼓励高效协作与自由讨论，欢迎每个人在实战中磨炼技术、积累作品、放大影响力，用代码把想法做成现实。'
+        description: 'Information Solutions 是 UTChinese Network 的技术引擎，负责支撑和推动整个官方网站的设计与开发。我们是一支年轻但专业的全栈开发团队，专注用前沿技术实现校园活动信息的高效展示与管理，帮更多同学更方便地了解、参与、加入我们的社团。\n\n在这里，你不仅能用到主流技术栈（React、Express.js、Prisma），还能深度参与完整的产品开发流程：从需求对接、架构设计到上线维护，每一步都由你亲手落地。我们相信，你和你的产品一样伟大，你和你的梦想一样年轻。\n\n我们鼓励高效协作与自由讨论，欢迎每个人在实战中磨炼技术、积累作品、放大影响力，用代码把想法做成现实。'
       },
       subgroup2: {
         title: 'Human Resources',
